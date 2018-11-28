@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style type="text/css">
+img {
+	cursor: pointer;
+}
+</style>
+</head>
+<body ng-app="sqlApp" >
+
+<div class="am-g " style="margin-top: 50px">
+	<div class="am-u-lg-10 am-u-sm-centered">
+		<table class="am-table am-table-striped am-text-center">
+			<thead>
+			<tr class="am-primary">
+				<th>序号</th>
+				<th>SQLKEY</th>
+				<th>功能名称</th>
+                <th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+
+            <tr ng-repeat="x in data">
+                <td><span  ng-bind="$index+1"></span></td>
+                <td><span  ng-bind="x.sqlKey"></span></td>
+                <td><span  ng-bind="x.name"></span></td>
+                <td><span  >
+                    <button type="button" class="am-btn am-btn-secondary am-round am-btn-xs">修改</button>
+                    <button type="button" class="am-btn am-btn-danger am-round am-btn-xs">删除</button>
+                </span></td>
+
+
+            </tr>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>首页</title>
+
+    <script src="../../common/js/base.js"></script>
+
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+  <div class="mdui-toolbar mdui-color-theme" id="userInfo">
+    <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+    <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
+          <a href="color.html" class="mdui-typo-title">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+      <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
+  </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+  <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+    <div class="mdui-collapse-item mdui-collapse-item-open">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
+        <div class="mdui-list-item-content">后台管理</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list">
+        <a href="index.html" class="mdui-list-item mdui-ripple mdui-list-item-active">属性管理</a>
+        <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
+        <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
+        <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+  .color-palette{
+    position: relative;
+    padding: 0 0 36px 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .color-palette li {
+    padding: 15px;
+  }
+  .color-palette .color-divider {
+    margin-top: 8px;
+  }
+  .color-palette .main-color {
+  }
+  .color-palette .main-color .color-name {
+    display: block;
+    margin-bottom: 60px;
+  }
+  .color-palette .color-hex {
+    float: right;
+    text-transform: uppercase;
+  }
+  .color-palette .anchor-primary-color {
+    position: absolute;
+    top: -72px;
+  }
+  .color-palette .anchor-accent-color {
+    position: absolute;
+    top: 520px;
+  }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="property">
+  <h1 class="doc-title mdui-text-color-theme">属性管理
+      <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-blue-accent"
+               v-on:click="setPropertyRedis()">
+          加载缓存
+      </button>
+  </h1>
+
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-3">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">属性组</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addPropertyGroup'}">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                </h3>
+            </div>
+            <ul class="mdui-list" v-for="(propertyGroup,index) in propertyGroupList">
+
+                <li class="mdui-list-item mdui-ripple"
+                    v-on:click="getProperty(index,propertyGroup.groupKey)"
+                    v-bind:class="{'mdui-list-item-active':index==active}"
+                >
+                    {{propertyGroup.groupName}}
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addPropertyGroup'}" v-on:click="editPropertyGroup(propertyGroup)"
+                            style="position: absolute;right: 17%;top: 7px;">
+                        <i class="mdui-icon material-icons">edit</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="delPropertyGroup(index,propertyGroup)"
+                            style="position: absolute;right: 2%;top: 7px;">
+                        <i class="mdui-icon material-icons">delete</i>
+                    </button>
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>
+        </div>
+        <div class="mdui-col-xs-9">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">属性</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addProperty'}">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                </h3>
+            </div>
+           <!-- <ul class="mdui-list" v-for="(property,index) in propertyList">
+                <li class="mdui-list-item mdui-ripple">
+                    {{property.propertyValue}}
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>-->
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>属性code</th>
+                        <th>属性value</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(property,index) in propertyList" >
+                        <td>{{index+1}}</td>
+                        <td>{{property.propertyKey}}</td>
+                        <td>{{property.propertyValue}}</td>
+                        <td>
+
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    mdui-dialog="{target: '#addProperty'}" v-on:click="editProperty(property)">
+                                修改
+                            </button>
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    v-on:click="delProperty(index,property.gid)">
+                                删除
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <!--弹出框-->
+        <div class="mdui-dialog" id="spinner">
+            <div class="mdui-dialog-title">正在执行</div>
+            <div class="mdui-dialog-content" style="text-align: center">
+                正在执行，请稍候...
+                <div class="mdui-spinner mdui-spinner-colorful"></div>
+            </div>
+        </div>
+
+        <div class="mdui-dialog" id="addProperty">
+            <div class="mdui-dialog-title">添加属性</div>
+            <div class="mdui-dialog-content" >
+                <input type="hidden" v-model="property.gid">
+                <div class="mdui-textfield "  v-bind:class="property.propertyKey==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">property_key</label>
+                    <input class="mdui-textfield-input" placeholder="属性key" v-model="property.propertyKey" required/>
+                    <div class="mdui-textfield-error">属性key不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="property.propertyValue==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">property_name</label>
+                    <input class="mdui-textfield-input" placeholder="属性value" v-model="property.propertyValue" required/>
+                    <div class="mdui-textfield-error">属性value不能为空</div>
+                </div>
+                <!--浮动标签-->
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">property_desc</label>
+                    <textarea class="mdui-textfield-input" placeholder="属性描述" v-model="property.propertyDesc"></textarea>
+                </div>
+
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">extra1</label>
+                    <input class="mdui-textfield-input" placeholder="拓展属性1" v-model="property.extra1"/>
+                </div>
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">extra2</label>
+                    <input class="mdui-textfield-input" placeholder="拓展属性2" v-model="property.extra2"/>
+                </div>
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">extra3</label>
+                    <input class="mdui-textfield-input" placeholder="拓展属性3" v-model="property.extra3"/>
+                </div>
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">extra4</label>
+                    <input class="mdui-textfield-input" placeholder="拓展属性4" v-model="property.extra4"/>
+                </div>
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="addProperty()">确定</button>
+            </div>
+        </div>
+
+
+        <div class="mdui-dialog" id="addPropertyGroup">
+            <div class="mdui-dialog-title">添加属性组</div>
+            <div class="mdui-dialog-content" >
+                <input type="hidden" v-model="propertyGroup.gid">
+                <div class="mdui-textfield "  v-bind:class="propertyGroup.groupKey==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">groupKey</label>
+                    <input class="mdui-textfield-input" placeholder="属性组key" v-model="propertyGroup.groupKey" required/>
+                    <div class="mdui-textfield-error">属性组key不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="propertyGroup.groupName==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">groupName</label>
+                    <input class="mdui-textfield-input" placeholder="属性组名" v-model="propertyGroup.groupName" required/>
+                    <div class="mdui-textfield-error">属性组名不能为空</div>
+                </div>
+
+
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">属性组编码</label>
+                    <input class="mdui-textfield-input" placeholder="属性组编码" v-model="propertyGroup.groupCode"/>
+                </div>
+
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="addPropertyGroup()">确定</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+
+    //进度指示器
+    /*var dialogOptions = {
+        modal : true,
+        closeOnEsc : false,
+    }
+    var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
+
+    console.log(projectName);
+
+
+    Vue.config.debug = true;//开启vue的debug模式
+
+    var userInfo = new Vue({
+                                el: "#userInfo",
+                                methods:{
+                                         logout:function () {
+                                             console.log(vm.user);
+                                             $.ajax({
+                                                        type : "post",
+                                                        url : projectName + "/userC/logout",
+                                                        data : "{}",
+                                                        datatype : 'json',
+                                                        contentType:"application/json",
+                                                        success : function(data) {
+                                                            //console.log(vm.parent.success);
+                                                            //console.log(vm.isTest);
+                                                            console.log(data)
+                                                            location.href = projectName + "/base/admin/index.html";
+                                                        },
+                                                        error : function() {
+                                                            alert("请求失败");
+                                                        }
+                                                    });
+                                         }
+                                },
+
+
+                     });
+    var vm = new Vue({
+                         el:"#property",
+                         data : {
+                             propertyGroup : {
+                                 gid:'',
+                                 groupCode:'',
+                                 groupKey:'',
+                                 groupName:''
+                             },
+                             propertyGroupList:[],
+                             property : {
+                                 gid:'',
+                                 propertyKey:'',
+                                 propertyValue:'',
+                                 propertyDesc:'',
+                                 extra1:'',
+                                 extra2:'',
+                                 extra3:'',
+                                 extra4:'',
+                                 groupKey:'',
+                             },
+                             propertyList:[],
+                             active:'-1',
+                             ckGKey:'',
+                             ckPKey:'',
+
+
+                         },
+                         // 初始化执行
+                         mounted(){
+                             this.queryPropertyGroup()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                             propertyGroupList:function (){
+                                 vm.getProperty(0,vm.propertyGroupList[0].groupKey);
+                             },
+                         },
+                         methods : {
+                             queryPropertyGroup: function () {
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryPropertyGroup",
+                                            //data : JSON.stringify(test3.page),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+                                                if(data.success == true){
+                                                    vm.propertyGroupList = data.obj;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             getProperty: function (index,groupKey) {
+                                 //console.log(event.currentTarget);
+                                 //添加选中状态
+                                 this.active=index;
+                                 //添加选中的propertyGroupId
+                                 vm.ckGroupKey = groupKey;
+
+                                 //通过id查询属性
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryProperty",
+                                            data : "groupKey="+groupKey,
+                                            success : function(data) {
+                                                //console.log(vm.parent.success);
+                                                //console.log(vm.isTest);
+                                                if(data.success == true){
+                                                    vm.propertyList = data.obj;
+                                                   // console.log(vm.propertyList);
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                console.log("请求失败");
+                                            }
+                                        });
+                             },
+                             delProperty: function (index,gid) {
+                                 //console.log(event.currentTarget);
+
+                                 // 含文本和确认回调
+                                 mdui.confirm('确认删除？！', function(){
+                                     //spinner.open();
+                                     /*setTimeout(function(){
+                                         spinner.close();
+                                     }, 1000);*/
+                                     //console.log(spinner.getState());
+                                     $.AMUI.progress.start();
+                                     //通过id删除属性
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/adminC/delProperty",
+                                                data : "gid="+gid,
+                                                async: false,
+                                                success : function(data) {
+                                                    //console.log(vm.parent.success);
+                                                    //console.log(vm.isTest);
+                                                    if(data.success == true){
+                                                        vm.propertyList.splice(index,1);
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                    $.AMUI.progress.done();
+                                                },
+                                                error : function() {
+                                                    mdui.alert("请求失败");
+                                                    $.AMUI.progress.done();
+                                                }
+                                            });
+                                 });
+
+
+
+                             },
+                             addProperty:function(){
+                                 var inst = new mdui.Dialog('#addProperty');
+                                 vm.property.groupKey = vm.ckGroupKey;
+                                 //不为空验证
+                                 if(vm.property.groupKey == ''){
+                                     alert("发生错误！");
+                                     return
+                                 }
+                                 if(vm.property.propertyValue == ''){
+                                     return
+                                 }
+                                 if(vm.property.propertyKey == ''){
+                                     return
+                                 }
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/addorUpdateProperty",
+                                            data : JSON.stringify(vm.property),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                if(data.success == true){
+                                                    inst.close();
+                                                    vm.getProperty(vm.active,vm.ckGroupKey);
+                                                }else{
+                                                    alert(data.message);
+                                                }
+                                                vm.property = {};
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             editProperty:function(property){
+                                 vm.property = property;
+                             },
+                             delPropertyGroup: function (index,propertyGroup) {
+
+                                 // 含文本和确认回调
+                                 mdui.confirm('确认删除？！', function(){
+                                     $.AMUI.progress.start();
+                                     //通过id删除属性
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/adminC/delPropertyGroup",
+                                                data : JSON.stringify(propertyGroup),
+                                                datatype : 'json',
+                                                contentType:"application/json",
+                                                async: false,
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        vm.propertyGroupList.splice(index,1);
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                    $.AMUI.progress.done();
+                                                },
+                                                error : function() {
+                                                    mdui.alert("请求失败");
+                                                    $.AMUI.progress.done();
+                                                }
+                                            });
+                                 });
+
+
+
+                             },
+                             addPropertyGroup:function(){
+                                 var inst = new mdui.Dialog('#addPropertyGroup');
+                                 //不为空验证
+                                 if(vm.propertyGroup.groupKey == ''){
+                                     return
+                                 }
+                                 if(vm.propertyGroup.groupName == ''){
+                                     return
+                                 }
+
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/addorUpdatePropertyGroup",
+                                            data : JSON.stringify(vm.propertyGroup),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                if(data.success == true){
+                                                    inst.close();
+                                                    vm.queryPropertyGroup();
+                                                }else{
+                                                    alert(data.message);
+                                                }
+                                                vm.propertyGroup = {};
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             editPropertyGroup:function(propertyGroup){
+                                 vm.propertyGroup = propertyGroup;
+                             },
+                             setPropertyRedis:function(){
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/setRedisByKey",
+                                            //data : JSON.stringify(vm.propertyGroup),
+                                            data:"key=property",
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                alert(data.message);
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                         }
+                     });
+
+
+
+
+
+
+    /*$(function(){
+        $.ajax({
+                   type : "post",
+                   url : "/userC/validateUserLogin",
+                   data : "token="+token,
+                   success : function(data) {
+                       //console.log(vm.parent.success);
+                       //console.log(vm.isTest);
+                       if(data.success != true){
+                           location.href = "../login.html";
+                       }
+                   },
+                   error : function() {
+                       console.log("请求失败");
+                   }
+               });
+    });*/
+
+</script>
+

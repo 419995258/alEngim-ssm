@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>首页</title>
+
+    <script src="../../common/js/base.js"></script>
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
+
+    <link rel="stylesheet" href="../../common/js/Pagination/page.css">
+    <script src="../../common/js/Pagination/page.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+  <div class="mdui-toolbar mdui-color-theme" id="userInfo">
+    <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+    <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
+          <a href="color.html" class="mdui-typo-title">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+      <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
+  </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+  <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+    <div class="mdui-collapse-item mdui-collapse-item-open">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
+        <div class="mdui-list-item-content">后台管理</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list">
+        <a href="index.html" class="mdui-list-item mdui-ripple ">属性管理</a>
+        <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
+        <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
+        <a href="user.html" class="mdui-list-item mdui-ripple mdui-list-item-active">用户管理</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+  .color-palette{
+    position: relative;
+    padding: 0 0 36px 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .color-palette li {
+    padding: 15px;
+  }
+  .color-palette .color-divider {
+    margin-top: 8px;
+  }
+  .color-palette .main-color {
+  }
+  .color-palette .main-color .color-name {
+    display: block;
+    margin-bottom: 60px;
+  }
+  .color-palette .color-hex {
+    float: right;
+    text-transform: uppercase;
+  }
+  .color-palette .anchor-primary-color {
+    position: absolute;
+    top: -72px;
+  }
+  .color-palette .anchor-accent-color {
+    position: absolute;
+    top: 520px;
+  }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="user">
+  <h1 class="doc-title mdui-text-color-theme">用户管理
+
+  </h1>
+
+    <div class="mdui-row" >
+
+        <div class="mdui-col-xs-12">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">用户</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addBaseUser'}" v-on:click="openaddDialog()">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                </h3>
+            </div>
+           <!-- <ul class="mdui-list" v-for="(property,index) in propertyList">
+                <li class="mdui-list-item mdui-ripple">
+                    {{property.propertyValue}}
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>-->
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>realName</th>
+                        <th>loginName</th>
+                        <th>状态（启用）</th>
+                        <th>角色</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(user,index) in userList" >
+                        <td>{{index+1}}</td>
+                        <td>{{user.realname}}</td>
+                        <td>{{user.loginName}}</td>
+                        <td>
+                            <label class="mdui-switch">
+                                <input type="checkbox"  v-bind:checked="user.userStatus == '1'" v-on:change="changeUserStatus(user)"/>
+                                <i class="mdui-switch-icon"></i>
+                            </label>
+                        </td>
+                        <td>{{user.roleCodes}}</td>
+
+                        <td>
+
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    mdui-dialog="{target: '#addBaseUser'}" v-on:click="editUser(user)">
+                                修改
+                            </button>
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    v-on:click="delUser(user)">
+                                删除
+                            </button>
+
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!--分页-->
+    <div id="Pagination"></div>
+
+
+    <div>
+        <!--弹出框-->
+
+
+
+
+
+        <div class="mdui-dialog" id="addBaseUser">
+            <div class="mdui-dialog-title">添加用户</div>
+            <div class="mdui-dialog-content" >
+                <input type="hidden" v-model="userForm.userId">
+                <input type="hidden" v-model="userForm.userStatus">
+                <div class="mdui-textfield "  v-bind:class="userForm.loginName==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">loginName</label>
+                    <input class="mdui-textfield-input" placeholder="登录名" v-model="userForm.loginName" required/>
+                    <div class="mdui-textfield-error">登录名不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="userForm.realname==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">realName</label>
+                    <input class="mdui-textfield-input" placeholder="realname" v-model="userForm.realname" required/>
+                    <div class="mdui-textfield-error">realName不能为空</div>
+                </div>
+                <div class="mdui-textfield " >
+                    <label class="mdui-textfield-label">passWord</label>
+                    <input class="mdui-textfield-input" placeholder="请输入要修改的密码，若不修改则为空" v-model="userForm.passWord" />
+                </div>
+                <div class="mdui-textfield " >
+                    <label class="mdui-textfield-label">角色分配：</label>
+                    <div class="mdui-row-md-5" >
+                        <div class="mdui-col" v-for="(baseRole,index) in baseRoleList">
+                            <label class="mdui-checkbox">
+                                <input type="checkbox" v-bind:value="baseRole.roleCode" v-model="userForm.roleCodesList" />
+                                <i class="mdui-checkbox-icon"></i>
+                                <span v-bind:title="baseRole.roleDesc">{{baseRole.roleName}}</span>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="adduser(userForm)">确定</button>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+    console.log(projectName);
+
+    //进度指示器
+    /*var dialogOptions = {
+        modal : true,
+        closeOnEsc : false,
+    }
+    var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
+
+    $(function(){
+        queryUserList();
+
+        //listenDialog();
+
+
+    });
+
+
+
+    Vue.config.debug = true;//开启vue的debug模式
+
+    var userInfo = new Vue({
+                                el: "#userInfo",
+                                methods:{
+                                         logout:function () {
+                                             console.log(vm.user);
+                                             $.ajax({
+                                                        type : "post",
+                                                        url : projectName + "/userC/logout",
+                                                        data : "{}",
+                                                        datatype : 'json',
+                                                        contentType:"application/json",
+                                                        success : function(data) {
+                                                            //console.log(vm.parent.success);
+                                                            //console.log(vm.isTest);
+                                                            console.log(data)
+                                                            location.href = projectName + "/base/admin/index.html";
+                                                        },
+                                                        error : function() {
+                                                            alert("请求失败");
+                                                        }
+                                                    });
+                                         }
+                                },
+
+
+                     });
+    var vm = new Vue({
+                         el:"#user",
+                         data : {
+                             user : {
+                                 userId:'',
+                                 realname:'',
+                                 loginName:'',
+                                 userStatus:'',
+                                 roleCodes:'',
+                                 passWord:'',
+                                 roleCodesList:[],
+                                 roleCodesListStr:''
+                             },
+                             userForm : {
+                                 userId:'',
+                                 realname:'',
+                                 loginName:'',
+                                 userStatus:'',
+                                 roleCodes:'',
+                                 passWord:'',
+                                 roleCodesList:[],
+                                 roleCodesListStr:''
+                             },
+                             baseRole : {
+                                 roleName:'',
+                                 roleCode:'',
+                                 roleDesc:''
+                             },
+                             userList:[],
+                             baseRoleList:[],
+                             // roleCodes:[],
+                             active:'-1',
+
+
+                         },
+                         created(){
+                             this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.queryUserList()
+                             this.queryRole();
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             queryUserList: function () {
+                                 queryUserList();
+
+                             },
+                             changeUserStatus:function (user){
+                                 if( user.userStatus == '1'){
+                                     user.userStatus = '0';
+                                 }else{
+                                     user.userStatus = '1';
+                                 }
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/changeUserStatus",
+                                            data : JSON.stringify(user),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             delUser:function (user){
+                                 mdui.confirm('确认删除？！', function(){
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/adminC/delUser",
+                                                data : JSON.stringify(user),
+                                                datatype : 'json',
+                                                contentType:"application/json",
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        queryUserList();
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                },
+                                                error : function() {
+                                                    mdui.alert("请求失败");
+                                                }
+                                            });
+                                 })
+                             },
+                             queryRole: function () {
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryBaseRole",
+                                            //data : JSON.stringify(test3.page),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.baseRoleList = data.obj;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             openaddDialog:function(){
+                                 //listenDialog();
+                                 /*初始化数据*/
+                                 vm.userForm = Object.assign(vm.userForm,vm.defaultUserData);
+                             },
+                             adduser:function (user) {
+                                 console.log(JSON.stringify(user));
+                                 var inst = new mdui.Dialog('#addBaseUser');
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/updateUser",
+                                            data : JSON.stringify(user),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    queryUserList();
+                                                    inst.close();
+                                                    mdui.alert(data.message);
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             editUser:function(user){
+                                 vm.userForm = JSON.parse(JSON.stringify(user));
+                             },
+                         }
+                     });
+
+
+
+
+
+
+    /*查询userList*/
+    function queryUserList() {
+
+        var obj = $("#Pagination").page({
+                                            //  后台地址
+                                            url : projectName + "/adminC/queryUserList",
+                                            data: {
+                                                // 第一次请求时需要的查询参数,默认为空
+                                                loginName : "admin",
+                                            },
+                                            pageNo:1, // 默认1
+                                            pageSize:10, // 默认10
+                                            getRes: function(data){
+                                                // 这里可以对服务器返回给你的数据进行处理,如拼接html进table等等
+                                                if(data.success == false){
+                                                    mdui.alert(data.message);
+                                                }else{
+                                                    vm.userList = data.rows;
+                                                }
+                                            },
+                                            initComplete: function(){
+                                                // 这里可以做需要dom初始化完成的操作
+                                            }
+                                        })
+    }
+
+    /*监听打开修改*/
+    function listenDialog() {
+
+        /*初始化数据*/
+        var dialog = document.getElementById('addBaseUser');
+        dialog.addEventListener('open.mdui.dialog', function () {
+            console.log("初始化")
+            /*初始化数据*/
+            vm.user = Object.assign(vm.user,vm.defaultUserData);
+            //vm.user = {};
+        });
+
+    }
+
+</script>
+

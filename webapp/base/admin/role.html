@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>首页</title>
+
+
+    <script src="../../common/js/base.js"></script>
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
+
+    <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+  <div class="mdui-toolbar mdui-color-theme" id="userInfo">
+    <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+    <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
+          <a href="color.html" class="mdui-typo-title">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+      <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
+  </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+  <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+    <div class="mdui-collapse-item mdui-collapse-item-open">
+      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
+        <div class="mdui-list-item-content">后台管理</div>
+        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+      </div>
+      <div class="mdui-collapse-item-body mdui-list">
+        <a href="index.html" class="mdui-list-item mdui-ripple ">属性管理</a>
+        <a href="role.html" class="mdui-list-item mdui-ripple mdui-list-item-active">角色管理</a>
+        <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
+        <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+  .color-palette{
+    position: relative;
+    padding: 0 0 36px 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .color-palette li {
+    padding: 15px;
+  }
+  .color-palette .color-divider {
+    margin-top: 8px;
+  }
+  .color-palette .main-color {
+  }
+  .color-palette .main-color .color-name {
+    display: block;
+    margin-bottom: 60px;
+  }
+  .color-palette .color-hex {
+    float: right;
+    text-transform: uppercase;
+  }
+  .color-palette .anchor-primary-color {
+    position: absolute;
+    top: -72px;
+  }
+  .color-palette .anchor-accent-color {
+    position: absolute;
+    top: 520px;
+  }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="role">
+  <h1 class="doc-title mdui-text-color-theme">角色管理
+      <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-blue-accent"
+               v-on:click="setPropertyRedis()">
+          加载缓存
+      </button>
+  </h1>
+
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-3">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">角色</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addBaseRole'}" v-on:click="openaddDialog()">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                </h3>
+            </div>
+            <ul class="mdui-list" v-for="(baseRole,index) in baseRoleList">
+                <!--v-on:click="getPermission(index,baseRole.roleCode)"-->
+                <li class="mdui-list-item mdui-ripple"
+                    v-on:click="queryBasePermissionChecked(index,baseRole)"
+                    v-bind:class="{'mdui-list-item-active':index==active}"
+                    v-bind:title="baseRole.roleDesc"
+                >
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">
+                            {{baseRole.roleName}}
+                        </div>
+
+                        <div class="mdui-list-item-text mdui-list-item-one-line">
+                            <span class="mdui-text-color-theme-text">{{baseRole.roleCode}}</span>
+                        </div>
+                    </div>
+
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addBaseRole'}" v-on:click="editBaseRole(baseRole)"
+                            style="position: absolute;right: 17%;top: 7px;">
+                        <i class="mdui-icon material-icons">edit</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="delBaseRole(index,baseRole)"
+                            style="position: absolute;right: 2%;top: 7px;">
+                        <i class="mdui-icon material-icons">delete</i>
+                    </button>
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>
+        </div>
+        <div class="mdui-col-xs-9">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">权限分配</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+
+                </h3>
+            </div>
+           <!-- <ul class="mdui-list" v-for="(property,index) in propertyList">
+                <li class="mdui-list-item mdui-ripple">
+                    {{property.propertyValue}}
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>-->
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td valign="top" style="width:200px;">
+                            <div id="treeDiv" class="ztree" >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    v-on:click="updateBasePermissionChecked(baseRole.roleCode)">
+                                确认
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div>
+        <!--弹出框-->
+
+
+
+
+
+        <div class="mdui-dialog" id="addBaseRole">
+            <div class="mdui-dialog-title">添加角色</div>
+            <div class="mdui-dialog-content" >
+                <input type="hidden" v-model="baseRoleForm.roleId">
+                <div class="mdui-textfield "  v-bind:class="baseRoleForm.roleName==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">roleName</label>
+                    <input class="mdui-textfield-input" placeholder="角色名" v-model="baseRoleForm.roleName" required/>
+                    <div class="mdui-textfield-error">角色名不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="baseRoleForm.roleCode==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">roleCode</label>
+                    <input class="mdui-textfield-input" placeholder="角色code" v-model="baseRoleForm.roleCode" required/>
+                    <div class="mdui-textfield-error">角色code不能为空</div>
+                </div>
+
+
+                <div class="mdui-textfield ">
+                    <label class="mdui-textfield-label">角色描述</label>
+                    <input class="mdui-textfield-input" placeholder="角色描述" v-model="baseRoleForm.roleDesc"/>
+                </div>
+
+            </div>
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="addBaseRole()">确定</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+    console.log(projectName);
+
+    //进度指示器
+    /*var dialogOptions = {
+        modal : true,
+        closeOnEsc : false,
+    }
+    var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
+
+    var setting = {
+        check: {
+            enable: true
+        },
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"permissionName",
+                title:"code",
+            }
+        }
+    };
+
+    var zNodes = "";
+    $(function(){
+        initTree();
+    });
+
+    var treeObj;
+    function initTree(){
+        treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+        var node = treeObj.getNodeByParam("code", "-1");
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        //console.log(treeNode.id);
+        //vm.queryPermission(treeNode.id);
+        //vm.addPermission.pid = treeNode.id;
+    }
+
+
+    function queryPermission(){
+
+    };
+
+
+
+    Vue.config.debug = true;//开启vue的debug模式
+
+    var userInfo = new Vue({
+                                el: "#userInfo",
+                                methods:{
+                                         logout:function () {
+                                             console.log(vm.user);
+                                             $.ajax({
+                                                        type : "post",
+                                                        url : projectName + "/userC/logout",
+                                                        data : "{}",
+                                                        datatype : 'json',
+                                                        contentType:"application/json",
+                                                        success : function(data) {
+                                                            //console.log(vm.parent.success);
+                                                            //console.log(vm.isTest);
+                                                            console.log(data)
+                                                            //location.href = "/base/admin/index.html";
+                                                        },
+                                                        error : function() {
+                                                            alert("请求失败");
+                                                        }
+                                                    });
+                                         }
+                                },
+
+
+                     });
+    var vm = new Vue({
+                         el:"#role",
+                         data : {
+                             baseRole : {
+                                 roleId:'',
+                                 roleName:'',
+                                 roleCode:'',
+                                 roleDesc:''
+                             },
+                             baseRoleForm : {
+                                 roleId:'',
+                                 roleName:'',
+                                 roleCode:'',
+                                 roleDesc:''
+                             },
+                             baseRoleList:[],
+                             active:'-1',
+
+
+                         },
+                         created(){
+                             this.defaultBaseRoleData  = JSON.parse(JSON.stringify(this.baseRole));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             this.queryRole()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，baseRoleList，默认选中第一个，获取属性值
+                             baseRoleList:function (){
+                                 if(vm.baseRoleList.length > 0 ){
+                                     vm.queryBasePermissionChecked(0,vm.baseRoleList[0]);
+                                 }
+                             },
+                         },
+                         methods : {
+                             setPropertyRedis:function(){
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/setRedisByKey",
+                                            //data : JSON.stringify(vm.propertyGroup),
+                                            data:"key=role",
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                alert(data.message);
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             queryRole: function () {
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryBaseRole",
+                                            //data : JSON.stringify(test3.page),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.baseRoleList = data.obj;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             openaddDialog:function(){
+                                 //listenDialog();
+                                 /*初始化数据*/
+                                 vm.baseRoleForm = Object.assign(vm.baseRoleForm,vm.defaultBaseRoleData);
+                             },
+                             addBaseRole:function(){
+                                 var inst = new mdui.Dialog('#addBaseRole');
+                                 //不为空验证
+                                 if(vm.baseRoleForm.roleName == ''){
+                                     return
+                                 }
+                                 if(vm.baseRoleForm.roleCode == ''){
+                                     return
+                                 }
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/addorUpdateBaseRole",
+                                            data : JSON.stringify(vm.baseRoleForm),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                if(data.success == true){
+                                                    inst.close();
+                                                    vm.queryRole();
+                                                }else{
+                                                    alert(data.message);
+                                                }
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+                             editBaseRole:function(baseRole){
+                                 vm.baseRoleForm = JSON.parse(JSON.stringify(baseRole));
+                                 /*vm.baseRole = baseRole;*/
+                             },
+                             delBaseRole: function (index,baseRole) {
+
+                                 // 含文本和确认回调
+                                 mdui.confirm('确认删除？！', function(){
+                                     $.AMUI.progress.start();
+                                     //通过id删除属性
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/adminC/delBaseRole",
+                                                data : "roleId="+baseRole.roleId,
+                                                //datatype : 'json',
+                                                //contentType:"application/json",
+                                                async: false,
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        vm.baseRoleList.splice(index,1);
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                    $.AMUI.progress.done();
+                                                },
+                                                error : function() {
+                                                    mdui.alert("请求失败");
+                                                    $.AMUI.progress.done();
+                                                }
+                                            });
+                                 });
+
+
+
+                             },
+                             queryBasePermissionChecked :function (index,baseRole) {
+                                 vm.baseRole = baseRole;
+                                 //添加选中状态
+                                 vm.active=index;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryBasePermissionChecked",
+                                            data : JSON.stringify(baseRole),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            async: false,
+                                            success : function(data) {
+                                                //console.log(vm.parent.success);
+                                                //console.log(vm.isTest);
+
+                                                zNodes = data.obj;
+                                                initTree();
+                                                //location.href = "/base/admin/index.html";
+                                            },
+                                            error : function() {
+                                                alert("请求失败");
+                                            }
+                                        });
+                             },
+                             updateBasePermissionChecked:function (roleCode) {
+                                 var nodes = treeObj.getCheckedNodes(true);
+                                 var changedNodes=treeObj.getChangeCheckedNodes();
+                                 var checkedids="";
+                                 if(changedNodes.length < 1){
+                                     mdui.alert("角色权限未变化！");
+                                     return false;
+                                 }
+                                 for(var i=0;i<nodes.length;i++){
+                                     checkedids = checkedids + nodes[i].code + ",";
+                                 }
+
+                                 var obj = {};
+                                 obj.roleCode = roleCode;
+                                 obj.permissionCode = checkedids;
+                                 console.log(obj);
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/updateBasePermissionChecked",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            async: false,
+                                            success : function(data) {
+                                                mdui.alert(data.message);
+                                                vm.queryBasePermissionChecked(vm.active,vm.baseRole);
+                                            },
+                                            error : function() {
+                                                alert("请求失败");
+                                            }
+                                        });
+                             }
+                         }
+                     });
+
+
+
+
+
+
+    /*$(function(){
+        $.ajax({
+                   type : "post",
+                   url : "/userC/validateUserLogin",
+                   data : "token="+token,
+                   success : function(data) {
+                       //console.log(vm.parent.success);
+                       //console.log(vm.isTest);
+                       if(data.success != true){
+                           location.href = "../login.html";
+                       }
+                   },
+                   error : function() {
+                       console.log("请求失败");
+                   }
+               });
+    });*/
+
+</script>
+

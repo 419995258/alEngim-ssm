@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body ng-app="orderApp">
+	<div class="container qz_content">
+		<nav class="navbar kk">
+			<span class="navbar-brand">我的购买记录</span>
+		</nav>
+		
+		<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>订单时间</th>
+							<th>订单金额</th>
+							<th>订单状态</th>
+							<th>备注</th>
+							<th>操作</th>
+							
+						</tr>
+					</thead>
+					<tbody >
+						<tr ng-repeat="x in order">
+							<td><span ng-bind="x.strTime"></span></td>
+							<td><span ng-bind="x.money"></span>元</td>
+							<td><span ng-bind="x.strState"></span></td>
+							<td><span ng-bind="x.note"></span></td>
+							<td>
+								<span>
+									<button type="button" class="btn btn-warning btn-sm"
+									ng-click="openXD($index)">查看详情</button>
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="text-right" style="margin-right:40px;">
+					<uib-pagination boundary-links="true" items-per-page="pageSize" ng-change="pageChanged()" total-items="totalItems" num-pages="pages" max-size="maxSize" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+					</uib-pagination>
+				</div>
+			</div>
+
+	</div>
+	<!--fixmodal-->
+	<div class="modal fade" id="fixModal" style="margin-top: 5%;">
+		<div class="modal-dialog" style="width:700px;">
+			<div class="modal-content">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>商品名</th>
+							<th>商品价格</th>
+							<th>商品数量</th>
+							<th>商品总价</th>
+							<th>图片</th>
+
+						</tr>
+					</thead>
+					<tbody id="fix">
+						<tr ng-repeat="x in orderItem">
+							<td><span ng-bind="x.goodsName"
+								style="height: 60px;line-height: 60px"></span></td>
+							<td><span ng-bind="x.price"
+								style="height: 60px;line-height: 60px"></span></td>
+							<td><span ng-bind="x.number"
+								style="height: 60px;line-height: 60px"></span></td>
+							<td><span style="height: 60px;line-height: 60px">{{x.number*x.price}}</span></td>
+							<td><img src="{{x.url}}" style="width:40px;height:60px"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	</body>
+</html>

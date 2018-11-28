@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>my431 functions library</description>
+  <display-name>my431 functions</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>my431-fn</short-name>
+  <uri></uri>
+
+  <function>
+    <description>
+      This function get the property value by key.
+    </description>
+    <name>getValueByCode</name>
+    <function-class>org.work.taglib.My431Function</function-class>
+    <function-signature>java.lang.String getValueByCode(java.lang.String)</function-signature>
+    <example>
+      ${my431fn:getValueByCode(key)}
+    </example>
+  </function>
+
+  <function>
+    <description>
+      This function UTC to date.
+    </description>
+    <name>UTC</name>
+    <function-class>org.work.taglib.My431Function</function-class>
+    <function-signature>java.lang.String UTC(java.lang.String)</function-signature>
+    <example>
+      ${my431fn:UTC(date)}
+    </example>
+  </function>
+
+</taglib>

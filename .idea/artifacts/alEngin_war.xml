@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="alEngin:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="alEngin.war">
+      <element id="artifact" artifact-name="alEngin:war exploded" />
+    </root>
+  </artifact>
+</component>

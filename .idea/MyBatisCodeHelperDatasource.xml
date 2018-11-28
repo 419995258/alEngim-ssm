@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MyBatisCodeHelperDatasource">
+    <option name="activeDatabaseInfo">
+      <NewDatabaseInfo>
+        <option name="database" value="alengin" />
+        <option name="databaseType" value="MySql" />
+        <option name="password" value="love431" />
+        <option name="url" value="192.168.3.115:3306" />
+        <option name="userName" value="root" />
+      </NewDatabaseInfo>
+    </option>
+    <option name="databaseInfos">
+      <list>
+        <NewDatabaseInfo>
+          <option name="database" value="alengin" />
+          <option name="databaseType" value="MySql" />
+          <option name="password" value="love431" />
+          <option name="url" value="192.168.3.115:3306" />
+          <option name="userName" value="root" />
+        </NewDatabaseInfo>
+      </list>
+    </option>
+    <option name="projectProfile">
+      <ProjectProfile>
+        <option name="addSerializeUid" value="true" />
+        <option name="javaMapperPackage" value="org.zyyd.base.dao" />
+        <option name="javaMapperPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+        <option name="javaModelPackage" value="org.zyyd.base.entity" />
+        <option name="javaModelPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="alEngin" />
+        <option name="moduleNameToPackageAndPathMap">
+          <map>
+            <entry key="alEngin">
+              <value>
+                <UserPackageAndPathInfoByModule>
+                  <option name="javaMapperPackage" value="org.zyyd.base.dao" />
+                  <option name="javaMapperPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+                  <option name="javaModelPacakge" value="org.zyyd.base.entity" />
+                  <option name="javaModelPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+                  <option name="xmlPackage" value="org.zyyd.base.dao.mapper" />
+                  <option name="xmlPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+                </UserPackageAndPathInfoByModule>
+              </value>
+            </entry>
+            <entry key="myProject">
+              <value>
+                <UserPackageAndPathInfoByModule>
+                  <option name="javaMapperPackage" value="org.zyyd.base.dao" />
+                  <option name="javaMapperPath" value="$PROJECT_DIR$/src" />
+                  <option name="javaModelPacakge" value="org.zyyd.base.entity" />
+                  <option name="javaModelPath" value="$PROJECT_DIR$/src" />
+                  <option name="xmlPackage" value="org.zyyd.base.dao.mapper" />
+                  <option name="xmlPath" value="D:\work\AllWorkspace\eclipse2018\myProject\src" />
+                </UserPackageAndPathInfoByModule>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="tableGenerateConfigs">
+          <map>
+            <entry key="alengin:al_attachment">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlAttachment" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_bc_editor">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlBcEditor" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_domain">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginDomain" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_omodel_curr">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginOmodelCurr" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_omodel_his">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginOmodelHis" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_paper_tree">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginPaperTree" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_session">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginSession" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_task">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginTask" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_task_content">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginTaskContent" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_task_stu">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginTaskStu" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_engin_track_tree">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlEnginTrackTree" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_itp">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlItp" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_itp_relation">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlItpRelation" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_itp_v_relation">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlItpVRelation" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_kc_editor">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlKcEditor" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_learning_object">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlLearningObject" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_mistake">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlMistake" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_mistake_book">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlMistakeBook" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_mistake_cover_itp">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlMistakeCoverItp" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_obj_res">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlObjRes" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_object_book">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlObjectBook" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_object_relation">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlObjectRelation" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_object_stand">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlObjectStand" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_paper_block">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlPaperBlock" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_paper_element">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlPaperElement" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_danxuan_choice">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResDanxuanChoice" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_danxuan_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResDanxuanItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_duoxuan_choice">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResDuoxuanChoice" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_duoxuan_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResDuoxuanItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_lianxian_choice">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResLianxianChoice" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_lianxian_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResLianxianItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_tiankong_blank">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResTiankongBlank" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_tiankong_blank_choice">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResTiankongBlankChoice" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_tiankong_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResTiankongItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_zhuguan_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResZhuguanItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_zuti_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResZutiItem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_res_zuti_subitem">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlResZutiSubitem" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_subject_enter_log">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlSubjectEnterLog" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_test_paper">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlTestPaper" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_tutor_res">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlTutorRes" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_tutor_res_book">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlTutorResBook" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_tutor_res_kc">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlTutorResKc" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:al_user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="AlUser" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:base_role_permission_map">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseRolePermissionMap" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:base_user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseUser" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_area">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseArea" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_module">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseModule" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_permission">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BasePermission" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_properties">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseProperties" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_properties_group">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BasePropertiesGroup" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_role">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseRole" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_role_permission_map">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="ID" />
+                  <option name="javaModelName" value="BaseRolePermissionMap" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_role_url_map">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseRoleUrlMap" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseUser" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="engin:base_user_role_map">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="ID" />
+                  <option name="javaModelName" value="BaseUserRoleMap" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:news">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="News" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:permission">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="Permission" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:property">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="Property" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:property_group">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="PropertyGroup" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:role">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="Role" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:role_permission">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="RolePermission" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="User" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="news:user_role">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="UserRole" />
+                  <option name="moduleName" value="myProject" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="useExample" value="true" />
+        <option name="useSwagger" value="true" />
+        <option name="xmlMapperPackage" value="org.zyyd.base.dao.mapper" />
+        <option name="xmlMapperPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
+      </ProjectProfile>
+    </option>
+  </component>
+</project>

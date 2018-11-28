@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>首页</title>
+
+
+
+
+    <script src="../../common/js/base.js"></script>
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
+
+    <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme" id="userInfo">
+        <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+        <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
+        <a href="color.html" class="mdui-typo-title">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
+    </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+    <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+        <div class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
+                <div class="mdui-list-item-content">后台管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <div class="mdui-collapse-item-body mdui-list">
+                <a href="index.html" class="mdui-list-item mdui-ripple ">属性管理</a>
+                <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
+                <a href="permission.html" class="mdui-list-item mdui-ripple mdui-list-item-active">权限管理</a>
+                <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+    .color-palette{
+        position: relative;
+        padding: 0 0 36px 0;
+        margin: 0;
+        list-style: none;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .color-palette li {
+        padding: 15px;
+    }
+    .color-palette .color-divider {
+        margin-top: 8px;
+    }
+    .color-palette .main-color {
+    }
+    .color-palette .main-color .color-name {
+        display: block;
+        margin-bottom: 60px;
+    }
+    .color-palette .color-hex {
+        float: right;
+        text-transform: uppercase;
+    }
+    .color-palette .anchor-primary-color {
+        position: absolute;
+        top: -72px;
+    }
+    .color-palette .anchor-accent-color {
+        position: absolute;
+        top: 520px;
+    }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="permission">
+    <h1 class="doc-title mdui-text-color-theme">权限管理
+        <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-blue-accent"
+                v-on:click="setPropertyRedis()">
+            加载缓存
+        </button>
+    </h1>
+
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-3">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">权限</h3>
+            </div>
+            <div class="mdui-col-xs-3">
+                <h3 class="doc-title mdui-text-color-theme">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addPermission'}">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                </h3>
+            </div>
+
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td valign="top" style="width:200px;">
+                            <div id="treeDiv" class="ztree">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="mdui-col-xs-9">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">修改</h3>
+            </div>
+            <div class="mdui-table-fluid" >
+                <div style="margin: 5%">
+                    <input type="hidden" v-model="permission.permissionId">
+
+
+                    <div class="mdui-textfield "  v-bind:class="permission.permissionName==''?'mdui-textfield-invalid':''">
+                        <label class="mdui-textfield-label">name</label>
+                        <input class="mdui-textfield-input" placeholder="权限名" v-model="permission.permissionName" required/>
+                        <div class="mdui-textfield-error">权限名不能为空</div>
+                    </div>
+                    <div class="mdui-textfield " v-bind:class="permission.code==''?'mdui-textfield-invalid':''">
+                        <label class="mdui-textfield-label">code</label>
+                        <input class="mdui-textfield-input" placeholder="权限code" v-model="permission.code" required/>
+                        <div class="mdui-textfield-error">权限code不能为空</div>
+                    </div>
+                    <!--浮动标签-->
+                    <div class="mdui-textfield ">
+                        <label class="mdui-textfield-label">desc</label>
+                        <textarea class="mdui-textfield-input" placeholder="权限描述" v-model="permission.permissionDesc"></textarea>
+                    </div>
+
+
+                    <div class="mdui-textfield " style="float: right;">
+                        <!--<label class="mdui-switch">
+                            <label style="font-size: 14px;color: #a2a2a2;">叶子节点：</label>
+                            <input type="checkbox" v-bind:checked="permission.nodeType == '1'"/>
+                            <i class="mdui-switch-icon"></i>
+                        </label>-->
+
+
+
+                        <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                v-on:click="delPermission(permission)">
+                            删除
+                        </button>
+
+                        <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                v-on:click="editPermission(permission)">
+                            修改
+                        </button>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="mdui-dialog" id="addPermission">
+        <div class="mdui-dialog-title">添加权限</div>
+        <div class="mdui-dialog-content" >
+            <input type="hidden" v-model="addPermission.parentCode">
+            <div class="mdui-textfield "  v-bind:class="addPermission.permissionName==''?'mdui-textfield-invalid':''">
+                <label class="mdui-textfield-label">name</label>
+                <input class="mdui-textfield-input" placeholder="权限名" v-model="addPermission.permissionName" required/>
+                <div class="mdui-textfield-error">权限名不能为空</div>
+            </div>
+            <div class="mdui-textfield " v-bind:class="addPermission.code==''?'mdui-textfield-invalid':''">
+                <label class="mdui-textfield-label">code</label>
+                <input class="mdui-textfield-input" placeholder="权限code" v-model="addPermission.code" required/>
+                <div class="mdui-textfield-error">权限code不能为空</div>
+            </div>
+            <!--浮动标签-->
+            <div class="mdui-textfield ">
+                <label class="mdui-textfield-label">desc</label>
+                <textarea class="mdui-textfield-input" placeholder="权限描述" v-model="addPermission.permissionDesc"></textarea>
+            </div>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" v-on:click="editPermission(addPermission)">确定</button>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+    console.log(projectName);
+
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"permissionName",
+                title:"code",
+            }
+        }
+    };
+
+    var zNodes = "";
+    $(function(){
+        initTree();
+
+    });
+
+    function initTree(){
+        queryPermission();
+        var treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+        var node = treeObj.getNodeByParam("code", "-1");
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        if(treeNode != null){
+            vm.queryPermission(treeNode.permissionId);
+            vm.addPermission.parentCode = treeNode.code;
+        }
+    }
+
+
+    function queryPermission(){
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/adminC/queryBasePermission",
+                   data : "{}",
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+                       //console.log(vm.parent.success);
+                       //console.log(vm.isTest);
+
+                       zNodes = data.obj;
+
+
+                       //location.href = "/base/admin/index.html";
+                   },
+                   error : function() {
+                       alert("请求失败");
+                   }
+               });
+    };
+
+
+    var vm = new Vue({
+                         el:"#permission",
+                         data : {
+                             permission:{
+                                 permissionId:'',
+                                 permissionName:'',
+                                 code:'',
+                                 permissionDesc:'',
+                                 nodeType:'',
+                             },
+                             addPermission:{
+                                 permissionId:'',
+                                 permissionName:'',
+                                 code:'',
+                                 permissionDesc:'',
+                                 nodeType:'',
+                                 parentCode:'',//父code
+                             },
+
+
+
+                         },
+                         // 初始化执行
+                         mounted(){
+
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+
+                         },
+                         methods : {
+                             queryPermission: function (id) {
+                                 vm.permission.permissionId = id;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/queryBasePermission",
+                                            data : JSON.stringify(vm.permission),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.permission = data.obj;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                 });
+                             },
+                             delPermission: function (permission) {
+                                 //console.log(event.currentTarget);
+                                 // 含文本和确认回调
+                                 mdui.confirm('确认删除？！', function(){
+                                     // 判断地区树这个节点是否有子节点
+                                     var treeObj = $.fn.zTree.getZTreeObj("treeDiv");
+                                     var node = treeObj.getNodeByParam("code", permission.code, 0);
+                                     console.log(node);
+                                     if(node.isParent){
+                                         mdui.alert("该权限下还有子权限!");
+                                         return false;
+                                     }else{
+                                         $.AMUI.progress.start();
+                                         //通过id删除属性
+                                         $.ajax({
+                                                    type : "post",
+                                                    url : projectName + "/adminC/delPermission",
+                                                    data : JSON.stringify(permission),
+                                                    datatype : 'json',
+                                                    contentType:"application/json",
+                                                    async: false,
+                                                    success : function(data) {
+                                                        //console.log(vm.parent.success);
+                                                        //console.log(vm.isTest);
+                                                        if(data.success == true){
+                                                            initTree();
+                                                        }else{
+                                                            mdui.alert(data.message);
+                                                        }
+                                                        $.AMUI.progress.done();
+                                                    },
+                                                    error : function() {
+                                                        mdui.alert("请求失败");
+                                                        $.AMUI.progress.done();
+                                                    }
+                                                });
+                                     }
+                                     //spinner.open();
+                                     /*setTimeout(function(){
+                                         spinner.close();
+                                     }, 1000);*/
+                                     //console.log(spinner.getState());
+
+                                 });
+
+
+
+                             },
+                             editPermission:function (permission) {
+                                 var inst = new mdui.Dialog('#addPermission');
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/addorUpdateBasePermission",
+                                            data : JSON.stringify(permission),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                mdui.alert(data.message);
+                                                vm.addPermission = {};
+                                                inst.close();
+                                                initTree();
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                 });
+                             },
+                             setPropertyRedis:function(){
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/adminC/setRedisByKey",
+                                            //data : JSON.stringify(vm.propertyGroup),
+                                            data:"key=permission",
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+
+                                                alert(data.message);
+
+                                            },
+                                            error : function() {
+                                                mdui.alert("请求失败");
+                                            }
+                                        });
+                             },
+
+                         }
+                     });
+
+</script>
+

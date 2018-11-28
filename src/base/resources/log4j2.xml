@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration status="off" monitorInterval="1800">
+<properties>
+	<property name="LOG_HOME">D://work\AllWorkspace\logs</property>
+	<property name="ERROR_LOG_FILE_NAME">error</property>
+	<property name="INFO_LOG_FILE_NAME">info</property>
+	<property name="PATTERN">%d %-5p [%t] %C{1} (%F:%L) - %m%n</property>
+</properties>
+
+     <Appenders>  
+         <Console name="Console" target="SYSTEM_OUT">  
+             <PatternLayout pattern="${PATTERN}"/>  
+         </Console>  
+   
+         <RollingRandomAccessFile name="ErrorLog"  
+                                  fileName="${LOG_HOME}/${ERROR_LOG_FILE_NAME}.log"  
+                                  filePattern="${LOG_HOME}/${ERROR_LOG_FILE_NAME}.log.%d{yyyy-MM-dd}.gz">  
+             <PatternLayout pattern="${PATTERN}"/>  
+             <Policies>  
+                 <TimeBasedTriggeringPolicy/>  
+                 <SizeBasedTriggeringPolicy size="100 MB"/>  
+             </Policies>  
+             <DefaultRolloverStrategy max="20"/>  
+         </RollingRandomAccessFile>  
+   
+         <RollingRandomAccessFile name="InfoLog"  
+                                  fileName="${LOG_HOME}/${INFO_LOG_FILE_NAME}.log"  
+                                  filePattern="${LOG_HOME}/${INFO_LOG_FILE_NAME}.log.%d{yyyy-MM-dd}.gz">  
+             <PatternLayout pattern="${PATTERN}"/>  
+             <Policies>  
+                 <TimeBasedTriggeringPolicy/>  
+                 <SizeBasedTriggeringPolicy size="100 MB"/>  
+             </Policies>  
+             <DefaultRolloverStrategy max="20"/>  
+         </RollingRandomAccessFile> 
+         
+		<Socket name="Logstash" host="192.168.3.59" port="4560" protocol="TCP">
+            <JsonLayout locationInfo="true" compact="true" eventEol="true" />
+        </Socket>
+   
+     </Appenders>  
+   
+     <Loggers>  
+         <!-- 3rdparty Loggers -->  
+         <logger name="org.springframework.core" level="info"></logger>  
+         <logger name="org.springframework.beans" level="info"></logger>  
+         <logger name="org.springframework.context" level="info"></logger>  
+         <logger name="org.springframework.web" level="error"></logger>  
+   
+         <logger name="org.zyyd" level="all" includeLocation="true" additivity="false">
+             <appender-ref ref="Console"/>  
+             <appender-ref ref="InfoLog"/>  
+         </logger> 
+          
+         <logger name="org.zyyd.base.util.LogUtil" level="all" includeLocation="true" additivity="false">
+             <appender-ref ref="Console"/>  
+             <appender-ref ref="Logstash"/>  
+         </logger>  
+   
+         <root level="info" includeLocation="true">  
+             <appender-ref ref="Console"/>  
+             <appender-ref ref="ErrorLog"/>  
+             <appender-ref ref="InfoLog"/>  
+         </root>
+
+         <!--对应的mybatis查询日志-->
+         <!--debug对应的只到语句，而TRACE还会打印结果条数-->
+         <!--name只到dao则只是语句，而如果是org.zyyd.base.dao.mapper则会打印每行的结果-->
+         <logger name="org.zyyd.base.dao" level="DEBUG" additivity="false">
+             <appender-ref ref="Console"/>
+             <appender-ref ref="InfoLog"/>
+         </logger>
+         <!--<Logger name="org.zyyd.base.dao" level="debug" additivity="false">-->
+             <!--<AppenderRef ref="mybatisSql" />-->
+         <!--</Logger>-->
+
+     </Loggers>  
+</Configuration>

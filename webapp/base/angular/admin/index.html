@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+		<title></title>
+
+		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+		<script src="/common/angular/static/js/lib/jquery/jquery-2.2.0.min.js"></script>
+		<!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+		<!-- 自定义样式 -->
+		<link rel="stylesheet" href="/common/angular/static/css/style.css">
+
+		<!-- 路由相关js -->
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/angular.min.js"></script>
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/angular-animate 1.4.min.js"></script>
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/angular-ui-router v1.0.0-alpha.5.min.js"></script>
+		<!-- 国际化相关js -->
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/angular-translate.min.js"></script>
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/angular-cookies.min.js"></script>
+		<!-- 国际化相关js -->
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/tm.pagination.js"></script>
+		<!--分页?-->
+		<link type="text/css" rel="stylesheet" href="/common/angular/static/css/views/system/page-list.css" />
+		<!--分页样式?-->
+
+		<!--amazeUI-->
+		<script type="text/javascript" src="/common/AmazeUI/js/amazeui.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="/common/AmazeUI/css/amazeui.min.css" />
+		<!-- 分页 -->
+		<script type="text/javascript" src="/common/angular/static/js/lib/angular/ui-bootstrap/ui-bootstrap-tpls 0.14.3.min.js"></script>
+
+		<!-- 校验必填项 -->
+		<script type="text/javascript" src="/common/angular/static/js/lib/global.js"></script>
+
+		<!-- 页面js -->
+		<!--Index-->
+		<script type="text/javascript" src="/base/angular/admin/index.js"></script>
+		<!--Home-->
+		<script type="text/javascript" src="/base/angular/admin/home.js"></script>
+		<!--place-->
+		<script type="text/javascript" src="/base/angular/admin/place.js"></script>
+		<!--sql-->
+		<script type="text/javascript" src="/base/angular/admin/sql.js"></script>
+	</head>
+	<body ng-app="indexApp" ng-controller="indexController" style="min-width: 1000px" >
+
+		<!--原始菜单-->
+		<ul class="am-nav am-nav-tabs am-nav-justify">
+			<li id="li_home" class="am-active"><a onclick="changeActive(this)" id="home" ui-sref="home" href="###">首页</a></li>
+			<li id="li_place"><a onclick="changeActive(this)" id="place" ui-sref="place" href="###">地区管理</a></li>
+			<li id="li_moudle"><a onclick="changeActive(this)" id="moudle" ui-sref="moudle" href="###">模块管理</a></li>
+			<li id="li_role"><a onclick="changeActive(this)" id="role" ui-sref="role" href="###">角色管理</a></li>
+			<li id="li_sql"><a onclick="changeActive(this)" id="sql" ui-sref="sql" href="###">sql管理</a></li>
+			<li id="li_log"><a onclick="changeActive(this)" id="log" ui-sref="log" href="###">操作日志</a></li>
+		</ul>
+
+		<!--视窗口-->
+		<div ui-view></div>
+
+
+		<!--底部链接-->
+		<div class="footer">
+			<div class="yqle">
+				友情连接:
+				<a ng-repeat="x in friends" href="{{x.href}}" target="_blank" ng-bind="x.friendName"></a>
+			</div>
+			Copyright ©
+		</div>
+
+		<script>
+			function changeActive(x) {
+                $("li[id^='li_']").removeClass("am-active");
+                $(x).parent().addClass("am-active");
+			};
+		</script>
+	</body>
+
+</html>
