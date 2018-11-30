@@ -1,9 +1,20 @@
 package org.zyyd.base.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,20 +23,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.vo.Message;
 import org.zyyd.base.entity.vo.ResultVo;
 import org.zyyd.base.service.TestService;
+import org.zyyd.base.util.BasicController;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.ApiOperation;
 import redis.RedisUtil;
 
 @Controller  //代表controller
 @RequestMapping("testC")
-public class testController {
+public class testController extends BasicController {
 
     @Autowired
     private RedisUtil redisUtil;
@@ -41,6 +55,7 @@ public class testController {
         Message message = new Message();
         redisUtil.set("aaa","test");
         System.out.println(redisUtil.get("aaa"));
+
        /* Student student = new Student();
         student.setName("a");
         student.setAge(11);
@@ -53,6 +68,8 @@ public class testController {
         return message;
     }
 
+
+
     /*@RequestMapping("/get")
     public Student getStudent(Integer id){
         Student student = new Student();
@@ -60,7 +77,20 @@ public class testController {
 
         return  student;
     }*/
-
+    @RequestMapping("/testShiroSession")
+    @ResponseBody
+    @RequiresPermissions("asdasd")
+    public Message testShiroSession(@RequestBody JSONObject json){
+        Message message = new Message();
+        return message;
+    }
+    @RequestMapping("/testShiroSession2")
+    @ResponseBody
+    @RequiresPermissions("properties:list")
+    public Message testShiroSession2(@RequestBody JSONObject json){
+        Message message = new Message();
+        return message;
+    }
 
 
 

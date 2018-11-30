@@ -1,12 +1,10 @@
 package org.zyyd.base.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.security.Key;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,12 +21,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.vo.Message;
+import org.zyyd.base.service.RedisService;
 import org.zyyd.base.service.UserService;
-import org.zyyd.base.servlet.ShiroRealm;
+import shiro.ShiroRealm;
 import org.zyyd.base.util.MD5;
 
 import com.alibaba.fastjson.JSONObject;
 
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.ApiOperation;
 import redis.RedisUtil;
 
@@ -38,11 +40,15 @@ import redis.RedisUtil;
 public class UserController {
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
+
+	private final String API_KEY = "love431";
+
+
 	@Autowired
 	private UserService userService;
 
 	@Autowired
-	private RedisUtil redisUtil;
+	private RedisService redisService;
 
 	@RequestMapping(value="/userLogin",method = RequestMethod.POST)
 	@ResponseBody
@@ -63,9 +69,7 @@ public class UserController {
                 // Boolean rememberMe = true;   //是否记住
                 shiroToken.setRememberMe(true);
                 subject.login(shiroToken);
-                System.out.println(subject.getPrincipal().toString());
-                baseUser = (BaseUser) subject.getPrincipal();
-				// Object name = SecurityUtils.getSubject().getPrincipals();
+                BaseUser user = (BaseUser) SecurityUtils.getSubject().getPrincipals().getPrimaryPrincipal();
 				// System.out.println(name);
 				// 获取role,并且存储session
 				//List<Map<String,Object>> roleList = new ArrayList<>();
@@ -75,6 +79,10 @@ public class UserController {
 
                 message.setSuccess(true);
                 message.setMessage("登录成功");
+
+
+                redisService.setShiroUser(baseUser);
+
 
 			} catch (AuthenticationException e) {
 				e.printStackTrace();

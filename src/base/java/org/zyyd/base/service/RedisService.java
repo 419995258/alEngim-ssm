@@ -20,6 +20,28 @@ public interface RedisService {
 
 
     /**
+     *   存储api用的shiro账户
+     * @Description:
+     * @param
+     * @return
+     * @throws
+     * @author pengbin <pengbin>
+     * 2018/11/29 20:18
+     */
+    void setShiroUser(BaseUser baseUser);
+
+    /**
+     *   获取api用的shiro账户
+     * @Description:
+     * @param
+     * @return
+     * @throws
+     * @author pengbin <pengbin>
+     * 2018/11/29 20:18
+     */
+    BaseUser getShiroUser(String loginName);
+
+    /**
      *   存放properties的缓存，全部
      * @Description:
      * @param

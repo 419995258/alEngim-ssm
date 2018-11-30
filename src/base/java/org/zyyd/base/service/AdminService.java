@@ -27,28 +27,6 @@ public interface AdminService {
 
 
 
-    /**
-     *   分页查询basePropertyGroup
-     * @Description:   
-     * @param    resultVo
-     * @return resultVo
-     * @throws
-     * @author pengbin <pengbin>
-     * 2018/11/16 16:24
-     */
-    ResultVo listBasePropertiesGroup(ResultVo resultVo);
-
-
-    /**
-     *   分页查询baseProperty
-     * @Description:   
-     * @param    resultVo
-     * @return resultVo
-     * @throws
-     * @author pengbin <pengbin>
-     * 2018/11/16 16:24
-     */
-    ResultVo listBaseProperties(ResultVo resultVo);
 
 
 

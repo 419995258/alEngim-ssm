@@ -36,6 +36,7 @@ import static redis.RedisCacheConsts.BASE_PROPERTIES_CACHE_CODE;
 import static redis.RedisCacheConsts.BASE_PROPERTIES_GROUP_CACHE_CODE;
 import static redis.RedisCacheConsts.BASE_ROLE_CACHE_CODE;
 import static redis.RedisCacheConsts.BASE_ROLE_ONE_CACHE_CODE;
+import static redis.RedisCacheConsts.BASE_USER_SHIRO_CACHE_LOGIN_NAME;
 
 
 /**
@@ -67,6 +68,19 @@ public class RedisServiceImpl extends BasicService implements RedisService {
     @Autowired
     private UserMapperExt userMapperExt;
 
+
+    @Override
+    public void setShiroUser(BaseUser baseUser) {
+       redisUtil.set(BASE_USER_SHIRO_CACHE_LOGIN_NAME + baseUser.getLoginName(),baseUser);
+       redisUtil.expire(BASE_USER_SHIRO_CACHE_LOGIN_NAME + baseUser.getLoginName(),60);
+    }
+
+    @Override
+    public BaseUser getShiroUser(String loginName) {
+        BaseUser baseUser = new BaseUser();
+        baseUser = (BaseUser) redisUtil.get(BASE_USER_SHIRO_CACHE_LOGIN_NAME + loginName);
+        return baseUser;
+    }
 
     @Override
     public void setPropertiesGroupRedis() {

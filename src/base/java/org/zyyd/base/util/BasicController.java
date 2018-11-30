@@ -45,6 +45,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
+import static org.zyyd.base.util.ObjectUtil.writeJson;
+
 public class BasicController {
 
 
@@ -56,8 +58,9 @@ public class BasicController {
         if (isAjaxRequest(request)) {
             // 输出JSON
             JSONObject json = new JSONObject();
-            json.put("code", "-999");
-            json.put("message", "请先登录");
+            json.put("code", "-1");
+            json.put("message", "请先登录!");
+            json.put("success",false);
             writeJson(json, response);
             return null;
         } else {
@@ -105,30 +108,7 @@ public class BasicController {
     }
 
 
-    /**
-     *   输出JSON
-     * @Description:
-     * @param
-     * @return
-     * @throws
-     * @author pengbin <pengbin>
-     * 2018/11/26 10:59
-     */
-    private void writeJson(JSONObject json, HttpServletResponse response) {
-        PrintWriter out = null;
-        try {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charset=utf-8");
-            out = response.getWriter();
-            out.write(json.toJSONString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+
 
 
 

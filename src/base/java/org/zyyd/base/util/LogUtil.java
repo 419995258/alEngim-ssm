@@ -25,7 +25,7 @@ public class LogUtil {
 	
 	public static void main(String[] args) {
 		Map<String,Object> message = new HashMap<String,Object>();
-		message.put("className", "tttttttttt");
+		message.put("className", "alEngin");
 		message.put("doMethod", "test");
 		LogUtil.info(message);
 	}

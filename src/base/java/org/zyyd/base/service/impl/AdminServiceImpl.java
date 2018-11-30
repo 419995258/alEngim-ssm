@@ -1,7 +1,5 @@
 package org.zyyd.base.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
@@ -18,7 +16,6 @@ import org.zyyd.base.dao.BaseRoleMapper;
 import org.zyyd.base.dao.BaseRolePermissionMapMapper;
 import org.zyyd.base.dao.BaseUserMapper;
 import org.zyyd.base.dao.BaseUserRoleMapMapper;
-import org.zyyd.base.dao.vo.UserMapperExt;
 import org.zyyd.base.entity.BasePermission;
 import org.zyyd.base.entity.BasePermissionExample;
 import org.zyyd.base.entity.BaseProperties;
@@ -31,28 +28,20 @@ import org.zyyd.base.entity.BaseRolePermissionMap;
 import org.zyyd.base.entity.BaseRolePermissionMapExample;
 import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.BaseUserExample;
-import org.zyyd.base.entity.BaseUserRoleMap;
 import org.zyyd.base.entity.vo.BaseUserVO;
 import org.zyyd.base.entity.vo.Message;
 import org.zyyd.base.entity.vo.ResultVo;
 import org.zyyd.base.service.AdminService;
 import org.zyyd.base.service.RedisService;
-import org.zyyd.base.servlet.ShiroRealm;
+import shiro.ShiroRealm;
 import org.zyyd.base.util.BasicService;
 import org.zyyd.base.util.MD5;
-import org.zyyd.base.util.ObjectUtil;
 
-import javafx.scene.layout.VBox;
-import redis.RedisUtil;
-
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -84,31 +73,6 @@ public class AdminServiceImpl extends BasicService implements AdminService {
     private BaseUserRoleMapMapper baseUserRoleMapMapper;
 
 
-    @Override
-    public ResultVo listBasePropertiesGroup(ResultVo resultVo) {
-        //使用分页插件,核心代码就这一行
-        //PageHelper.startPage(pNum, pSize);
-        this.setPageInfo(resultVo.getPageNo(),resultVo.getPageSize());
-        //查询property
-        BasePropertiesGroupExample basePropertiesGroupExample = new BasePropertiesGroupExample();
-        basePropertiesGroupExample.setOrderByClause("SEQ_NO desc");
-        List<BasePropertiesGroup> list = basePropertiesGroupMapper.selectByExample(basePropertiesGroupExample);
-        resultVo.setRows(list);
-        return resultVo;
-    }
-
-    @Override
-    public ResultVo listBaseProperties(ResultVo resultVo) {
-
-        //使用分页插件,核心代码就这一行
-        //PageHelper.startPage(pNum, pSize);
-        this.setPageInfo(resultVo.getPageNo(),resultVo.getPageSize());
-        //查询property
-        BasePropertiesExample basePropertiesExample = new BasePropertiesExample();
-
-
-        return resultVo;
-    }
 
     @Override
     public List<BasePropertiesGroup> listBasePropertiesGroup() {

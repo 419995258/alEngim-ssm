@@ -1,8 +1,14 @@
 package org.zyyd.base.util;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Collection;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 public class ObjectUtil {
@@ -196,5 +202,27 @@ public class ObjectUtil {
 		}
 		
 		return result;
+	}
+
+	/**
+	 * 输出JSON
+	 *
+	 * @Description:
+	 * @author pengbin <pengbin> 2018/11/26 10:59
+	 */
+	public static void writeJson(JSONObject json, HttpServletResponse response) {
+		PrintWriter out = null;
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json; charset=utf-8");
+			out = response.getWriter();
+			out.write(json.toJSONString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
 	}
 }

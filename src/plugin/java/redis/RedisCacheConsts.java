@@ -8,9 +8,9 @@ package redis;
  */
 public class RedisCacheConsts {
 	/**
-	 * SQL缓存名称
+	 * api用的shiro账户
 	 */
-	public final static String BASE_QUERY_CACHE_NAME="base_BaseQuery_queryName_";
+	public final static String BASE_USER_SHIRO_CACHE_LOGIN_NAME="base_BaseUser_shiro_loginName_";
 	
 
 

@@ -458,7 +458,6 @@ public class AdminController extends BasicController {
     @RequiresPermissions("user:list")
     public ResultVo queryUserList(@RequestBody BaseUserVO baseUserVO){
         ResultVo resultVo = new ResultVo();
-        Message message = new Message();
         resultVo = adminService.listBaseUserList(baseUserVO);
         return resultVo;
     }
