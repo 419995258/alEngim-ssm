@@ -12,13 +12,13 @@
 
     <script src="../../common/js/base.js"></script>
     <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../common/js/lhgdialog/lhgdialog.min.js?skin=alEngin"></script>
 
     <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
     <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
     <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
 
     <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
-    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
 
     <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
     <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
@@ -50,6 +50,7 @@
         <a href="role.html" class="mdui-list-item mdui-ripple mdui-list-item-active">角色管理</a>
         <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
         <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+        <a href="area.html" class="mdui-list-item mdui-ripple ">地区管理</a>
       </div>
     </div>
   </div>
@@ -117,7 +118,7 @@
             <ul class="mdui-list" v-for="(baseRole,index) in baseRoleList">
                 <!--v-on:click="getPermission(index,baseRole.roleCode)"-->
                 <li class="mdui-list-item mdui-ripple"
-                    v-on:click="queryBasePermissionChecked(index,baseRole)"
+                    v-on:click="listBasePermissionChecked(index,baseRole)"
                     v-bind:class="{'mdui-list-item-active':index==active}"
                     v-bind:title="baseRole.roleDesc"
                 >
@@ -135,7 +136,7 @@
                             style="position: absolute;right: 17%;top: 7px;">
                         <i class="mdui-icon material-icons">edit</i>
                     </button>
-                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="delBaseRole(index,baseRole)"
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="deleteBaseRole(index,baseRole)"
                             style="position: absolute;right: 2%;top: 7px;">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>
@@ -300,7 +301,7 @@
                                              console.log(vm.user);
                                              $.ajax({
                                                         type : "post",
-                                                        url : projectName + "/userC/logout",
+                                                        url : projectName + "/loginC/logout",
                                                         data : "{}",
                                                         datatype : 'json',
                                                         contentType:"application/json",
@@ -311,7 +312,7 @@
                                                             //location.href = "/base/admin/index.html";
                                                         },
                                                         error : function() {
-                                                            alert("请求失败");
+                                                            $.dialog.alert('请求失败！',function(){});
                                                         }
                                                     });
                                          }
@@ -355,7 +356,7 @@
                              //初始化获取数据后，对数据进行监听，baseRoleList，默认选中第一个，获取属性值
                              baseRoleList:function (){
                                  if(vm.baseRoleList.length > 0 ){
-                                     vm.queryBasePermissionChecked(0,vm.baseRoleList[0]);
+                                     vm.listBasePermissionChecked(0,vm.baseRoleList[0]);
                                  }
                              },
                          },
@@ -363,7 +364,7 @@
                              setPropertyRedis:function(){
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/setRedisByKey",
+                                            url : projectName + "/base/redisC/setRedisByKey",
                                             //data : JSON.stringify(vm.propertyGroup),
                                             data:"key=role",
                                             datatype : 'json',
@@ -375,14 +376,14 @@
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
                              queryRole: function () {
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryBaseRole",
+                                            url : projectName + "/base/baseRoleC/listBaseRole",
                                             //data : JSON.stringify(test3.page),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -394,7 +395,7 @@
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
@@ -415,7 +416,7 @@
 
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/addorUpdateBaseRole",
+                                            url : projectName + "/base/baseRoleC/updateBaseRole",
                                             data : JSON.stringify(vm.baseRoleForm),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -431,7 +432,7 @@
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
@@ -439,15 +440,14 @@
                                  vm.baseRoleForm = JSON.parse(JSON.stringify(baseRole));
                                  /*vm.baseRole = baseRole;*/
                              },
-                             delBaseRole: function (index,baseRole) {
+                             deleteBaseRole: function (index,baseRole) {
 
                                  // 含文本和确认回调
                                  mdui.confirm('确认删除？！', function(){
-                                     $.AMUI.progress.start();
                                      //通过id删除属性
                                      $.ajax({
                                                 type : "post",
-                                                url : projectName + "/adminC/delBaseRole",
+                                                url : projectName + "/base/baseRoleC/deleteBaseRole",
                                                 data : "roleId="+baseRole.roleId,
                                                 //datatype : 'json',
                                                 //contentType:"application/json",
@@ -458,11 +458,9 @@
                                                     }else{
                                                         mdui.alert(data.message);
                                                     }
-                                                    $.AMUI.progress.done();
                                                 },
                                                 error : function() {
-                                                    mdui.alert("请求失败");
-                                                    $.AMUI.progress.done();
+                                                    $.dialog.alert('请求失败！',function(){});
                                                 }
                                             });
                                  });
@@ -470,13 +468,13 @@
 
 
                              },
-                             queryBasePermissionChecked :function (index,baseRole) {
+                             listBasePermissionChecked :function (index,baseRole) {
                                  vm.baseRole = baseRole;
                                  //添加选中状态
                                  vm.active=index;
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryBasePermissionChecked",
+                                            url : projectName + "/base/baseRoleC/listBasePermissionChecked",
                                             data : JSON.stringify(baseRole),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -490,7 +488,7 @@
                                                 //location.href = "/base/admin/index.html";
                                             },
                                             error : function() {
-                                                alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
@@ -513,17 +511,17 @@
 
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/updateBasePermissionChecked",
+                                            url : projectName + "/base/baseRoleC/updateBasePermissionChecked",
                                             data : JSON.stringify(obj),
                                             datatype : 'json',
                                             contentType:"application/json",
                                             async: false,
                                             success : function(data) {
                                                 mdui.alert(data.message);
-                                                vm.queryBasePermissionChecked(vm.active,vm.baseRole);
+                                                vm.listBasePermissionChecked(vm.active,vm.baseRole);
                                             },
                                             error : function() {
-                                                alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              }

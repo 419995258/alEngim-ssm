@@ -14,13 +14,13 @@
 
     <script src="../../common/js/base.js"></script>
     <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../common/js/lhgdialog/lhgdialog.min.js?skin=alEngin"></script>
 
     <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
     <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
     <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
 
     <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
-    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
 
     <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
     <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
@@ -52,6 +52,7 @@
                 <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
                 <a href="permission.html" class="mdui-list-item mdui-ripple mdui-list-item-active">权限管理</a>
                 <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+                <a href="area.html" class="mdui-list-item mdui-ripple ">地区管理</a>
             </div>
         </div>
     </div>
@@ -166,7 +167,7 @@
 
 
                         <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
-                                v-on:click="delPermission(permission)">
+                                v-on:click="deletePermission(permission)">
                             删除
                         </button>
 
@@ -272,7 +273,7 @@
     function queryPermission(){
         $.ajax({
                    type : "post",
-                   url : projectName + "/adminC/queryBasePermission",
+                   url : projectName + "/base/baseRoleC/listBasePermission",
                    data : "{}",
                    datatype : 'json',
                    contentType:"application/json",
@@ -287,7 +288,7 @@
                        //location.href = "/base/admin/index.html";
                    },
                    error : function() {
-                       alert("请求失败");
+                       $.dialog.alert('请求失败！',function(){});
                    }
                });
     };
@@ -332,7 +333,7 @@
                                  vm.permission.permissionId = id;
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryBasePermission",
+                                            url : projectName + "/base/baseRoleC/listBasePermission",
                                             data : JSON.stringify(vm.permission),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -344,11 +345,11 @@
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                  });
                              },
-                             delPermission: function (permission) {
+                             deletePermission: function (permission) {
                                  //console.log(event.currentTarget);
                                  // 含文本和确认回调
                                  mdui.confirm('确认删除？！', function(){
@@ -364,7 +365,7 @@
                                          //通过id删除属性
                                          $.ajax({
                                                     type : "post",
-                                                    url : projectName + "/adminC/delPermission",
+                                                    url : projectName + "/base/baseRoleC/deletePermission",
                                                     data : JSON.stringify(permission),
                                                     datatype : 'json',
                                                     contentType:"application/json",
@@ -380,7 +381,7 @@
                                                         $.AMUI.progress.done();
                                                     },
                                                     error : function() {
-                                                        mdui.alert("请求失败");
+                                                        $.dialog.alert('请求失败！',function(){});
                                                         $.AMUI.progress.done();
                                                     }
                                                 });
@@ -400,7 +401,7 @@
                                  var inst = new mdui.Dialog('#addPermission');
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/addorUpdateBasePermission",
+                                            url : projectName + "/base/baseRoleC/updateBasePermission",
                                             data : JSON.stringify(permission),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -411,14 +412,14 @@
                                                 initTree();
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                  });
                              },
                              setPropertyRedis:function(){
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/setRedisByKey",
+                                            url : projectName + "/base/redisC/setRedisByKey",
                                             //data : JSON.stringify(vm.propertyGroup),
                                             data:"key=permission",
                                             datatype : 'json',
@@ -430,7 +431,7 @@
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },

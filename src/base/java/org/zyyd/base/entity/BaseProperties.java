@@ -7,43 +7,63 @@ import java.util.Date;
 
 @ApiModel(value="org.zyyd.base.entity.BaseProperties")
 public class BaseProperties implements Serializable {
-    /* 系统编码*/
+    /**
+	* 系统编码
+	*/
     @ApiModelProperty(value="系统编码")
     private String pid;
 
-    /* 属性代码*/
+    /**
+	* 属性代码
+	*/
     @ApiModelProperty(value="属性代码")
     private String propertyKey;
 
-    /* 属性值*/
+    /**
+	* 属性值
+	*/
     @ApiModelProperty(value="属性值")
     private String propertyValue;
 
-    /* 属性值描述*/
+    /**
+	* 属性值描述
+	*/
     @ApiModelProperty(value="属性值描述")
     private String propertyDesc;
 
-    /* 属性组代码[FK](如：teach.subject)*/
+    /**
+	* 属性组代码[FK](如：teach.subject)
+	*/
     @ApiModelProperty(value="属性组代码[FK](如：teach.subject)")
     private String groupKey;
 
-    /* 排序*/
+    /**
+	* 排序
+	*/
     @ApiModelProperty(value="排序")
     private Integer seqNo;
 
-    /* */
+    /**
+	* 
+	*/
     @ApiModelProperty(value="")
     private Date creTime;
 
-    /* */
+    /**
+	* 
+	*/
     @ApiModelProperty(value="")
     private String creUser;
 
-    /* */
+    /**
+	* 
+	*/
     @ApiModelProperty(value="")
     private Date modTime;
 
-    /* */
+    /**
+	* 
+	*/
     @ApiModelProperty(value="")
     private String modUser;
 

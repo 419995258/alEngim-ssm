@@ -69,12 +69,12 @@ public class ApiAuthcFilter extends AccessControlFilter {
 
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String jwt = httpRequest.getHeader("Token");
+        String jwt = httpRequest.getHeader("Authorization");
         if (StringUtils.isBlank(jwt)) {
             return false;
         }
         try {
-            String tokenStr = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("love431"))
+            String tokenStr = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("alEngin"))
                     .parseClaimsJws(jwt).getBody().getSubject();
 
 
@@ -86,7 +86,7 @@ public class ApiAuthcFilter extends AccessControlFilter {
 
             Subject subject = getSubject(request, response);
             subject.login(token);//认证
-            SecurityUtils.getSubject().getSession().setTimeout(60000);
+            SecurityUtils.getSubject().getSession().stop();
             return true;//认证成功，过滤器链继续
         } catch (AuthenticationException e) {//认证失败，发送401状态并附带异常信息
             e.printStackTrace();
@@ -106,20 +106,7 @@ public class ApiAuthcFilter extends AccessControlFilter {
     }
 
 
-    /**
-     * 是否是Ajax请求
-     *
-     * @Description:
-     * @author pengbin <pengbin> 2018/11/26 10:58
-     */
-    public static boolean isAjaxRequest(HttpServletRequest request) {
-        String requestedWith = request.getHeader("x-requested-with");
-        if (requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
 
 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>在线人员</title>
+
+    <script src="./common/js/base.js"></script>
+
+    <script src="./common/js/jquery/jquery-2.1.4.min.js"></script>
+
+
+    <link rel="stylesheet" href="./common/js/MDUI/css/mdui.min.css">
+    <link rel="stylesheet" href="./common/js/MDUI/css/doc.css">
+
+
+
+</head>
+<body class=" mdui-theme-primary-indigo mdui-theme-accent-pink">
+
+<style>
+  .color-palette{
+    position: relative;
+    padding: 0 0 36px 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .color-palette li {
+    padding: 15px;
+  }
+  .color-palette .color-divider {
+    margin-top: 8px;
+  }
+  .color-palette .main-color {
+  }
+  .color-palette .main-color .color-name {
+    display: block;
+    margin-bottom: 60px;
+  }
+  .color-palette .color-hex {
+    float: right;
+    text-transform: uppercase;
+  }
+  .color-palette .anchor-primary-color {
+    position: absolute;
+    top: -72px;
+  }
+  .color-palette .anchor-accent-color {
+    position: absolute;
+    top: 520px;
+  }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="session">
+
+
+    <div class="mdui-row" >
+a
+        <div class="mdui-col-xs-12">
+
+
+           <!-- <ul class="mdui-list" v-for="(property,index) in propertyList">
+                <li class="mdui-list-item mdui-ripple">
+                    {{property.propertyValue}}
+                </li>
+                <li class="mdui-divider"></li>
+            </ul>-->
+            <h3 class="doc-title mdui-text-color-theme">当前在线角色</h3>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>登录名</th>
+                        <th>realName</th>
+                        <th>host</th>
+                        <th>最后活动时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(session,index) in sessionList" >
+                        <td>{{index+1}}</td>
+                        <td>{{session.loginName}}</td>
+                        <td>{{session.realName}}</td>
+                        <td>{{session.host}}</td>
+                        <td>{{session.lastAccessTime}}</td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<script src="./common/js/MDUI/js/mdui.min.js"></script>
+<script src="./common/js/vue/vue.min.js"></script>
+
+<script>
+
+    //进度指示器
+    /*var dialogOptions = {
+        modal : true,
+        closeOnEsc : false,
+    }
+    var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
+
+    console.log(projectName);
+
+
+    Vue.config.debug = true;//开启vue的debug模式
+
+
+    var vm = new Vue({
+                         el:"#session",
+                         data : {
+                             session : {
+                                 id:'',
+                                 host:'',
+                                 loginName:'',
+                                 realName:'',
+                                 lastAccessTime:'',
+                             },
+                             sessionList:[],
+
+
+
+                         },
+                         // 初始化执行
+                         mounted(){
+                             this.getSessionList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+
+                             getSessionList: function () {
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/loginC/listLoginUser",
+                                            //data : JSON.stringify(test3.page),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+                                                if(data.success == true){
+                                                    vm.sessionList = data.obj;
+                                                }else{
+                                                    $.dialog.alert(data.message,function(){});
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+
+                         }
+                     });
+
+
+
+
+
+</script>
+

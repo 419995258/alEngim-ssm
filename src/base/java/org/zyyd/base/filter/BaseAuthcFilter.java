@@ -9,12 +9,17 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static org.zyyd.base.util.ObjectUtil.getJson;
+import static org.zyyd.base.util.ObjectUtil.isAjaxRequest;
 import static org.zyyd.base.util.ObjectUtil.writeJson;
 
 @Component("BaseAuthc")
@@ -29,6 +34,16 @@ public class BaseAuthcFilter extends AuthenticationFilter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
+        /*String path=req.getServletPath();
+
+        Map<String,Object> logMessage = new HashMap<String,Object>();
+        Enumeration<String> ks = ((HttpServletRequest) request).getParameterNames();
+        while (ks.hasMoreElements()) {//循环遍历Header中的参数，把遍历出来的参数放入Map中
+            String key=ks.nextElement();
+            String value=((HttpServletRequest) request).getParameter(key);
+            logMessage.put(key, value);
+        }*/
+
         if(isAjaxRequest(req)){
             JSONObject json = new JSONObject();
             json.put("code", "-1");
@@ -41,25 +56,9 @@ public class BaseAuthcFilter extends AuthenticationFilter {
         return false;
     }
 
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 
-    /**
-     *   是否是Ajax请求
-     * @Description:
-     * @param
-     * @return
-     * @throws
-     * @author pengbin <pengbin>
-     * 2018/11/26 10:58
-     */
-    public static boolean isAjaxRequest(HttpServletRequest request) {
-        String requestedWith = request.getHeader("x-requested-with");
-        if (requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest")) {
-            return true;
-        } else {
-            return false;
-        }
+        return super.isAccessAllowed(request, response, mappedValue);
     }
-
-
-
 }

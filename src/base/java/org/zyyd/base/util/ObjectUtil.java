@@ -2,12 +2,16 @@ package org.zyyd.base.util;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.math.RoundingMode;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -225,4 +229,46 @@ public class ObjectUtil {
 			}
 		}
 	}
+
+
+	/**
+	 *   是否是Ajax请求
+	 * @Description:
+	 * @param
+	 * @return
+	 * @throws
+	 * @author pengbin <pengbin>
+	 * 2018/11/26 10:58
+	 */
+	public static boolean isAjaxRequest(HttpServletRequest request) {
+		String requestedWith = request.getHeader("x-requested-with");
+		if (requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static JSONObject getJson(HttpServletRequest request,HttpServletResponse response){
+	    JSONObject json = new JSONObject();
+
+        String get = "";
+        try {
+            StringBuffer info = new java.lang.StringBuffer();
+            InputStream in = request.getInputStream();
+            BufferedInputStream buf = new BufferedInputStream(in);
+
+            byte[] buffer = new byte[1024];
+            int iRead;
+            while ((iRead = buf.read(buffer)) != -1) {
+                info.append(new String(buffer, 0, iRead, "UTF-8"));
+            }
+            get = info.toString();
+            json = JSONObject.parseObject(get);
+        } catch (Exception e) {
+            System.out.println("错误：：" + get);
+            e.printStackTrace();
+        }
+	    return json;
+    }
 }

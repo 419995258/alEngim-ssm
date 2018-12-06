@@ -11,6 +11,68 @@ import java.util.GregorianCalendar;
 
 
 public class DateFormater {
+
+    /**
+     * 日期格式为{@value},例如:"200408";
+     */
+    public static final String DATE_STYLE1 = "yyyyMM";
+
+    /**
+     * 日期格式为{@value},例如:"20040823";
+     */
+    public static final String DATE_STYLE2 = "yyyyMMdd";
+
+    /**
+     * 日期格式为"yyyy年MM月dd日 星期X",例如:"2006年05月26日 星期五";
+     */
+    public static final String DATE_STYLE3 = "yyyy年MM月dd日 E";
+
+    /**
+     * 日期格式为{@value},例如:"2006-05-26";
+     */
+    public static final String DATE_STYLE4 = "yyyy-MM-dd";
+
+    /**
+     * 日期格式为{@value},例如:"2006-05-26 17:11:01";
+     */
+    public static final String DATE_STYLE5 = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 日期格式为{@value},例如:"2006.05.26";
+     */
+    public static final String DATE_STYLE6 = "yyyy.MM.dd";
+
+
+    /**
+     * 所属期起日;
+     */
+    public static final String SSSQ_Q = "qq";
+
+    /**
+     * 所属期之日;
+     */
+    public static final String SSSQ_Z = "qz";
+
+    /**
+     * 日期格式为{@value},例如:"20060526171101";
+     */
+    public static final String DATE_STYLE7 = "yyyyMMddHH24miss";
+
+    public static final String DATE_STYLE8 = "yyyyMMdd HH:mm:ss";
+
+    public static final String DATE_STYLE9 = "yyyy-MM-dd HH:mm:ss";
+
+    public static final String DATE_STYLE10 = "yyyyMMdd HH:mm:ss";
+
+    public static final String DATE_STYLE11 = "yyyy年MM月dd日";
+
+    public static final String DATE_STYLE12 = "yyyy年MM月";
+    /**
+     * 格式：{@value} ，例如：2016-06
+     */
+    public static final String DATE_STYLE13 = "yyyy-MM";
+
+
     //用来全局控制 上一周，本周，下一周的周数变化    
     private  int weeks = 0;    
     private int MaxDate;//一月最大天数    
@@ -18,6 +80,7 @@ public class DateFormater {
     private final SimpleDateFormat shortSdf;
     private final SimpleDateFormat longHourSdf;
     private final SimpleDateFormat longSdf;
+
 	public DateFormater() {
 		  this.shortSdf = new SimpleDateFormat("yyyy-MM-dd");
 	      this.longHourSdf = new SimpleDateFormat("yyyy-MM-dd HH");

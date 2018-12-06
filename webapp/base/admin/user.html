@@ -11,13 +11,13 @@
 
     <script src="../../common/js/base.js"></script>
     <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../common/js/lhgdialog/lhgdialog.min.js?skin=alEngin"></script>
 
     <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
     <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
     <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
 
     <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
-    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
 
     <link rel="stylesheet" href="../../common/js/Pagination/page.css">
     <script src="../../common/js/Pagination/page.js"></script>
@@ -48,6 +48,7 @@
         <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
         <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
         <a href="user.html" class="mdui-list-item mdui-ripple mdui-list-item-active">用户管理</a>
+        <a href="area.html" class="mdui-list-item mdui-ripple ">地区管理</a>
       </div>
     </div>
   </div>
@@ -135,7 +136,7 @@
                         <td>{{user.loginName}}</td>
                         <td>
                             <label class="mdui-switch">
-                                <input type="checkbox"  v-bind:checked="user.userStatus == '1'" v-on:change="changeUserStatus(user)"/>
+                                <input type="checkbox"  v-bind:checked="user.userStatus == '1'" v-on:change="updateUserStatus(user)"/>
                                 <i class="mdui-switch-icon"></i>
                             </label>
                         </td>
@@ -148,7 +149,7 @@
                                 修改
                             </button>
                             <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
-                                    v-on:click="delUser(user)">
+                                    v-on:click="deleteUser(user)">
                                 删除
                             </button>
 
@@ -242,7 +243,7 @@
     var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
 
     $(function(){
-        queryUserList();
+        listUserList();
 
         //listenDialog();
 
@@ -260,7 +261,7 @@
                                              console.log(vm.user);
                                              $.ajax({
                                                         type : "post",
-                                                        url : projectName + "/userC/logout",
+                                                        url : projectName + "/loginC/logout",
                                                         data : "{}",
                                                         datatype : 'json',
                                                         contentType:"application/json",
@@ -271,7 +272,7 @@
                                                             location.href = projectName + "/base/admin/index.html";
                                                         },
                                                         error : function() {
-                                                            alert("请求失败");
+                                                            $.dialog.alert('请求失败！',function(){});
                                                         }
                                                     });
                                          }
@@ -319,7 +320,7 @@
                          },
                          // 初始化执行
                          mounted(){
-                             //this.queryUserList()
+                             //this.listUserList()
                              this.queryRole();
                          },
                          //执行某些方法后数据产生了变化再执行
@@ -331,11 +332,11 @@
                              //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
                          },
                          methods : {
-                             queryUserList: function () {
-                                 queryUserList();
+                             listUserList: function () {
+                                 listUserList();
 
                              },
-                             changeUserStatus:function (user){
+                             updateUserStatus:function (user){
                                  if( user.userStatus == '1'){
                                      user.userStatus = '0';
                                  }else{
@@ -343,7 +344,7 @@
                                  }
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/changeUserStatus",
+                                            url : projectName + "/base/baseUserC/updateUserStatus",
                                             data : JSON.stringify(user),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -355,27 +356,27 @@
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
-                             delUser:function (user){
+                             deleteUser:function (user){
                                  mdui.confirm('确认删除？！', function(){
                                      $.ajax({
                                                 type : "post",
-                                                url : projectName + "/adminC/delUser",
+                                                url : projectName + "/base/baseUserC/deleteUser",
                                                 data : JSON.stringify(user),
                                                 datatype : 'json',
                                                 contentType:"application/json",
                                                 success : function(data) {
                                                     if(data.success == true){
-                                                        queryUserList();
+                                                        listUserList();
                                                     }else{
                                                         mdui.alert(data.message);
                                                     }
                                                 },
                                                 error : function() {
-                                                    mdui.alert("请求失败");
+                                                    $.dialog.alert('请求失败！',function(){});
                                                 }
                                             });
                                  })
@@ -383,7 +384,7 @@
                              queryRole: function () {
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryBaseRole",
+                                            url : projectName + "/base/baseRoleC/listBaseRole",
                                             //data : JSON.stringify(test3.page),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -395,7 +396,7 @@
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
@@ -409,13 +410,13 @@
                                  var inst = new mdui.Dialog('#addBaseUser');
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/updateUser",
+                                            url : projectName + "/base/baseUserC/updateUser",
                                             data : JSON.stringify(user),
                                             datatype : 'json',
                                             contentType:"application/json",
                                             success : function(data) {
                                                 if(data.success == true){
-                                                    queryUserList();
+                                                    listUserList();
                                                     inst.close();
                                                     mdui.alert(data.message);
                                                 }else{
@@ -423,7 +424,7 @@
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
@@ -439,11 +440,11 @@
 
 
     /*查询userList*/
-    function queryUserList() {
+    function listUserList() {
 
         var obj = $("#Pagination").page({
                                             //  后台地址
-                                            url : projectName + "/adminC/queryUserList",
+                                            url : projectName + "/base/baseUserC/listUserList",
                                             data: {
                                                 // 第一次请求时需要的查询参数,默认为空
                                                 loginName : "admin",

@@ -13,12 +13,16 @@
 
     <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
 
+    <script src="../../common/js/lhgdialog/lhgdialog.min.js?skin=alEngin"></script>
+
     <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
     <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
     <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
 
+    <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
     <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
-    <script src="../../common/js/AmazeUI/js/amazeui.min.js"></script>
 
 
 </head>
@@ -46,6 +50,7 @@
         <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
         <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
         <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+        <a href="area.html" class="mdui-list-item mdui-ripple ">地区管理</a>
       </div>
     </div>
   </div>
@@ -100,34 +105,35 @@
 
     <div class="mdui-row" >
         <div class="mdui-col-xs-3">
-            <div class="mdui-col-xs-9">
+            <div class="mdui-col-xs-6">
                 <h3 class="doc-title mdui-text-color-theme">属性组</h3>
             </div>
-            <div class="mdui-col-xs-3">
+            <div class="mdui-col-xs-6">
                 <h3 class="doc-title mdui-text-color-theme">
-                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple mdui-center" mdui-dialog="{target: '#addPropertyGroup'}">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addPropertyGroup'}" v-on:click="openAddPropertyGroup()">
                         <i class="mdui-icon material-icons">add</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addPropertyGroup'}" >
+                        <i class="mdui-icon material-icons">edit</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="deletePropertyGroup(propertyGroup)">
+                        <i class="mdui-icon material-icons">delete</i>
                     </button>
                 </h3>
             </div>
-            <ul class="mdui-list" v-for="(propertyGroup,index) in propertyGroupList">
 
-                <li class="mdui-list-item mdui-ripple"
-                    v-on:click="getProperty(index,propertyGroup.groupKey)"
-                    v-bind:class="{'mdui-list-item-active':index==active}"
-                >
-                    {{propertyGroup.groupName}}
-                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addPropertyGroup'}" v-on:click="editPropertyGroup(propertyGroup)"
-                            style="position: absolute;right: 17%;top: 7px;">
-                        <i class="mdui-icon material-icons">edit</i>
-                    </button>
-                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " v-on:click="delPropertyGroup(index,propertyGroup)"
-                            style="position: absolute;right: 2%;top: 7px;">
-                        <i class="mdui-icon material-icons">delete</i>
-                    </button>
-                </li>
-                <li class="mdui-divider"></li>
-            </ul>
+
+            <!--树状结构-->
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td valign="top" style="width:200px;">
+                            <div id="treeDiv" class="ztree">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div class="mdui-col-xs-9">
             <div class="mdui-col-xs-9">
@@ -168,7 +174,7 @@
                                 修改
                             </button>
                             <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
-                                    v-on:click="delProperty(index,property.gid)">
+                                    v-on:click="deleteProperty(index,property.pid)">
                                 删除
                             </button>
                         </td>
@@ -240,6 +246,11 @@
             <div class="mdui-dialog-title">添加属性组</div>
             <div class="mdui-dialog-content" >
                 <input type="hidden" v-model="propertyGroup.gid">
+                <div class="mdui-textfield "  v-bind:class="propertyGroup.groupCode==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">groupCode</label>
+                    <input class="mdui-textfield-input" placeholder="属性组key" v-model="propertyGroup.groupCode" required/>
+                    <div class="mdui-textfield-error">属性组Code不能为空</div>
+                </div>
                 <div class="mdui-textfield "  v-bind:class="propertyGroup.groupKey==''?'mdui-textfield-invalid':''">
                     <label class="mdui-textfield-label">groupKey</label>
                     <input class="mdui-textfield-input" placeholder="属性组key" v-model="propertyGroup.groupKey" required/>
@@ -252,10 +263,6 @@
                 </div>
 
 
-                <div class="mdui-textfield ">
-                    <label class="mdui-textfield-label">属性组编码</label>
-                    <input class="mdui-textfield-input" placeholder="属性组编码" v-model="propertyGroup.groupCode"/>
-                </div>
 
             </div>
             <div class="mdui-dialog-actions">
@@ -285,6 +292,79 @@
     console.log(projectName);
 
 
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"groupCode",
+            },
+            key:{
+                name:"groupName",
+                title:"groupKey",
+            }
+        }
+    };
+
+    var zNodes = "";
+    $(function(){
+        initTree();
+
+    });
+
+    function initTree(){
+        listPropertyGroup();
+        var treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+        var node = treeObj.getNodeByParam("groupCode", "-1");
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        if(treeNode != null){
+            vm.getProperty(treeNode.groupKey);
+            vm.parentGroupCode = treeNode.groupCode;
+            vm.propertyGroup.gid = treeNode.gid;
+            vm.propertyGroup.groupCode = treeNode.groupCode;
+            vm.propertyGroup.groupKey = treeNode.groupKey;
+            vm.propertyGroup.groupName = treeNode.groupName;
+
+        }
+    }
+
+    function listPropertyGroup(){
+            $.ajax({
+                       type : "post",
+                       url : projectName + "/base/basePropertiesC/listPropertyGroup",
+                       //data : JSON.stringify(test3.page),
+                       datatype : 'json',
+                       contentType:"application/json",
+                       async: false,
+                       success : function(data) {
+                           //console.log(JSON.stringify(data))
+                           if(data.success == true){
+                               zNodes  = data.obj;
+                           }else{
+                               $.dialog.alert(data.message,function(){});
+                           }
+                       },
+                       error : function() {
+                           $.dialog.alert('请求失败！',function(){});
+                       }
+                   });
+    }
+
+
     Vue.config.debug = true;//开启vue的debug模式
 
     var userInfo = new Vue({
@@ -294,7 +374,7 @@
                                              console.log(vm.user);
                                              $.ajax({
                                                         type : "post",
-                                                        url : projectName + "/userC/logout",
+                                                        url : projectName + "/loginC/logout",
                                                         data : "{}",
                                                         datatype : 'json',
                                                         contentType:"application/json",
@@ -305,7 +385,7 @@
                                                             location.href = projectName + "/base/admin/index.html";
                                                         },
                                                         error : function() {
-                                                            alert("请求失败");
+                                                            $.dialog.alert('请求失败！',function(){});
                                                         }
                                                     });
                                          }
@@ -320,11 +400,12 @@
                                  gid:'',
                                  groupCode:'',
                                  groupKey:'',
-                                 groupName:''
+                                 groupName:'',
+                                 parentCode:'',
                              },
                              propertyGroupList:[],
                              property : {
-                                 gid:'',
+                                 pid:'',
                                  propertyKey:'',
                                  propertyValue:'',
                                  propertyDesc:'',
@@ -338,12 +419,15 @@
                              active:'-1',
                              ckGKey:'',
                              ckPKey:'',
+                             parentGroupCode:'' // 用于添加新的属性组的parCode
 
-
+                         },
+                         created(){
+                             this.defaultpropertyGroup  = JSON.parse(JSON.stringify(this.propertyGroup));
                          },
                          // 初始化执行
                          mounted(){
-                             this.queryPropertyGroup()
+                             // this.listPropertyGroup()
                          },
                          //执行某些方法后数据产生了变化再执行
                          updated:function () {
@@ -352,42 +436,40 @@
                          // 数据发生变化之后进行监听，再执行
                          watch:{
                              //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
-                             propertyGroupList:function (){
+                             /*propertyGroupList:function (){
                                  vm.getProperty(0,vm.propertyGroupList[0].groupKey);
-                             },
+                             },*/
                          },
                          methods : {
-                             queryPropertyGroup: function () {
+                             listPropertyGroup: function () {
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryPropertyGroup",
+                                            url : projectName + "/base/basePropertiesC/listPropertyGroup",
                                             //data : JSON.stringify(test3.page),
                                             datatype : 'json',
                                             contentType:"application/json",
                                             success : function(data) {
                                                 //console.log(JSON.stringify(data))
                                                 if(data.success == true){
-                                                    vm.propertyGroupList = data.obj;
+                                                    // zNodes  = data.obj;
                                                 }else{
-                                                    mdui.alert(data.message);
+                                                    $.dialog.alert(data.message,function(){});
                                                 }
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
-                             getProperty: function (index,groupKey) {
+                             getProperty: function (groupKey) {
                                  //console.log(event.currentTarget);
-                                 //添加选中状态
-                                 this.active=index;
                                  //添加选中的propertyGroupId
                                  vm.ckGroupKey = groupKey;
 
                                  //通过id查询属性
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/queryProperty",
+                                            url : projectName + "/base/basePropertiesC/listProperty",
                                             data : "groupKey="+groupKey,
                                             success : function(data) {
                                                 //console.log(vm.parent.success);
@@ -396,15 +478,15 @@
                                                     vm.propertyList = data.obj;
                                                    // console.log(vm.propertyList);
                                                 }else{
-                                                    mdui.alert(data.message);
+                                                    $.dialog.alert(data.message,function(){});
                                                 }
                                             },
                                             error : function() {
-                                                console.log("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
-                             delProperty: function (index,gid) {
+                             deleteProperty: function (index,pid) {
                                  //console.log(event.currentTarget);
 
                                  // 含文本和确认回调
@@ -414,12 +496,11 @@
                                          spinner.close();
                                      }, 1000);*/
                                      //console.log(spinner.getState());
-                                     $.AMUI.progress.start();
                                      //通过id删除属性
                                      $.ajax({
                                                 type : "post",
-                                                url : projectName + "/adminC/delProperty",
-                                                data : "gid="+gid,
+                                                url : projectName + "/base/basePropertiesC/deleteProperty",
+                                                data : "gid="+pid,
                                                 async: false,
                                                 success : function(data) {
                                                     //console.log(vm.parent.success);
@@ -427,13 +508,11 @@
                                                     if(data.success == true){
                                                         vm.propertyList.splice(index,1);
                                                     }else{
-                                                        mdui.alert(data.message);
+                                                        $.dialog.alert(data.message,function(){});
                                                     }
-                                                    $.AMUI.progress.done();
                                                 },
                                                 error : function() {
-                                                    mdui.alert("请求失败");
-                                                    $.AMUI.progress.done();
+                                                    $.dialog.alert('请求失败！',function(){});
                                                 }
                                             });
                                  });
@@ -446,7 +525,6 @@
                                  vm.property.groupKey = vm.ckGroupKey;
                                  //不为空验证
                                  if(vm.property.groupKey == ''){
-                                     alert("发生错误！");
                                      return
                                  }
                                  if(vm.property.propertyValue == ''){
@@ -458,7 +536,7 @@
 
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/addorUpdateProperty",
+                                            url : projectName + "/base/basePropertiesC/updateProperty",
                                             data : JSON.stringify(vm.property),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -467,45 +545,42 @@
 
                                                 if(data.success == true){
                                                     inst.close();
-                                                    vm.getProperty(vm.active,vm.ckGroupKey);
+                                                    vm.getProperty(vm.ckGroupKey);
                                                 }else{
-                                                    alert(data.message);
+                                                    $.dialog.alert(data.message,function(){});
                                                 }
                                                 vm.property = {};
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
                              editProperty:function(property){
                                  vm.property = property;
                              },
-                             delPropertyGroup: function (index,propertyGroup) {
+                             deletePropertyGroup: function (propertyGroup) {
 
                                  // 含文本和确认回调
                                  mdui.confirm('确认删除？！', function(){
-                                     $.AMUI.progress.start();
                                      //通过id删除属性
                                      $.ajax({
                                                 type : "post",
-                                                url : projectName + "/adminC/delPropertyGroup",
+                                                url : projectName + "/base/basePropertiesC/deletePropertyGroup",
                                                 data : JSON.stringify(propertyGroup),
                                                 datatype : 'json',
                                                 contentType:"application/json",
                                                 async: false,
                                                 success : function(data) {
                                                     if(data.success == true){
-                                                        vm.propertyGroupList.splice(index,1);
+                                                        initTree();
                                                     }else{
-                                                        mdui.alert(data.message);
+                                                        $.dialog.alert(data.message,function(){});
                                                     }
-                                                    $.AMUI.progress.done();
                                                 },
                                                 error : function() {
-                                                    mdui.alert("请求失败");
-                                                    $.AMUI.progress.done();
+                                                    $.dialog.alert('请求失败！',function(){});
                                                 }
                                             });
                                  });
@@ -522,11 +597,15 @@
                                  if(vm.propertyGroup.groupName == ''){
                                      return
                                  }
+                                 if(vm.propertyGroup.groupCode == ''){
+                                     return
+                                 }
+                                 vm.propertyGroup.parentCode = vm.parentGroupCode;
 
 
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/addorUpdatePropertyGroup",
+                                            url : projectName + "/base/basePropertiesC/updatePropertyGroup",
                                             data : JSON.stringify(vm.propertyGroup),
                                             datatype : 'json',
                                             contentType:"application/json",
@@ -535,25 +614,28 @@
 
                                                 if(data.success == true){
                                                     inst.close();
-                                                    vm.queryPropertyGroup();
+                                                    initTree();
                                                 }else{
-                                                    alert(data.message);
+                                                    $.dialog.alert(data.message,function(){});
                                                 }
-                                                vm.propertyGroup = {};
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },
-                             editPropertyGroup:function(propertyGroup){
-                                 vm.propertyGroup = propertyGroup;
+                             editPropertyGroup:function(){
+
+                             },
+                             openAddPropertyGroup:function(){
+                                 /*初始化数据*/
+                                 vm.propertyGroup = Object.assign(vm.propertyGroup,vm.defaultpropertyGroup);
                              },
                              setPropertyRedis:function(){
                                  $.ajax({
                                             type : "post",
-                                            url : projectName + "/adminC/setRedisByKey",
+                                            url : projectName + "/base/redisC/setRedisByKey",
                                             //data : JSON.stringify(vm.propertyGroup),
                                             data:"key=property",
                                             datatype : 'json',
@@ -561,11 +643,11 @@
                                             success : function(data) {
                                                 //console.log(JSON.stringify(data))
 
-                                                alert(data.message);
+                                                $.dialog.alert(data.message,function(){});
 
                                             },
                                             error : function() {
-                                                mdui.alert("请求失败");
+                                                $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
                              },

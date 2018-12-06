@@ -21,7 +21,6 @@ import org.zyyd.base.entity.BaseRolePermissionMap;
 import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.BaseUserExample;
 import org.zyyd.base.service.RedisService;
-import org.zyyd.base.service.UserService;
 import org.zyyd.base.util.BasicService;
 
 import java.util.ArrayList;
@@ -159,7 +158,7 @@ public class RedisServiceImpl extends BasicService implements RedisService {
     public void setPropertiesOneRedis(String key) {
         BasePropertiesExample basePropertiesExample = new BasePropertiesExample();
         basePropertiesExample.createCriteria().andPropertyKeyEqualTo(key);
-        List<BaseProperties> basePropertiesList = basePropertiesMapper.selectByExampleWithBLOBs(basePropertiesExample);
+        List<BaseProperties> basePropertiesList = basePropertiesMapper.selectByExample(basePropertiesExample);
         if(basePropertiesList.size() > 0){
             BaseProperties baseProperties = basePropertiesList.get(0);
             redisUtil.set(BASE_PROPERTIES_CACHE_CODE + baseProperties.getPropertyKey(),baseProperties);

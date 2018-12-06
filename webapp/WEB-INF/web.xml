@@ -30,6 +30,8 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+
+
     <!--<filter>-->
         <!--<filter-name>BaseSessionChecker</filter-name>-->
         <!--<filter-class>org.work.filter.BaseSessionCheckerFilter</filter-class>-->
@@ -59,6 +61,17 @@
     <!-- shiro的filter-mapping-->
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 流过滤器,验证信息后保存到log -->
+    <filter>
+        <filter-name>LogFilter</filter-name>
+        <filter-class>org.zyyd.base.filter.LogFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LogFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

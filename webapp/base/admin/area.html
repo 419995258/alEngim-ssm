@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>地区管理</title>
+
+
+
+
+    <script src="../../common/js/base.js"></script>
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../common/js/lhgdialog/lhgdialog.min.js?skin=alEngin"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+
+    <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+
+    <link href="../../common/js/jquery/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/jquery/jquery-ui/jquery-ui.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme" id="userInfo">
+        <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+        <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
+        <a href="color.html" class="mdui-typo-title">首页</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
+    </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+    <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+        <div class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
+                <div class="mdui-list-item-content">后台管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <div class="mdui-collapse-item-body mdui-list">
+                <a href="index.html" class="mdui-list-item mdui-ripple ">属性管理</a>
+                <a href="role.html" class="mdui-list-item mdui-ripple ">角色管理</a>
+                <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
+                <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
+                <a href="area.html" class="mdui-list-item mdui-ripple mdui-list-item-active">地区管理</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+    .color-palette{
+        position: relative;
+        padding: 0 0 36px 0;
+        margin: 0;
+        list-style: none;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .color-palette li {
+        padding: 15px;
+    }
+    .color-palette .color-divider {
+        margin-top: 8px;
+    }
+    .color-palette .main-color {
+    }
+    .color-palette .main-color .color-name {
+        display: block;
+        margin-bottom: 60px;
+    }
+    .color-palette .color-hex {
+        float: right;
+        text-transform: uppercase;
+    }
+    .color-palette .anchor-primary-color {
+        position: absolute;
+        top: -72px;
+    }
+    .color-palette .anchor-accent-color {
+        position: absolute;
+        top: 520px;
+    }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="baseArea">
+    <h1 class="doc-title mdui-text-color-theme">地区管理
+        <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-blue-accent"
+                v-on:click="setPropertyRedis()">
+            加载缓存
+        </button>
+    </h1>
+
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-3">
+            <div class="mdui-col-xs-9">
+                <h3 class="doc-title mdui-text-color-theme">权限</h3>
+            </div>
+
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td valign="top" style="width:200px;">
+                            <div id="treeDiv" class="ztree">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="mdui-col-xs-9">
+            <div style="margin-bottom: 40px;    line-height: 3;">
+                <div class="mdui-col-xs-9">
+                    <span>地区名称：{{baseArea.areaName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>地区编号：{{baseArea.areaCode}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>下级地区：{{baseAreaList.length}}</span>
+                </div>
+                <div class="mdui-col-xs-3">
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#addBaseArea'}" title="添加">
+                        <i class="mdui-icon material-icons">add</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple " mdui-dialog="{target: '#editBaseArea'}" title="修改" v-on:click="openeditBaseArea()" >
+                        <i class="mdui-icon material-icons">edit</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple "  title="删除" v-on:click="delBaseArea(baseArea.areaCode)">
+                        <i class="mdui-icon material-icons">delete</i>
+                    </button>
+
+                    <button class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-btn-raised mdui-color-theme-accent mdui-ripple "  title="保存排序" v-on:click="updateBaseAreaSeqNo()">
+                        <i class="mdui-icon material-icons">sort_by_alpha</i>
+                    </button>
+
+                </div>
+            </div>
+            <div class="mdui-table-fluid">
+                <table class="mdui-table mdui-table-hoverable" id="sort">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>地区编号</th>
+                        <th>地区名称</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(baseArea,index) in baseAreaList" v-bind:areaId="baseArea.areaId">
+                        <td>{{index+1}}</td>
+                        <td>{{baseArea.areaCode}}</td>
+                        <td>{{baseArea.areaName}}</td>
+
+
+                        <td>
+
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    mdui-dialog="{target: '#addBaseUser'}" v-on:click="editUser(user)">
+                                修改
+                            </button>
+                            <button class="mdui-btn mdui-btn-dense mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                                    v-on:click="delBaseArea(baseArea.areaCode)">
+                                删除
+                            </button>
+                            <i class="mdui-icon material-icons" title="按住拖动排序">sort</i>
+
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <div>
+        <!--弹出框-->
+
+
+
+        <div class="mdui-dialog" id="addBaseArea">
+            <div class="mdui-dialog-title">添加地区</div>
+            <div class="mdui-dialog-content" >
+                <div class="mdui-textfield "  v-bind:class="baseAreaForm.areaName==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">区域名称</label>
+                    <input class="mdui-textfield-input" placeholder="区域名称" v-model="baseAreaForm.areaName" required/>
+                    <div class="mdui-textfield-error">区域名称不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="baseAreaForm.areaCode==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">地区编码</label>
+                    <input class="mdui-textfield-input" placeholder="地区编码" v-model="baseAreaForm.areaCode" required/>
+                    <div class="mdui-textfield-error">地区编码不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="baseAreaForm.nationalCode==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">行政区划编码</label>
+                    <input class="mdui-textfield-input" placeholder="行政区划编码" v-model="baseAreaForm.nationalCode" required/>
+                    <div class="mdui-textfield-error">行政区划编码不能为空</div>
+                </div>
+                <div>
+                    <label class="mdui-textfield-label">区域类型</label>
+                    <select class="mdui-select" mdui-select="{position: 'top'}" v-model="baseAreaForm.nodeType">
+                        <option value="0" >叶子节点</option>
+                        <option value="1" >非叶子节点</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="addBaseArea()">确定</button>
+            </div>
+        </div>
+
+        <div class="mdui-dialog" id="editBaseArea">
+            <div class="mdui-dialog-title">修改地区</div>
+            <div class="mdui-dialog-content" >
+                <input type="hidden" v-model="baseArea.areaId">
+                <input type="hidden" v-model="baseArea.areaCode">
+                <div class="mdui-textfield "  v-bind:class="baseArea.areaName==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">区域名称</label>
+                    <input class="mdui-textfield-input" placeholder="区域名称" v-model="baseArea.areaName" required/>
+                    <div class="mdui-textfield-error">区域名称不能为空</div>
+                </div>
+                <div class="mdui-textfield " v-bind:class="baseArea.nationalCode==''?'mdui-textfield-invalid':''">
+                    <label class="mdui-textfield-label">行政区划编码</label>
+                    <input class="mdui-textfield-input" placeholder="行政区划编码" v-model="baseArea.nationalCode" required/>
+                    <div class="mdui-textfield-error">行政区划编码不能为空</div>
+                </div>
+                <div>
+                    <label class="mdui-textfield-label">区域类型</label>
+                    <select class="mdui-select" mdui-select="{position: 'top'}" id="nodeTypeSelect" v-model="baseArea.nodeType">
+                        <option value="1" >非叶子节点</option>
+                        <option value="0" >叶子节点</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="mdui-dialog-actions">
+                <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+                <button class="mdui-btn mdui-ripple" v-on:click="updateBaseArea()">确定</button>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+    console.log(projectName);
+
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"areaCode",
+            },
+            key:{
+                name:"areaName",
+                title:"areaCode",
+            }
+        }
+    };
+
+    var zNodes = "";
+    $(function(){
+        initTree();
+
+
+    });
+
+    function initTree(){
+        queryBaseArea();
+        var treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+        var node = treeObj.getNodeByParam("areaCode", "-1");
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        if(treeNode != null){
+            vm.queryBaseAreaByParentCode(treeNode.areaCode);
+            vm.checkedCode = treeNode.areaCode;
+            vm.queryBaseArea(treeNode.areaCode);
+        }
+    }
+
+
+    function queryBaseArea(){
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/base/baseAreaC/listBaseArea",
+                   data : "{}",
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+                       //console.log(vm.parent.success);
+                       //console.log(vm.isTest);
+
+                       zNodes = data.obj;
+
+
+                       //location.href = "/base/admin/index.html";
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    };
+
+
+    var vm = new Vue({
+                         el:"#baseArea",
+                         data : {
+
+                             baseArea:{
+                                 areaId:'',
+                                 areaCode:'',
+                                 areaName:'',
+                                 parentCode:'',
+                                 nationalCode:'',
+                                 areaType:'',
+                                 nodeLevel:'',
+                                 nodeType:'',
+                                 seqNo:'',
+                             },
+                             baseAreaForm:{
+                                 areaId:'',
+                                 areaCode:'',
+                                 areaName:'',
+                                 parentCode:'',
+                                 nationalCode:'',
+                                 areaType:'',
+                                 nodeLevel:'',
+                                 nodeType:'1',
+                                 seqNo:'',
+                             },
+                             baseAreaList:[],
+                             checkedCode:'',
+                             selected:'2'
+
+
+
+                         },
+                         created(){
+                             this.defaultBaseAreaForm  = JSON.parse(JSON.stringify(this.baseAreaForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+
+                         },
+                         methods : {
+                             queryBaseArea: function (areaCode) {
+                                 var obj = {};
+                                 obj.areaCode = areaCode;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseAreaC/listBaseArea",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.baseArea = data.obj;
+                                                    console.log(vm.baseArea.nodeType)
+
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                 });
+                             },
+                             queryBaseAreaByParentCode: function (areaCode) {
+                                 var obj = {};
+                                 obj.areaCode = areaCode;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseAreaC/listBaseAreaByParentCode",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.baseAreaList = data.obj;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             openeditBaseArea: function(){
+                                 // vm.baseArea.areaCode = vm.checkedCode;
+                                 //初始化
+                                 // mdui.mutation();
+                                 var inst = mdui.Select('#nodeTypeSelect');
+                                 inst.handleUpdate();
+                             },
+                             updateBaseArea:function(){
+                                 var obj = vm.baseArea;
+                                 obj.baseAreaSize = vm.baseAreaList.length;
+
+                                 var inst = new mdui.Dialog('#editBaseArea');
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseAreaC/updateBaseArea",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                inst.close();
+                                                if(data.success == true){
+                                                    vm.queryBaseArea(vm.baseArea.areaCode);
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             addBaseArea:function(){
+                                 vm.baseAreaForm.parentCode = vm.baseArea.areaCode;
+                                 vm.baseAreaForm.nodeLevel = vm.baseArea.nodeLevel;
+                                 var inst = new mdui.Dialog('#addBaseArea');
+
+
+                                 if(vm.baseArea.nodeType == '0'){
+                                     inst.close();
+                                     $.dialog.alert('当前节点为叶子节点，不能添加！',function(){});
+                                     return false;
+                                 }
+
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseAreaC/saveBaseArea",
+                                            data : JSON.stringify(vm.baseAreaForm),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                inst.close();
+                                                if(data.success == true){
+                                                    // 初始化数据
+                                                    // 刷新页面
+                                                    initTree();
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             delBaseArea:function(areaCode){
+                                 // 含文本和确认回调
+                                 mdui.confirm('确认删除？！', function(){
+                                     if(areaCode == ''){
+                                         mdui.alert("删除areaCode不能为空");
+                                         return false;
+                                     }
+                                     var obj = {};
+                                     obj.areaCode = areaCode;
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/base/baseAreaC/deleteBaseArea",
+                                                data : JSON.stringify(obj),
+                                                datatype : 'json',
+                                                contentType:"application/json",
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        // 刷新页面
+                                                        location.reload();
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                },
+                                                error : function() {
+                                                    $.dialog.alert('请求失败！',function(){});
+                                                }
+                                            });
+                                 });
+                             },
+                             updateBaseAreaSeqNo:function (){
+                                 var areaIds = "";
+                                 $("#sort tbody").find("tr").each(function(){
+                                     var areaId = $(this).attr("areaId");
+                                     areaIds = areaIds + areaId + ",";
+                                 });
+                                 console.log(areaIds);
+                                 var obj = {};
+                                 obj.areaIds = areaIds;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseAreaC/updateBaseAreaSeqNo",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    location.reload();
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             }
+
+                         },
+                     });
+
+
+
+
+    // 排序
+    var fixHelperModified = function(e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function(index) {
+                $(this).width($originals.eq(index).width())
+            });
+            return $helper;
+        },
+        updateIndex = function(e, ui) {
+            $('td.index', ui.item.parent()).each(function (i) {
+                $(this).html(i + 1);
+            });
+        };
+    $("#sort tbody").sortable({
+                                  handle: ".mdui-icon", //还有这个class类点中了才能拖移
+                                  helper: fixHelperModified,
+                                  stop: updateIndex,
+                                  opacity: 0.6,                       //拖动时，透明度为0.6
+                                  revert: true,
+                                  axis:'y', // 只能y轴移动
+                                  delay:100,// 按住100ms后才能使用，防止误触
+                              }).disableSelection();
+
+
+
+</script>
+

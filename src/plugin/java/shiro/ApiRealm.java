@@ -16,8 +16,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.zyyd.base.entity.BasePermission;
 import org.zyyd.base.entity.BaseUser;
+import org.zyyd.base.service.BaseUserService;
 import org.zyyd.base.service.RedisService;
-import org.zyyd.base.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,7 +38,7 @@ public class ApiRealm extends AuthorizingRealm {
     }
 
     @Autowired
-    private UserService userService;
+    private BaseUserService baseUserService;
 
     @Autowired
     private RedisService redisService;
@@ -138,7 +138,7 @@ public class ApiRealm extends AuthorizingRealm {
 
         if(authenticationToken instanceof ApiToken){
             ApiToken apiToken = (ApiToken)authenticationToken;
-            BaseUser baseUser = userService.getUserByUserName(apiToken.getClientKey());
+            BaseUser baseUser = baseUserService.getUserByUserName(apiToken.getClientKey());
             if(StringUtils.isBlank(baseUser.getUserId())){
                 return null;
             }
@@ -148,7 +148,7 @@ public class ApiRealm extends AuthorizingRealm {
         }else{
             UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
             String userName=token.getUsername();
-            BaseUser user = userService.getUserByUserName(token.getUsername());
+            BaseUser user = baseUserService.getUserByUserName(token.getUsername());
             if (user.getUserId() != null) {
 //            byte[] salt = Encodes.decodeHex(user.getSalt());
 //            ShiroUser shiroUser=new ShiroUser(user.getId(), user.getLoginName(), user.getName());

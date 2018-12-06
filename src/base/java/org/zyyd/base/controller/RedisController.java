@@ -28,7 +28,6 @@ import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.vo.BaseUserVO;
 import org.zyyd.base.entity.vo.Message;
 import org.zyyd.base.entity.vo.ResultVo;
-import org.zyyd.base.service.AdminService;
 import org.zyyd.base.service.RedisService;
 
 import java.io.IOException;
@@ -48,7 +47,7 @@ import redis.RedisUtil;
 
 //@ApiIgnore  //  忽略扫描该类，api
 @Controller  //RestController代表controller,但是是和ResponseBody结合
-@RequestMapping("redisC")
+@RequestMapping("base/redisC")
 @Api(value = "缓存的处理")
 public class RedisController {
 

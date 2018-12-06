@@ -489,6 +489,46 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="alengin:base_book_catelog">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseBookCatelog" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:base_book_version">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseBookVersion" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:base_knowledge_catelog">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseKnowledgeCatelog" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="alengin:base_properties">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="" />
+                  <option name="javaModelName" value="BaseProperties" />
+                  <option name="moduleName" value="alEngin" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="alengin:base_role_permission_map">
               <value>
                 <TableGenerateConfig>

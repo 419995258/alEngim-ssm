@@ -44,7 +44,7 @@ public class test {
     public void test2(){
 
         SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("love431");
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("alEngin");
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, sigAlg.getJcaName());
         System.out.println(signingKey);
 
@@ -71,4 +71,6 @@ public class test {
         System.out.println("token:" + token);
         System.out.println("subject:" + claims.getSubject());
     }
+
+
 }

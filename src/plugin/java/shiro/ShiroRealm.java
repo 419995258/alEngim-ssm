@@ -17,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.zyyd.base.dao.vo.UserMapperExt;
 import org.zyyd.base.entity.BasePermission;
 import org.zyyd.base.entity.BaseUser;
-import org.zyyd.base.service.AdminService;
+import org.zyyd.base.service.BaseUserService;
 import org.zyyd.base.service.RedisService;
-import org.zyyd.base.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class ShiroRealm extends AuthorizingRealm {
     //private Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserService userService;
+    private BaseUserService baseUserService;
 
     @Autowired
     private RedisService redisService;
@@ -136,13 +135,10 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName=token.getUsername();
        // logger.info(userName+token.getPassword());
 
-        BaseUser user = userService.getUserByUserName(token.getUsername());
+        BaseUser user = baseUserService.getUserByUserName(token.getUsername());
         if (user.getUserId() != null) {
-//            byte[] salt = Encodes.decodeHex(user.getSalt());
-//            ShiroUser shiroUser=new ShiroUser(user.getId(), user.getLoginName(), user.getName());
             //设置用户session
             Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("user", user);
             return new SimpleAuthenticationInfo(user,user.getPassWord(),getName());
         } else {
             return null;

@@ -28,7 +28,6 @@ import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.vo.BaseUserVO;
 import org.zyyd.base.entity.vo.Message;
 import org.zyyd.base.entity.vo.ResultVo;
-import org.zyyd.base.service.AdminService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,6 +44,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
+import static org.zyyd.base.util.ObjectUtil.isAjaxRequest;
 import static org.zyyd.base.util.ObjectUtil.writeJson;
 
 public class BasicController {
@@ -89,23 +89,6 @@ public class BasicController {
 
 
 
-    /**
-     *   是否是Ajax请求
-     * @Description:
-     * @param
-     * @return
-     * @throws
-     * @author pengbin <pengbin>
-     * 2018/11/26 10:58
-     */
-    public static boolean isAjaxRequest(HttpServletRequest request) {
-        String requestedWith = request.getHeader("x-requested-with");
-        if (requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 
 

@@ -38,14 +38,15 @@
                 /common/** = anon
                 <!--登录验证码匿名访问-->
                 /login.html = anon
-                /userC/** = anon
-				/testC/** = ApiAuthc
+                /loginC/** = anon
+
                 <!--任何链接都必须认证访问-->
 				<!--/doc.html = authc,roles[sysadmin]-->
 				/doc.html = anon
 				<!--/swagger-ui.html = authc,roles[sysadmin]-->
-                /** =authc
-				<!--/** = BaseAuthc-->
+                <!--/** =authc-->
+                /testC/** = ApiAuthc
+				/** = BaseAuthc
 
             </value>
         </property>
@@ -95,6 +96,15 @@
     <bean id="ApiRealm" class="shiro.ApiRealm">
     </bean>
 
+	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO"/>
+
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+
+		<property name="sessionDAO" ref="sessionDAO"/>
+
+	</bean>
+
+
     <!-- Subject工厂 -->
     <bean id="subjectFactory"
           class="shiro.AgileSubjectFactory"/>
@@ -104,6 +114,7 @@
 		<!--获取权限源，可以通过获取数据库也可以redis-->
 		<property name="realm" ref="ShiroRealm"></property>
 		<property name="cacheManager" ref="shiroCacheManager"></property>
+		<property name="sessionManager" ref="sessionManager" />
 		<!--<property name="subjectFactory" ref="subjectFactory"/>
         <property name="subjectDAO.sessionStorageEvaluator.sessionStorageEnabled"
                   value="false"/>-->
