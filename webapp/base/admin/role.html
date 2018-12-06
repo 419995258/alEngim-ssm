@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
       xmlns:v-bind="http://www.w3.org/1999/xhtml">
@@ -28,35 +29,17 @@
 </head>
 <body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
 <header class="mdui-appbar mdui-appbar-fixed">
-  <div class="mdui-toolbar mdui-color-theme" id="userInfo">
-    <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
-    <a href="index.html" class="mdui-typo-headline mdui-hidden-xs">后台管理</a>
-          <a href="color.html" class="mdui-typo-title">首页</a>
-        <div class="mdui-toolbar-spacer"></div>
-      <div class="mc-login-btn mdui-btn mdui-btn-dense mdui-ripple mdui-ripple-white" v-on:click="logout()">退出</div>
-  </div>
+    <div id="head">
+
+    </div>
 </header>
 
-<div class="mdui-drawer" id="main-drawer">
-  <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
-    <div class="mdui-collapse-item mdui-collapse-item-open">
-      <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-        <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">near_me</i>
-        <div class="mdui-list-item-content">后台管理</div>
-        <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-      </div>
-      <div class="mdui-collapse-item-body mdui-list">
-        <a href="index.html" class="mdui-list-item mdui-ripple ">属性管理</a>
-        <a href="role.html" class="mdui-list-item mdui-ripple mdui-list-item-active">角色管理</a>
-        <a href="permission.html" class="mdui-list-item mdui-ripple ">权限管理</a>
-        <a href="user.html" class="mdui-list-item mdui-ripple ">用户管理</a>
-        <a href="area.html" class="mdui-list-item mdui-ripple ">地区管理</a>
-      </div>
-    </div>
-  </div>
+
+<!--<%@ include file="../leftMenu.jsp"%>-->
+<div id="leftMenu">
+
 
 </div>
-
 <a id="anchor-top"></a>
 
 <style>
@@ -264,6 +247,15 @@
 
     var zNodes = "";
     $(function(){
+        //引入head
+        $('#head').load('../head.html',function () {
+
+        })
+        //引入leftMenu
+        $('#leftMenu').load('../leftMenu.html',function () {
+            $('#admin_role').addClass("mdui-list-item-active");
+            mdui.mutation();
+        })
         initTree();
     });
 
@@ -294,32 +286,7 @@
 
     Vue.config.debug = true;//开启vue的debug模式
 
-    var userInfo = new Vue({
-                                el: "#userInfo",
-                                methods:{
-                                         logout:function () {
-                                             console.log(vm.user);
-                                             $.ajax({
-                                                        type : "post",
-                                                        url : projectName + "/loginC/logout",
-                                                        data : "{}",
-                                                        datatype : 'json',
-                                                        contentType:"application/json",
-                                                        success : function(data) {
-                                                            //console.log(vm.parent.success);
-                                                            //console.log(vm.isTest);
-                                                            console.log(data)
-                                                            //location.href = "/base/admin/index.html";
-                                                        },
-                                                        error : function() {
-                                                            $.dialog.alert('请求失败！',function(){});
-                                                        }
-                                                    });
-                                         }
-                                },
 
-
-                     });
     var vm = new Vue({
                          el:"#role",
                          data : {

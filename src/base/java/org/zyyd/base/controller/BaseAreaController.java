@@ -75,6 +75,7 @@ public class BaseAreaController extends BasicController {
             List<BaseArea> baseBaseAreaList = baseAreaService.listBaseArea(baseArea);
 
             if(StringUtils.isBlank(baseArea.getAreaCode())){
+
                 String jsonStr = JSONObject.toJSONString(baseBaseAreaList);
                 JSONArray jsonArray = JSON.parseArray(jsonStr);
                 for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext(); ) {
@@ -88,6 +89,11 @@ public class BaseAreaController extends BasicController {
                         // 设置数都默认不展开
                         json.put("open","false");
                     }
+
+                    json.remove("modUser");
+                    json.remove("creUser");
+                    json.remove("areaType");
+
                 }
                 message.setObj(jsonArray);
                 message.setSuccess(true);
