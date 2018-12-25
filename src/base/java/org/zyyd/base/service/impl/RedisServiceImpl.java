@@ -1,14 +1,18 @@
 package org.zyyd.base.service.impl;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zyyd.base.dao.BaseAreaMapper;
 import org.zyyd.base.dao.BasePermissionMapper;
 import org.zyyd.base.dao.BasePropertiesGroupMapper;
 import org.zyyd.base.dao.BasePropertiesMapper;
 import org.zyyd.base.dao.BaseRoleMapper;
 import org.zyyd.base.dao.BaseUserMapper;
 import org.zyyd.base.dao.vo.UserMapperExt;
+import org.zyyd.base.entity.BaseArea;
+import org.zyyd.base.entity.BaseAreaExample;
 import org.zyyd.base.entity.BasePermission;
 import org.zyyd.base.entity.BasePermissionExample;
 import org.zyyd.base.entity.BaseProperties;
@@ -30,6 +34,10 @@ import java.util.Map;
 
 import redis.RedisUtil;
 
+import static redis.RedisCacheConsts.BASE_AREA_CACHE_CODE;
+import static redis.RedisCacheConsts.BASE_AREA_CACHE_ID;
+import static redis.RedisCacheConsts.BASE_AREA_GROUP_CACHE_CODE;
+import static redis.RedisCacheConsts.BASE_AREA_GROUP_CACHE_ID;
 import static redis.RedisCacheConsts.BASE_PERMISSION_CACHE_CODE;
 import static redis.RedisCacheConsts.BASE_PROPERTIES_CACHE_CODE;
 import static redis.RedisCacheConsts.BASE_PROPERTIES_GROUP_CACHE_CODE;
@@ -65,6 +73,9 @@ public class RedisServiceImpl extends BasicService implements RedisService {
     private BasePermissionMapper basePermissionMapper;
 
     @Autowired
+    private BaseAreaMapper baseAreaMapper;
+
+    @Autowired
     private UserMapperExt userMapperExt;
 
 
@@ -87,14 +98,13 @@ public class RedisServiceImpl extends BasicService implements RedisService {
         BasePropertiesGroupExample propertyGroupExample = new BasePropertiesGroupExample();
         List<BasePropertiesGroup> propertyGroupList = basePropertiesGroupMapper.selectByExample(propertyGroupExample);
         if(propertyGroupList.size() > 0){
-            BasePropertiesExample propertyExample = new BasePropertiesExample();
-            propertyExample.setOrderByClause(" seq_no desc");
-            BasePropertiesExample.Criteria cr = propertyExample.createCriteria();
             List<BaseProperties> propertyList = new ArrayList<>();
             for (Iterator<BasePropertiesGroup> iterator = propertyGroupList.iterator(); iterator.hasNext(); ) {
                 BasePropertiesGroup propertyGroup = iterator.next();
-                cr = propertyExample.createCriteria();
-                cr.andGroupKeyEqualTo(propertyGroup.getGroupKey());
+
+                BasePropertiesExample propertyExample = new BasePropertiesExample();
+                propertyExample.setOrderByClause(" seq_no desc");
+                propertyExample.createCriteria().andGroupKeyEqualTo(propertyGroup.getGroupKey());
                 propertyList = basePropertiesMapper.selectByExample(propertyExample);
                 //放置于redis
                 redisUtil.set(BASE_PROPERTIES_GROUP_CACHE_CODE + propertyGroup.getGroupKey(),propertyList);
@@ -111,6 +121,7 @@ public class RedisServiceImpl extends BasicService implements RedisService {
             BasePropertiesExample propertyExample = new BasePropertiesExample();
             propertyExample.setOrderByClause(" seq_no desc");
             BasePropertiesExample.Criteria cr = propertyExample.createCriteria();
+            cr.andGroupKeyEqualTo(groupCode);
             List<BaseProperties> propertyList = new ArrayList<>();
             for (Iterator<BasePropertiesGroup> iterator = propertyGroupList.iterator(); iterator.hasNext(); ) {
                 BasePropertiesGroup propertyGroup = iterator.next();
@@ -145,7 +156,7 @@ public class RedisServiceImpl extends BasicService implements RedisService {
     @Override
     public void setPropertiesOneRedis() {
         BasePropertiesExample basePropertiesExample = new BasePropertiesExample();
-        List<BaseProperties> basePropertiesList = basePropertiesMapper.selectByExampleWithBLOBs(basePropertiesExample);
+        List<BaseProperties> basePropertiesList = basePropertiesMapper.selectByExample(basePropertiesExample);
         if(basePropertiesList.size() > 0){
             for (Iterator<BaseProperties> iterator = basePropertiesList.iterator(); iterator.hasNext(); ) {
                 BaseProperties baseProperties = iterator.next();
@@ -221,7 +232,13 @@ public class RedisServiceImpl extends BasicService implements RedisService {
     @Override
     public List<BasePermission> listPermissionRedis(String roleCode) {
         List<BasePermission> basePermissionList = new ArrayList<>();
-        basePermissionList = (List<BasePermission>)redisUtil.get(BASE_ROLE_CACHE_CODE + roleCode);
+        Object obj = redisUtil.get(BASE_ROLE_CACHE_CODE + roleCode);
+        if(obj == null){
+            this.setRoleRedis(roleCode);
+        }else{
+            basePermissionList = (List<BasePermission>)obj;
+        }
+
 
         if(basePermissionList == null || basePermissionList.size() < 1){
             this.setRoleRedis(roleCode);
@@ -326,5 +343,144 @@ public class RedisServiceImpl extends BasicService implements RedisService {
         if(o!=null){
             redisUtil.removeHashValue(BASE_PERMISSION_CACHE_CODE + code);
         }
+    }
+
+
+    @Override
+    public void setArea() {
+        List<BaseArea> baseAreaList = new ArrayList<>();
+        BaseAreaExample baseAreaExample = new BaseAreaExample();
+        baseAreaExample.setOrderByClause("SEQ_NO");
+        baseAreaList = baseAreaMapper.selectByExample(baseAreaExample);
+        if(baseAreaList.size() > 0){
+            for (Iterator<BaseArea> iterator = baseAreaList.iterator(); iterator.hasNext(); ) {
+                BaseArea next = iterator.next();
+                redisUtil.set(BASE_AREA_CACHE_CODE + next.getAreaCode(),next);
+                redisUtil.set(BASE_AREA_CACHE_ID + next.getAreaId(),next);
+
+                // 存储下级地区
+                if(next.getNodeLevel() != null && next.getNodeLevel() == 3){
+                    continue;
+                }else{
+                    BaseAreaExample baseAreaSubExample = new BaseAreaExample();
+                    baseAreaSubExample.setOrderByClause("SEQ_NO");
+                    baseAreaSubExample.createCriteria().andParentCodeEqualTo(next.getAreaCode());
+                    List<BaseArea> baseAreaSub = baseAreaMapper.selectByExample(baseAreaSubExample);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_CODE + next.getAreaCode(),baseAreaSub);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_ID + next.getAreaId(),baseAreaSub);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void setOneArea(String areaCode) {
+        if(StringUtils.isBlank(areaCode)){
+            areaCode = "";
+        }
+        List<BaseArea> baseAreaList = new ArrayList<>();
+        BaseAreaExample baseAreaExample = new BaseAreaExample();
+        baseAreaExample.setOrderByClause("SEQ_NO");
+        baseAreaExample.createCriteria().andAreaCodeEqualTo(areaCode);
+        baseAreaList = baseAreaMapper.selectByExample(baseAreaExample);
+        if(baseAreaList.size() > 0){
+            for (Iterator<BaseArea> iterator = baseAreaList.iterator(); iterator.hasNext(); ) {
+                BaseArea next = iterator.next();
+                redisUtil.set(BASE_AREA_CACHE_CODE + next.getAreaCode(),next);
+                redisUtil.set(BASE_AREA_CACHE_ID + next.getAreaId(),next);
+
+                // 存储下级地区
+                if(next.getNodeLevel() == 3){
+                    continue;
+                }else{
+                    BaseAreaExample baseAreaSubExample = new BaseAreaExample();
+                    baseAreaSubExample.setOrderByClause("SEQ_NO");
+                    baseAreaSubExample.createCriteria().andParentCodeEqualTo(next.getAreaCode());
+                    List<BaseArea> baseAreaSub = baseAreaMapper.selectByExample(baseAreaSubExample);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_CODE + next.getAreaCode(),next);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_ID + next.getAreaId(),next);
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void setOneAreaByAreaId(String areaId) {
+        if(StringUtils.isBlank(areaId)){
+            areaId = "";
+        }
+        List<BaseArea> baseAreaList = new ArrayList<>();
+        BaseAreaExample baseAreaExample = new BaseAreaExample();
+        baseAreaExample.setOrderByClause("SEQ_NO");
+        baseAreaExample.createCriteria().andAreaIdEqualTo(areaId);
+        baseAreaList = baseAreaMapper.selectByExample(baseAreaExample);
+        if(baseAreaList.size() > 0){
+            for (Iterator<BaseArea> iterator = baseAreaList.iterator(); iterator.hasNext(); ) {
+                BaseArea next = iterator.next();
+                redisUtil.set(BASE_AREA_CACHE_CODE + next.getAreaCode(),next);
+                redisUtil.set(BASE_AREA_CACHE_ID + next.getAreaId(),next);
+
+                // 存储下级地区
+                if(next.getNodeLevel() == 3){
+                    continue;
+                }else{
+                    BaseAreaExample baseAreaSubExample = new BaseAreaExample();
+                    baseAreaSubExample.setOrderByClause("SEQ_NO");
+                    baseAreaSubExample.createCriteria().andParentCodeEqualTo(next.getAreaCode());
+                    List<BaseArea> baseAreaSub = baseAreaMapper.selectByExample(baseAreaSubExample);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_CODE + next.getAreaCode(),next);
+                    redisUtil.set(BASE_AREA_GROUP_CACHE_ID + next.getAreaId(),next);
+                }
+            }
+        }
+    }
+
+    @Override
+    public BaseArea getAreaByAreaCode(String areaCode) {
+        BaseArea baseArea = new BaseArea();
+        baseArea = (BaseArea) redisUtil.get(BASE_AREA_CACHE_CODE + areaCode);
+        if(baseArea == null){
+            this.setOneArea(areaCode);
+            baseArea = (BaseArea) redisUtil.get(BASE_AREA_CACHE_CODE + areaCode);
+        }
+        return baseArea;
+    }
+
+    @Override
+    public List<BaseArea> listAreaGroupByAreaCode(String areaCode) {
+        BaseArea baseArea = new BaseArea();
+        List<BaseArea> baseAreaList = new ArrayList<>();
+        baseAreaList = (List<BaseArea>) redisUtil.get(BASE_AREA_GROUP_CACHE_CODE + areaCode);
+        if(baseArea == null){
+            this.setOneArea(areaCode);
+            baseAreaList = (List<BaseArea>) redisUtil.get(BASE_AREA_GROUP_CACHE_CODE + areaCode);
+        }
+        return baseAreaList;
+    }
+
+
+    @Override
+    public BaseArea getAreaByAreaId(String areaId) {
+        BaseArea baseArea = new BaseArea();
+        baseArea = (BaseArea) redisUtil.get(BASE_AREA_CACHE_ID+ areaId);
+        if(baseArea == null){
+            this.setOneAreaByAreaId(areaId);
+            baseArea = (BaseArea) redisUtil.get(BASE_AREA_CACHE_ID + areaId);
+        }
+        return baseArea;
+    }
+
+    @Override
+    public List<BaseArea> listAreaGroupByAreaId(String areaId) {
+        BaseArea baseArea = new BaseArea();
+        List<BaseArea> baseAreaList = new ArrayList<>();
+        baseAreaList = (List<BaseArea>) redisUtil.get(BASE_AREA_GROUP_CACHE_ID + areaId);
+        if(baseArea == null){
+            this.setOneAreaByAreaId(areaId);
+            baseAreaList = (List<BaseArea>) redisUtil.get(BASE_AREA_GROUP_CACHE_ID + areaId);
+        }
+        return baseAreaList;
     }
 }

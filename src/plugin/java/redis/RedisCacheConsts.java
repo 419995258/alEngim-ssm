@@ -39,4 +39,24 @@ public class RedisCacheConsts {
 	 */
 	public final static String BASE_ROLE_ONE_CACHE_CODE="base_BaseRole_roleCode_one_";
 
+	/**
+	 * areaCode存储baseArea
+	 */
+	public final static String BASE_AREA_CACHE_CODE="base_BaseArea_areaCode_one_";
+
+	/**
+	 * areaId存储baseArea
+	 */
+	public final static String BASE_AREA_CACHE_ID="base_BaseArea_areaId_one_";
+
+	/**
+	 * areaCode存储baseArea的下级地区
+	 */
+	public final static String BASE_AREA_GROUP_CACHE_CODE="base_BaseArea_areaCode_group_";
+
+	/**
+	 * areaId存储baseArea的下级地区
+	 */
+	public final static String BASE_AREA_GROUP_CACHE_ID="base_BaseArea_areaId_group_";
+
 }

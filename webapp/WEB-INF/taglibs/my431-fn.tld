@@ -13,18 +13,6 @@
 
   <function>
     <description>
-      This function get the property value by key.
-    </description>
-    <name>getValueByCode</name>
-    <function-class>org.work.taglib.My431Function</function-class>
-    <function-signature>java.lang.String getValueByCode(java.lang.String)</function-signature>
-    <example>
-      ${my431fn:getValueByCode(key)}
-    </example>
-  </function>
-
-  <function>
-    <description>
       This function UTC to date.
     </description>
     <name>UTC</name>

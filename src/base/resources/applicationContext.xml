@@ -34,7 +34,7 @@
 	<import resource="spring-redis.xml"/>
 	
 	<!--********************************************配置esclient********************************************-->
-	<!--<import resource="spring-esclient.xml"/>-->
+	<import resource="spring-esclient.xml"/>
 
     <!--********************************************配置shiro********************************************-->
     <import resource="spring-shiro.xml"/>

@@ -146,7 +146,7 @@ public class BasePropertiesServiceImpl extends BasicService implements BasePrope
             // 先验证key不能重复
             BasePropertiesExample propertyExample = new BasePropertiesExample();
             propertyExample.createCriteria().andPropertyKeyEqualTo(property.getPropertyKey())
-                    .andPidEqualTo(property.getPid());
+                    .andPidNotEqualTo(property.getPid());
             List<BaseProperties> propertyList = basePropertiesMapper.selectByExample(propertyExample);
             if(propertyList.size() > 0){
                 message.setMessage("属性key已经重复");
@@ -283,9 +283,6 @@ public class BasePropertiesServiceImpl extends BasicService implements BasePrope
         }
         return message;
     }
-
-
-
 
 }
 

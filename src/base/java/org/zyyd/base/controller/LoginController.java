@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zyyd.base.entity.BaseUser;
 import org.zyyd.base.entity.vo.Message;
@@ -71,7 +72,7 @@ public class LoginController {
                 message.setMessage("登录成功");
 
 
-                redisService.setShiroUser(baseUser);
+                //edisService.setShiroUser(baseUser);
 
 
 			} catch (AuthenticationException e) {
@@ -88,9 +89,6 @@ public class LoginController {
     @RequestMapping(value="/logout",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "用户进行登出")
-    //@ApiImplicitParam(paramType = "query",name= "username" ,value = "用户名",dataType = "string")
-    /*public  void userLogin(@RequestParam(value = "username" , required = false) String username,
-                           @RequestParam(value = "password" , required = false) String password)*/
     public Message logout(@RequestBody JSONObject json, HttpServletRequest request){
         Message message = new Message();
         try{
@@ -116,9 +114,6 @@ public class LoginController {
     @RequestMapping(value="/listLoginUser",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "所有在线的用户")
-    //@ApiImplicitParam(paramType = "query",name= "username" ,value = "用户名",dataType = "string")
-    /*public  void userLogin(@RequestParam(value = "username" , required = false) String username,
-                           @RequestParam(value = "password" , required = false) String password)*/
     public Message listLoginUser( HttpServletRequest request){
         Message message = new Message();
 

@@ -235,6 +235,7 @@
         //引入leftMenu
         $('#leftMenu').load('../leftMenu.html',function () {
             $('#admin_permission').addClass("mdui-list-item-active");
+            $('#admin_permission').parents(".mdui-collapse-item").addClass("mdui-collapse-item-open");
             mdui.mutation();
         })
 

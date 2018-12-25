@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -39,6 +41,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 @RequestMapping(value = "base/baseAreaC")
+@Api(value = "base/baseAreaC", tags = "地区", description = "地区")
 public class BaseAreaController extends BasicController {
 
     private static Logger logger = LoggerFactory.getLogger(BaseAreaController.class);
@@ -46,8 +49,6 @@ public class BaseAreaController extends BasicController {
 
     @Autowired
     private BaseAreaService baseAreaService;
-
-
 
 
     /**
@@ -64,13 +65,14 @@ public class BaseAreaController extends BasicController {
     @RequestMapping(value="/listBaseArea",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "查询地区")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:list")
     public Message listBaseArea(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
 
         BaseArea baseArea = new BaseArea();
 
         try {
+
             BeanUtils.copyProperties(baseArea,baseAreaVO);
             List<BaseArea> baseBaseAreaList = baseAreaService.listBaseArea(baseArea);
 
@@ -104,7 +106,7 @@ public class BaseAreaController extends BasicController {
                 message.setSuccess(true);
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
             message.setMessage("发生异常");
             logger.error(e.toString());
         }
@@ -127,7 +129,7 @@ public class BaseAreaController extends BasicController {
     @RequestMapping(value="/listBaseAreaByParentCode",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "查询地区的子地区")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:list")
     public Message listBaseAreaByParentCode(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
         BaseArea baseArea = new BaseArea();
@@ -162,7 +164,7 @@ public class BaseAreaController extends BasicController {
     @RequestMapping(value="/updateBaseArea",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存编辑的地区")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:update")
     public Message updateBaseArea(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
 
@@ -185,7 +187,7 @@ public class BaseAreaController extends BasicController {
     @RequestMapping(value="/saveBaseArea",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "添加地区")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:update")
     public Message saveBaseArea(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
 
@@ -208,7 +210,7 @@ public class BaseAreaController extends BasicController {
     @RequestMapping(value="/deleteBaseArea",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "删除地区")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:update")
     public Message deleteBaseArea(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
 
@@ -219,10 +221,19 @@ public class BaseAreaController extends BasicController {
     }
 
 
+    /**
+     * @Title: updateBaseAreaSeqNo
+     * @Description: 更新地区的排序
+     * @author pengbin <pengbin>
+     * @date 2018/12/6 21:27
+     * @param [baseAreaVO]
+     * @return org.zyyd.base.entity.vo.Message
+     * @throws
+     */
     @RequestMapping(value="/updateBaseAreaSeqNo",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "更新地区的排序")
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions("area:update")
     public Message updateBaseAreaSeqNo(@RequestBody BaseAreaVO baseAreaVO){
         Message message = new Message();
 

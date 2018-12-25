@@ -254,6 +254,7 @@
         //引入leftMenu
         $('#leftMenu').load('../leftMenu.html',function () {
             $('#admin_role').addClass("mdui-list-item-active");
+            $('#admin_role').parents(".mdui-collapse-item").addClass("mdui-collapse-item-open");
             mdui.mutation();
         })
         initTree();

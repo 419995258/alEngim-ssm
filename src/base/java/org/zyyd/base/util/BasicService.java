@@ -16,7 +16,7 @@ public class BasicService {
      * @param currentpage
      */
 	public void setPageInfo(Integer pageNo, Integer pageSize) {
-		// TODO 设置分页初始信息
+		//  设置分页初始信息
 		if (pageNo == null) {
 			pageNo = 1;
 		}
@@ -28,7 +28,7 @@ public class BasicService {
 	}
 
 	public void setPageInfo(Integer pageNo) {
-		// TODO 设置分页初始信息
+		//  设置分页初始信息
 		if (pageNo == null) {
 			pageNo = 1;
 		}
@@ -45,7 +45,7 @@ public class BasicService {
      */
 	public void setReturnPageInfo(Integer pagesize, Integer currentpage,
 			List pos, ResultVo resultVo) throws Exception {
-		// TODO 设置返回的分页信息
+		//  设置返回的分页信息
 		
 		if (pagesize != null || currentpage != null) {
 			// 分页信息设置
@@ -68,7 +68,7 @@ public class BasicService {
 
 	public void setReturnPageInfo(Integer currentpage,
 								  List pos, ResultVo resultVo) throws Exception {
-		// TODO 设置返回的分页信息
+		//  设置返回的分页信息
 
 		if (currentpage != null) {
 			// 分页信息设置

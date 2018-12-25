@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiOperation;
 //@ApiIgnore  //  忽略扫描该类，api
 @Controller  //RestController代表controller,但是是和ResponseBody结合
 @RequestMapping("base/basePropertiesC")
-@Api(value = "basePropertiesC", tags = "属性管理接口", description = "属性管理接口")
+@Api(value = "base/basePropertiesC", tags = "属性", description = "属性")
 public class BasePropertiesController extends BasicController {
 
 
@@ -59,13 +59,6 @@ public class BasePropertiesController extends BasicController {
     @ResponseBody
     @ApiOperation(value = "查询项目属性组")
     @RequiresPermissions("properties:list")
-    //@ApiImplicitParam(paramType = "query",name= "username" ,value = "用户名",dataType = "string")
-    /*@ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query",name= "username" ,value = "用户名",dataType = "string"),
-            @ApiImplicitParam(paramType = "query",name= "password" ,value = "密码",dataType = "string")
-    })*/
-    /*public  void userLogin(@RequestParam(value = "username" , required = false) String username,
-                           @RequestParam(value = "password" , required = false) String password)*/
     public Message listPropertyGroup(){
         Message message = new Message();
         List<BasePropertiesGroup> propertyGroupList = basePropertiesService.listBasePropertiesGroup();

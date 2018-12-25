@@ -293,6 +293,7 @@
         //引入leftMenu
         $('#leftMenu').load('../leftMenu.html',function () {
             $('#admin_area').addClass("mdui-list-item-active");
+            $('#admin_area').parents(".mdui-collapse-item").addClass("mdui-collapse-item-open");
             mdui.mutation();
         })
         initTree();
@@ -534,6 +535,7 @@
                                  });
                              },
                              updateBaseAreaSeqNo:function (){
+                                 // 获取id
                                  var areaIds = "";
                                  $("#sort tbody").find("tr").each(function(){
                                      var areaId = $(this).attr("areaId");
@@ -542,6 +544,7 @@
                                  console.log(areaIds);
                                  var obj = {};
                                  obj.areaIds = areaIds;
+
                                  $.ajax({
                                             type : "post",
                                             url : projectName + "/base/baseAreaC/updateBaseAreaSeqNo",
@@ -559,15 +562,31 @@
                                                 $.dialog.alert('请求失败！',function(){});
                                             }
                                         });
-                             }
+                             },
+                             setPropertyRedis:function(){
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/redisC/setRedisByKey",
+                                            //data : JSON.stringify(vm.propertyGroup),
+                                            data:"key=area",
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
 
+                                                $.dialog.alert(data.message,function(){});
+
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
                          },
                      });
 
 
 
 
-    // 排序
+    // ----------------------------------------排序---------------------------------
     var fixHelperModified = function(e, tr) {
             var $originals = tr.children();
             var $helper = tr.clone();
@@ -590,7 +609,7 @@
                                   axis:'y', // 只能y轴移动
                                   delay:100,// 按住100ms后才能使用，防止误触
                               }).disableSelection();
-
+    // ----------------------------------------排序---------------------------------
 
 
 </script>

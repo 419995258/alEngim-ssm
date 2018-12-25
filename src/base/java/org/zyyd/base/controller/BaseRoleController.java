@@ -37,19 +37,12 @@ import io.swagger.annotations.ApiOperation;
 //@ApiIgnore  //  忽略扫描该类，api
 @Controller  //RestController代表controller,但是是和ResponseBody结合
 @RequestMapping("base/baseRoleC")
-@Api(value = "baseRoleC", tags = "角色后台的管理接口", description = "角色的管理接口相关")
+@Api(value = "base/baseRoleC", tags = "角色", description = "角色")
 public class BaseRoleController extends BasicController {
-
 
 
     @Autowired
     private BaseRoleService baseRoleService;
-
-
-
-
-
-
 
 
     /**

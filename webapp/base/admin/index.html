@@ -306,6 +306,7 @@
         //引入leftMenu
         $('#leftMenu').load('../leftMenu.html',function () {
             $('#admin_index').addClass("mdui-list-item-active");
+            $('#admin_index').parents(".mdui-collapse-item").addClass("mdui-collapse-item-open");
             mdui.mutation();
         })
 
@@ -608,8 +609,6 @@
                                             url : projectName + "/base/redisC/setRedisByKey",
                                             //data : JSON.stringify(vm.propertyGroup),
                                             data:"key=property",
-                                            datatype : 'json',
-                                            contentType:"application/json",
                                             success : function(data) {
                                                 //console.log(JSON.stringify(data))
 

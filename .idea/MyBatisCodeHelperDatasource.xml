@@ -29,6 +29,7 @@
         <option name="javaModelPackage" value="org.zyyd.base.entity" />
         <option name="javaModelPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
         <option name="lastDatabaseCrudChooseModuleName" value="alEngin" />
+        <option name="modelAddToString" value="true" />
         <option name="moduleNameToPackageAndPathMap">
           <map>
             <entry key="alEngin">
@@ -732,7 +733,6 @@
           </map>
         </option>
         <option name="useExample" value="true" />
-        <option name="useSwagger" value="true" />
         <option name="xmlMapperPackage" value="org.zyyd.base.dao.mapper" />
         <option name="xmlMapperPath" value="D:\work\AllWorkspace\SZD\alEngin\trunk\src\base\java" />
       </ProjectProfile>

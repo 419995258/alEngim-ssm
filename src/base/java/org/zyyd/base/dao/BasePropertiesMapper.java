@@ -28,9 +28,4 @@ public interface BasePropertiesMapper {
 
     int updateByPrimaryKey(BaseProperties record);
 
-    List<BaseProperties> selectByExampleWithBLOBs(BasePropertiesExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") BaseProperties record, @Param("example") BasePropertiesExample example);
-
-    int updateByPrimaryKeyWithBLOBs(BaseProperties record);
 }

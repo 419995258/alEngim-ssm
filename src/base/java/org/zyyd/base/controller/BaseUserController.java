@@ -37,15 +37,12 @@ import io.swagger.annotations.ApiOperation;
 //@ApiIgnore  //  忽略扫描该类，api
 @Controller  //RestController代表controller,但是是和ResponseBody结合
 @RequestMapping("base/baseUserC")
-@Api(value = "baseUserC", tags = "用户后台的管理接口", description = "用户后台的管理接口")
+@Api(value = "base/baseUserC", tags = "用户", description = "用户")
 public class BaseUserController extends BasicController {
-
 
 
     @Autowired
     private BaseUserService baseUserService;
-
-
 
 
     /**
@@ -132,26 +129,6 @@ public class BaseUserController extends BasicController {
         return message;
 
     }
-
-
-
-    /*@RequestMapping(value="/clearShiro",method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation(value = "测试clearShiro")
-    public void clearShiro(){
-        Subject subject = SecurityUtils.getSubject();
-        RealmSecurityManager securityManager =
-                (RealmSecurityManager) SecurityUtils.getSecurityManager();
-        ShiroRealm shiroRealm = (ShiroRealm)securityManager.getRealms().iterator().next();
-        //删除登陆人
-        shiroRealm.getAuthorizationCache().remove(subject.getPrincipal());
-        //删除登陆人对应的缓存
-        shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
-        //重新加载subject
-        subject.releaseRunAs();
-    }*/
-
-
 
 
 

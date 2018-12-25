@@ -2,6 +2,7 @@ package org.zyyd.base.service;
 
 
 
+import org.zyyd.base.entity.BaseArea;
 import org.zyyd.base.entity.BasePermission;
 import org.zyyd.base.entity.BaseProperties;
 import org.zyyd.base.entity.BaseRole;
@@ -262,5 +263,86 @@ public interface RedisService {
      * 2018/11/26 15:00
      */
     void removePermissionOneRedis(String code);
+
+
+
+    /**{areaCode:area}
+     * @Title: setOneArea
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:26
+     * @param
+     * @return
+     * @throws
+     */
+    void setArea();
+
+    /**{areaCode:area}
+     * @Title: setOneArea
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:26
+     * @param
+     * @return
+     * @throws
+     */
+    void setOneArea(String areaCode);
+
+    /**{areaCode:area}
+     * @Title: setOneArea
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:26
+     * @param
+     * @return
+     * @throws
+     */
+    void setOneAreaByAreaId(String areaId);
+
+
+    /**获取某个地区通过areaCode
+     * @Title: getArea
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:40
+     * @param
+     * @return
+     * @throws
+     */
+    BaseArea getAreaByAreaCode(String areaCode);
+
+    /**获取某个地区的子地区通过areaCode
+     * @Title: getAreaGroupByAreaCode
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:40
+     * @param
+     * @return
+     * @throws
+     */
+    List<BaseArea> listAreaGroupByAreaCode(String areaCode);
+
+
+    /**获取某个地区通过areaId
+     * @Title: getArea
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:40
+     * @param
+     * @return
+     * @throws
+     */
+    BaseArea getAreaByAreaId(String areaId);
+
+    /**获取某个地区的子地区通过areaId
+     * @Title: getAreaGroupByAreaCode
+     * @Description:
+     * @author pengbin <pengbin>
+     * @date 2018/12/17 20:40
+     * @param
+     * @return
+     * @throws
+     */
+    List<BaseArea> listAreaGroupByAreaId(String areaId);
 
 }
