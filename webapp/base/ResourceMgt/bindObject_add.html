@@ -1,0 +1,261 @@
+<!--添加父目标子目标-->
+<div id="bindObject" style="width: 650px;height: 350px">
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-4">
+            <div id="tab1-content" class="mdui-p-a-2">
+                <!--树状结构-->
+                <div>
+                    <table style="width:80%">
+                        <tr>
+                            <td valign="top" style="width:150px;">
+                                <div id="treeDivAdd" class="ztree">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="mdui-col-xs-8">
+            <div>
+                <select v-model="alLearningObjectVO.isCanDescription">
+                    <option value="1" >可描述目标</option>
+                    <option value="0" >非可描述目标</option>
+                </select>
+                描述：<input type="text" v-model="alLearningObjectVO.objectNoDesc">
+                <a href="###" v-on:click="listLearningObject()">搜索</a>
+            </div>
+            <div v-for="(alLearningObject,index) in alLearningObjectList" >
+                <div >
+
+                    <div v-if="alLearningObject.IS_CAN_DESCRIPTION == '1' && alLearningObjectVO.isCanDescription == '1'">
+                        <div>
+                            <span>
+                                <input type="radio"  v-bind:value="alLearningObject.OBJECT_ID" v-model="objectId"/>
+                            </span>
+                            <span  v-on:click="openlhAlItp(alLearningObject)">
+                                目标{{index+1}}:
+                            </span>
+                            <span>
+                                [{{alLearningObject.objectTypeStr}}]
+                            </span>
+                            <span v-bind:style="alLearningObject.IS_STA_LEVEL=='1' ? 'color:red' : '' ">
+                                [{{alLearningObject.IS_STA_LEVEL=='1'?'标准':'非标准'}}]
+                            </span>
+                            <span>
+                                {{alLearningObject.OBJECT_DESC}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div v-if="alLearningObject.IS_CAN_DESCRIPTION != '1' && alLearningObjectVO.isCanDescription == '0'">
+                        <div>
+                            <span>
+                                <input type="radio"  v-bind:value="alLearningObject.OBJECT_ID" v-model="objectId"/>
+                            </span>
+                            <span>
+                                目标[{{alLearningObject.OBJECT_NO}}]:
+                            </span>
+                            <span>
+                                {{alLearningObject.OBJECT_DESC}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <div>
+        <a href="###" v-on:click="checkObjectId()">确定</a>
+        <a href="###" v-on:click="close()">取消</a>
+    </div>
+
+
+</div>
+
+<script>
+
+
+    var bindObject = new Vue({
+                         el:"#bindObject",
+                         data : {
+                             alPaperElement:{},
+                             objectId:'',
+                             alLearningObjectList:[],
+                             alLearningObjectVO:{
+                                 isCanDescription:'1',
+                                 objectNoDesc:'',
+                             }
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             // 关闭dialog
+                             close:function () {
+                                api.close();
+                             },
+                             listLearningObject:function(){
+                                 var obj = {};
+                                 obj.kcId = kcIdBc;
+                                 obj.objectNoDesc = bindObject.alLearningObjectVO.objectNoDesc;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/list",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    bindObject.alLearningObjectList = data.obj;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             checkObjectId:function () {
+                                 vm.alPaperElementList[bindIndex].objectId = bindObject.objectId;
+                                 var obj = {};
+                                 obj.objectId = bindObject.objectId;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/listObjectStr",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.alPaperElementList[bindIndex].objectStr = data.obj.objectStr;
+                                                    vm.alPaperElementList[bindIndex].kcStr = data.obj.kcStr;
+                                                    api.close();
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             }
+
+                         }
+                     });
+
+
+    //-----------------------------------------------------渲染地区树准备-------------------------
+    var setting3;
+    var zNodes3 = "";
+    var treeObj3;
+
+    // 教材引入目标选中的kcId
+    var kcIdBc = "";
+
+    setting3 = {
+        callback: {
+            onClick: zTreeOnClick3
+        },
+        view: {
+            dblClickExpand: dblClickExpand3
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"name",
+                title:"subjectCode",
+                kcId:""
+            }
+        }
+    };
+
+
+
+    function dblClickExpand3(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick3(event, treeId, treeNode) {
+        if(treeNode != null){
+            // 引入目标页面
+            kcIdBc = treeNode.kcId;
+            bindObject.listLearningObject();
+        }
+    }
+
+
+
+    function listKnowledge3(){
+        var obj={};
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/base/baseKnowledgeCatelog/listTree",
+                   data : JSON.stringify(obj),
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+                       //console.log(JSON.stringify(data))
+                       if(data.success == true){
+                           zNodes3  = data.obj;
+                       }else{
+                           $.dialog.alert(data.message,function(){});
+                       }
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    }
+
+    function initTree(){
+        listKnowledge3();
+        // 树选中
+        treeObj3 =$.fn.zTree.init($("#treeDivAdd"), setting3, zNodes3);
+        var node = treeObj3.getNodeByParam("code", "-1");
+        treeObj3.selectNode(node);
+        treeObj3.setting.callback.onClick(null, treeObj3.setting.treeId, node);
+    }
+
+
+    //---------------------------------------渲染地区树over
+
+
+
+    $(function(){
+
+        console.log("bindIndex:" + bindIndex);
+        console.log("bindObjectId:" + bindObjectId);
+        bindObject.objectId = bindObjectId;
+        bindObject.objectStr = bindObjectStr;
+        initTree();
+
+    });
+
+
+</script>

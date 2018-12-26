@@ -1,0 +1,237 @@
+<!--查询单元试卷-->
+<div >
+    <div class="mdui-col-xs-3" id="danyuanTree">
+
+        <div>
+            <div>
+                版本：
+                <select v-model="bookVersion" v-on:change="listBookList()">
+                    <option v-for="(bookVersion,index) in bookVersionList" v-bind:value="bookVersion.versionId" >{{bookVersion.versionName}}</option>
+                </select>
+            </div>
+            <div>
+                册：
+                <select v-model="book" v-on:change="changeBookChange()">
+                    <option v-for="(book,index) in bookList" v-bind:value="book.code" >{{book.name}}</option>
+                </select>
+            </div>
+            <!--树状结构-->
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td valign="top" style="width:200px;">
+                            <div id="treeDiv" class="ztree">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdui-col-xs-9" >
+        <div id="subContent">
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+
+
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"name",
+            }
+        }
+    };
+    var zNodes = "";
+    var treeObj;
+    function initTree(){
+        listBookTree();
+        treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+
+        var nodeCode = zNodes[0].code;
+        var node = treeObj.getNodeByParam("code", nodeCode);
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        if(treeNode != null){
+            // 引入目标页面
+            danyuan.bcId = treeNode.bcId;
+            danyuan.bcCode = treeNode.code;
+            $('#subContent').load('testPaper_danyuan_sub_list.html',function () {
+
+            })
+        }
+    }
+
+    function listBookTree(){
+        var obj = {};
+        obj.code = danyuan.book;
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/base/baseBookCatelog/listBookTree",
+                   data : JSON.stringify(obj),
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+
+                       zNodes = data.obj;
+
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    };
+
+
+    var danyuan = new Vue({
+                         el:"#danyuanTree",
+                         data : {
+                             // 教材版本
+                             bookVersionList:[],
+                             // 上下册
+                             bookList:[],
+                             // 版本
+                             bookVersion:'',
+                              //册
+                             book:'',
+                             // 教材id
+                             bcId:'',
+                             bcCode:'',
+                             paperVo:{
+                                 paperType:'paperType.XUEQI',
+                                 subjectCode:'subject.czsx',
+                                 schoolYear:'',
+                                 termCode:'',
+                                 province:'',
+                                 city:'',
+                                 county:'',
+                                 title:'',
+                                 gradeCode:'',
+                                 paperYear:''
+                             },
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+
+                         },
+                         // 初始化执行
+                         mounted(){
+
+
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                             bookVersion:function (){
+
+                             }
+                         },
+                         methods : {
+                             listBookVersionList:function () {
+                                 var obj = {};
+                                 obj.paperType = paperType;
+                                 obj.subjectCode = subjectCode;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseBookVersion/listVersionObj",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            async: false,
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+                                                if(data.success == true){
+                                                    danyuan.bookVersionList = data.obj;
+                                                    danyuan.bookVersion = danyuan.bookVersionList[0].versionId;
+                                                }else{
+                                                    $.dialog.alert(data.message,function(){});
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             listBookList:function () {
+                                 var obj = {};
+                                 obj.paperType = paperType;
+                                 obj.subjectCode = subjectCode;
+                                 obj.versionId = danyuan.bookVersion;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/baseBookCatelog/listBook",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            async: false,
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+                                                if(data.success == true){
+                                                    danyuan.bookList = data.obj;
+                                                    danyuan.book = danyuan.bookList[0].code;
+
+
+
+                                                }else{
+                                                    $.dialog.alert(data.message,function(){});
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             // 改变树
+                             changeBookChange:function () {
+                                 listBookTree();
+                                 treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+                             }
+
+                         }
+                     });
+
+    $(function(){
+
+        // 加载教材的版本
+        danyuan.listBookVersionList();
+        // 默认选中第一个册
+        danyuan.listBookList();
+        //渲染地区树
+        initTree();
+    });
+
+
+
+
+</script>

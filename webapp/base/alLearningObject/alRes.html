@@ -1,0 +1,227 @@
+
+<!--补救资源list-->
+<div id="vue">
+
+    <a href="###" onclick="backListLearnObject()">返回</a>
+    <a href="###" v-if="indexList[alLearningObject.OBJECT_ID] > 0 " v-on:click="changeNext(indexList[indexList[alLearningObject.OBJECT_ID]-1 + '_id'])">上一个</a>
+    <a href="###" v-if="indexList[alLearningObject.OBJECT_ID] < indexList['size'] -1 " v-on:click="changeNext(indexList[indexList[alLearningObject.OBJECT_ID]+1 + '_id'])">下一个</a>
+
+    <div>
+        <div v-if="alLearningObject.IS_CAN_DESCRIPTION == '1'">
+            <div>
+                <span>
+                    目标:
+                </span>
+                <span>
+                    [{{alLearningObject.objectTypeStr}}]
+                </span>
+                <span v-bind:style="alLearningObject.IS_STA_LEVEL=='1' ? 'color:red' : '' ">
+                    [{{alLearningObject.IS_STA_LEVEL=='1'?'标准':'非标准'}}]
+                </span>
+                <span>
+                    {{alLearningObject.OBJECT_DESC}}
+                </span>
+            </div>
+
+        </div>
+
+        <div v-if="alLearningObject.IS_CAN_DESCRIPTION != '1'">
+            <div>
+                    <span>
+                        目标[{{alLearningObject.OBJECT_NO}}]:
+                    </span>
+                <span>
+                        {{alLearningObject.OBJECT_DESC}}
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <a href="###" v-on:click="openAlItp(alLearningObject)">题目（{{alLearningObject.ITEM_COUNT}}）</a>
+        <a href="###" v-on:click="openAlRes(alLearningObject)">补救资源（{{alLearningObject.RES_COUNT}}）</a>
+        <a href="###" v-on:click="openAlObjSim(alLearningObject)">相似目标（{{alLearningObject.SIMILARITY_OBJECT_COUNT}}）</a>
+        <a href="###" v-on:click="openAlObjParent(alLearningObject)">父（{{alLearningObject.PARENT_COUNT}}）</a>
+        <a href="###" v-on:click="openAlObjSub(alLearningObject)">子（{{alLearningObject.SUB_COUNT}}）</a>
+    </div>
+
+    <a id="anchor-top"></a>
+
+    <div >
+       <div style="    margin-left: 90%;">
+           <button v-on:click="updateSeqNo()">保存</button>
+       </div>
+        <ul id="sort">
+            <li style="list-style:none;" v-for="(alResVO,index) in alResList" v-bind:resVId="alResVO.RES_V_ID">
+                <div style="display:inline-block;float: left;line-height: 3;">
+                               图片
+                </div>
+                <div style="display:inline-block">
+                    <div>
+                        <span>{{alResVO.TITLE}}</span>
+                    </div>
+                    <div>
+                        <span>大小:{{alResVO.FILE_SIZE}}</span><span>文件格式:{{alResVO.FILE_EXT}}</span>
+                    </div>
+                    <div>
+                        <span>标签:{{alResVO.TAG}}</span>
+                    </div>
+                </div>
+                <div style="display:inline-block;float: right;line-height: 3;">
+                    <i class="mdui-icon material-icons" title="按住拖动排序">sort</i>
+                </div>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+<script>
+
+
+    var vm = new Vue({
+                         el:"#vue",
+                         data : {
+                             alResVO:{
+                                 objectId:'',
+                             },
+                             alResList:[],
+                             alLearningObject:{
+
+                             },
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             listAlItp:function(){
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alTutorRes/list",
+                                            data : JSON.stringify(vm.alResVO),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.alResList = data.obj;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             openAlItp:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlItp(alLearningObject.OBJECT_ID);
+                             },
+                             openAlRes:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlRes(alLearningObject.OBJECT_ID);
+                             },
+                             openAlObjSim:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlObjSim(alLearningObject.OBJECT_ID);
+                             },
+                             openAlObjParent:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlObjParent(alLearningObject.OBJECT_ID);
+                             },
+                             openAlObjSub:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlObjSub(alLearningObject.OBJECT_ID);
+                             },
+                             changeNext:function (id) {
+                                 objectId = id;
+                                 listObjById(objectId);
+                                 openAlRes(objectId);
+                             },
+                             updateSeqNo:function (){
+                                 // 获取id
+                                 var resVIds = "";
+                                 $("#sort").find("li").each(function(){
+                                     var resVId = $(this).attr("resVId");
+                                     resVIds = resVIds + resVId + ",";
+                                 });
+
+                                 var obj = {};
+                                 obj.resVIds = resVIds;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alTutorRes/updateSeqNo",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    $.dialog.alert(data.message);
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             }
+                         }
+                     });
+
+
+    $(function(){
+        // vm.listAlItp();
+        console.log("objectId:" + objectId);
+        vm.alLearningObject = object;
+        vm.alResVO.objectId = objectId;
+        vm.listAlItp();
+    });
+    function backListLearnObject() {
+
+        openLearnObject(kcId,bcId);
+    }
+
+
+    // ----------------------------------------排序---------------------------------
+    var fixHelperModified = function(e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function(index) {
+                $(this).width($originals.eq(index).width())
+            });
+            return $helper;
+        },
+        updateIndex = function(e, ui) {
+            $('td.index', ui.item.parent()).each(function (i) {
+                $(this).html(i + 1);
+            });
+        };
+    $("#sort").sortable({
+                                  handle: ".mdui-icon", //还有这个class类点中了才能拖移
+                                  helper: fixHelperModified,
+                                  stop: updateIndex,
+                                  opacity: 0.6,                       //拖动时，透明度为0.6
+                                  revert: true,
+                                  axis:'y', // 只能y轴移动
+                                  delay:100,// 按住100ms后才能使用，防止误触
+                              }).disableSelection();
+    // ----------------------------------------排序---------------------------------
+
+
+</script>

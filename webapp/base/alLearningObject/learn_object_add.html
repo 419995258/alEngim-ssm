@@ -1,0 +1,133 @@
+<div id="vue">
+    <div>
+        <a href="###" onclick="backListLearnObject()">返回</a>
+        <h2 style="display: initial;    margin-left: 40%;">新增目标</h2>
+    </div>
+    <div v-if="alLearningObjectVO.isCanDescription != '0'">
+        知识类型：
+        <select v-model="alLearningObjectVO.objectType" >
+            <option v-for="(properties,index) in learningObjectType" v-bind:value="properties.propertyKey" >{{properties.propertyValue}}</option>
+        </select>
+
+        <select v-model="alLearningObjectVO.isStaLevel">
+            <option value="1">标准</option>
+            <option value="0">非标准</option>
+        </select>
+    </div>
+    <div>
+        知识名称:
+        <textarea v-model="alLearningObjectVO.objectDesc">
+
+        </textarea>
+    </div>
+    <div>
+        <a href="###" onclick="backListLearnObject()">返回</a>
+        <a href="###" v-on:click="addLearnObject(alLearningObjectVO)">添加</a>
+    </div>
+</div>
+
+<script>
+
+
+    var vm = new Vue({
+                         el:"#vue",
+                         data : {
+                             learningObjectType:[],
+                             alLearningObjectVO:{
+                                 kcId:'',
+                                 objectId:'',
+                                 objectType:'',
+                                 isStaLevel:'1',
+                                 objectDesc:'',
+                                 isCanDescription:'',
+
+                             },
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                             this.listProperties('learningObject.type');
+
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             listProperties:function (groupCode) {
+                                 var obj = {};
+                                 obj.groupCode = groupCode;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/base/redisC/getPropertiesGroupByCode",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.learningObjectType = data.obj;
+                                                    vm.alLearningObjectVO.objectType = vm.learningObjectType[0].propertyKey;
+                                                }else{
+                                                    mdui.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             addLearnObject:function () {
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/save",
+                                            data : JSON.stringify(vm.alLearningObjectVO),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    openLearnObject(kcId,bcId);
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             }
+
+
+
+                         }
+                     });
+
+    $(function(){
+
+        vm.alLearningObjectVO.kcId = kcId;
+        if(editAlLearningObject == ''){
+        }else{
+            console.log(JSON.stringify(editAlLearningObject));
+            vm.alLearningObjectVO.objectType = editAlLearningObject.OBJECT_TYPE;
+            vm.alLearningObjectVO.isStaLevel = editAlLearningObject.IS_STA_LEVEL;
+            vm.alLearningObjectVO.objectDesc = editAlLearningObject.OBJECT_DESC;
+            vm.alLearningObjectVO.objectId = editAlLearningObject.OBJECT_ID;
+            vm.alLearningObjectVO.isCanDescription = editAlLearningObject.IS_CAN_DESCRIPTION;
+        }
+    });
+
+    function backListLearnObject(){
+        openLearnObject(kcId,bcId);
+    }
+
+</script>

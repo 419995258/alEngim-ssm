@@ -1,0 +1,238 @@
+<!--引入目标-->
+<div id="vue" style="width: 650px;height: 350px">
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-4">
+            <div id="tab1-content" class="mdui-p-a-2">
+                <!--树状结构-->
+                <div>
+                    <table style="width:80%">
+                        <tr>
+                            <td valign="top" style="width:150px;">
+                                <div id="treeDivAdd" class="ztree">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="mdui-col-xs-8">
+            <div v-for="(alLearningObject,index) in alLearningObjectList" >
+                <div >
+
+                    <div v-if="alLearningObject.IS_CAN_DESCRIPTION == '1'">
+                        <div>
+                            <span>
+                                <input type="checkbox"  v-bind:value="alLearningObject.OBJECT_ID" v-model="checkObjectIdsBC"/>
+                            </span>
+                            <span  v-on:click="openlhAlItp(alLearningObject)">
+                                目标{{index+1}}:
+                            </span>
+                                    <span>
+                                [{{alLearningObject.objectTypeStr}}]
+                            </span>
+                                    <span v-bind:style="alLearningObject.IS_STA_LEVEL=='1' ? 'color:red' : '' ">
+                                [{{alLearningObject.IS_STA_LEVEL=='1'?'标准':'非标准'}}]
+                            </span>
+                                    <span>
+                                {{alLearningObject.OBJECT_DESC}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div v-if="alLearningObject.IS_CAN_DESCRIPTION != '1'">
+                        <div>
+                            <span>
+                                <input type="checkbox"  v-bind:value="alLearningObject.OBJECT_ID" v-model="checkObjectIdsBC"/>
+                            </span>
+                            <span>
+                                目标[{{alLearningObject.OBJECT_NO}}]:
+                            </span>
+                                    <span>
+                                {{alLearningObject.OBJECT_DESC}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+                <a href="###" v-on:click="saveCheckObjectIdsBC()">保存</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+
+    var vm = new Vue({
+                         el:"#vue",
+                         data : {
+                             alLearningObjectVO:{
+                                 kcId:'',
+                                 bcId:'',
+                                 isCanDescription:'1',
+                                 objectNoDesc:'',
+                                 showDes:''
+                             },
+                             alLearningObject:{
+
+                             },
+                             alLearningObjectList:[],
+                             checkObjectIdsBC:[]
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             listLearningObject:function(kcIdBc){
+                                 var obj = {};
+                                 obj.kcId = kcIdBc;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/list",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.alLearningObjectList = data.obj;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             // 引入目标
+                             saveCheckObjectIdsBC:function () {
+                                 var obj = {};
+                                 obj.bcId = bcId;
+                                 obj.checkObjectIds = vm.checkObjectIdsBC;
+                                 console.log(obj);
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/saveBC",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    console.log("over");
+                                                    api.close();
+                                                    openLearnObject(kcId,bcId);
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+
+                             },
+                             // 查看某个目标详情
+                             openlhAlItp:function (alLearningObject) {
+                                 console.log(JSON.stringify(alLearningObject))
+                                 lhObject = alLearningObject;
+                                 lhObjectId = alLearningObject.OBJECT_ID;
+                                 openlhAlItp(alLearningObject);
+                             }
+
+
+                         }
+                     });
+
+    $(function(){
+        // vm.alLearningObjectVO.kcId = kcIdBc;
+        // vm.listLearningObject();
+
+    });
+
+    // 教材引入目标选中的kcId
+    var kcIdBc = "";
+
+    //-----------------------------------------------------渲染地区树准备-------------------------
+    setting3 = {
+        callback: {
+            onClick: zTreeOnClick3
+        },
+        view: {
+            dblClickExpand: dblClickExpand3
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"name",
+                title:"subjectCode",
+                kcId:""
+            }
+        }
+    };
+
+
+
+    function dblClickExpand3(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick3(event, treeId, treeNode) {
+        if(treeNode != null){
+            // 引入目标页面
+            kcIdBc = treeNode.kcId;
+            vm.listLearningObject(kcIdBc);
+        }
+    }
+
+
+
+    function listKnowledge3(){
+        var obj={};
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/base/baseKnowledgeCatelog/listTree",
+                   data : JSON.stringify(obj),
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+                       //console.log(JSON.stringify(data))
+                       if(data.success == true){
+                           zNodes3  = data.obj;
+                       }else{
+                           $.dialog.alert(data.message,function(){});
+                       }
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    }
+    //---------------------------------------渲染地区树over
+
+</script>

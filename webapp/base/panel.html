@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>可扩展面板 - MDUI 开发文档, Material Design 前端框架</title>
+    <script src="../common/js/jquery/jquery-2.2.0.min.js"></script>
+    <link rel="stylesheet" href="../common/js/MDUI/css/doc.css">
+
+</head>
+<body>
+
+
+
+<!--段落-->
+<div class=" doc-container">
+    <div class="doc-example">
+        <div class="doc-example-tools">
+            <a href="###" class="viewsource">编辑</a>
+        </div>
+        <div class="doc-example-demo-label">
+            编辑
+        </div>
+
+        <div class="doc-example-demo">
+            <!--内容-->
+            111
+        </div>
+        <pre class="doc-example-code">
+                            <!--编辑-->
+                           111
+        </pre>
+    </div>
+</div>
+
+<script>
+    // 打开编辑
+    $('.viewsource').click(function () {
+        $(this).parents('.doc-example').eq(0).toggleClass('doc-example-showcode');
+    });
+</script>
+

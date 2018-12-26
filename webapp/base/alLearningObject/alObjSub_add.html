@@ -1,0 +1,225 @@
+<!--添加父目标子目标-->
+<div id="vue" style="text-align: left;">
+    <div>
+        <div v-for="(alLearningObject,index) in alLearningObjectList">
+            <div >
+                <span>
+                    <input type="checkbox"  v-bind:value="alLearningObject.OBJECT_ID" v-model="checkObjectIds"/>
+                </span>
+                <span v-on:click="openAlItp(alLearningObject)">
+                    目标{{index+1}}:
+                </span>
+                <span>
+                    [{{alLearningObject.objectTypeStr}}]
+                </span>
+                <span v-bind:style="alLearningObject.IS_STA_LEVEL=='1' ? 'color:red' : '' ">
+                    [{{alLearningObject.IS_STA_LEVEL=='1'?'标准':'非标准'}}]
+                </span>
+                <span>
+                    {{alLearningObject.OBJECT_DESC}}
+                </span>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <a href="###" v-on:click="save()">确定</a>
+        <a href="###" v-on:click="close()">取消</a>
+    </div>
+
+
+</div>
+
+<script>
+
+
+    var vm = new Vue({
+                         el:"#vue",
+                         data : {
+                             alLearningObjectVO:{
+                                 kcId:'',
+                                 bcId:'',
+                                 isCanDescription:'1',
+                             },
+                             alLearningObject:{
+
+                             },
+                             alLearningObjectList:[],
+                             checkObjectIds:[]
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             // 显示所有的目标
+                             listLearningObject:function(){
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/list",
+                                            data : JSON.stringify(vm.alLearningObjectVO),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.alLearningObjectList = data.obj;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             // 显示所有的父子列表
+                             listLearnParSubObject:function(){
+                                 var obj = {};
+                                 obj.objectId = objectId;
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/listSub",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    for(var i = 0; i < data.obj.length; i++){
+                                                        vm.checkObjectIds.push(data.obj[i].OBJECT_ID);
+                                                    }
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             // 关闭dialog
+                             close:function () {
+                                 api.close();
+                             },
+                             // 添加保存父子关系
+                             save:function(){
+                                 var obj = {};
+                                 obj.objectId = objectId;
+                                 obj.checkObjectIds = vm.checkObjectIds;
+                                 obj.changeType = 'sub';
+
+                                $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/saveAlObjRelation",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    api.close();
+                                                    openAlObjParent(objectId);
+                                                    // 更新父目标数量
+                                                    object.PARENT_COUNT = vm.checkObjectIds.length;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             openAlItp:function (alLearningObject) {
+                                 lhObject = alLearningObject;
+                                 lhObjectId = alLearningObject.OBJECT_ID
+                                 openlhAlItp(alLearningObject);
+
+                             },
+
+                             
+                         }
+                     });
+
+    $(function(){
+        console.log("objectId:" + objectId);
+        vm.alLearningObjectVO.kcId = kcId;
+        vm.listLearningObject();
+        vm.listLearnParSubObject();
+    });
+
+    var lhObject = {};
+    var lhObjectId = "";
+
+
+    function openlhAlItp(alLearningObject) {
+        $.ajax({
+                   url:'lhObj/alItp.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+    function openlhAlRes(alLearningObject) {
+        $.ajax({
+                   url:'lhObj/alRes.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+    function openlhAlObjSim(alLearningObject) {
+        $.ajax({
+                   url:'lhObj/alItp.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+    function openlhAlObjParent(alLearningObject) {
+        $.ajax({
+                   url:'lhObj/alObjParent.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+    function openlhAlObjSub(alLearningObject) {
+        $.ajax({
+                   url:'lhObj/alObjSub.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+
+    function back(){
+        $.ajax({
+                   url:'alObjParent_add.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+</script>

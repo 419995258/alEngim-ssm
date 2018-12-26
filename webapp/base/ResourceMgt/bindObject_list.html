@@ -1,0 +1,78 @@
+<!--添加父目标子目标-->
+<div id="bindObject" style="text-align: left;">
+    <div v-if="objectId != '' ">
+        <div>
+            {{objectStr}}
+        </div>
+        <div>
+            {{kcStr}}
+        </div>
+
+    </div>
+    <div v-if="objectId == '' ">
+        暂无目标
+    </div>
+
+    <div>
+        <a href="###" onclick="setObject()">设置</a>
+        <a href="###" v-on:click="close()">确定</a>
+    </div>
+
+
+</div>
+
+<script>
+
+
+    var bindObject = new Vue({
+                         el:"#bindObject",
+                         data : {
+                             alPaperElement:{},
+                             objectId:'',
+                             objectStr:'',
+                             kcStr:'',
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             // 关闭dialog
+                             close:function () {
+                                 api.close();
+                             },
+
+                         }
+                     });
+
+    $(function(){
+        console.log("bindObjectId:" + bindObjectId);
+        bindObject.objectId = bindObjectId;
+        bindObject.objectStr = bindObjectStr;
+        bindObject.kcStr = bindKcStr;
+    });
+
+
+    function setObject(){
+        $.ajax({
+                   url:'bindObject_add.html',
+                   success:function(data){
+                       api.content(data);
+                   },
+                   cache:false
+               });
+    }
+
+</script>

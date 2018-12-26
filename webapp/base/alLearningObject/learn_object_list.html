@@ -1,0 +1,222 @@
+<!--目标list-->
+<div id="vue">
+    <div>
+        <div style="display:inline-block;">
+            <select class="mdui-select"  id="isCanDescription" v-model="alLearningObjectVO.isCanDescription" v-on:change="listLearningObject(alLearningObjectVO)">
+                <option value="1" >可描述目标</option>
+                <option value="0" >非可描述目标</option>
+            </select>
+        </div>
+
+        <div style="display:inline-block;" v-if="alLearningObjectVO.isCanDescription == 0 ">
+            <input type="checkbox" v-model="alLearningObjectVO.showDes" v-on:change="listLearningObject(alLearningObjectVO)">只看有描述
+        </div>
+
+        <div style="display:inline-block;" v-on:keyup.enter="listLearningObject(alLearningObjectVO)">
+            <input type="text" v-model="alLearningObjectVO.objectNoDesc" placeholder="请输入目标号或描述"/>
+        </div>
+        <div style="display:inline-block;">
+            <a href="###" onclick="sortAlLearningObject()" > 排序 </a>
+        </div>
+        <div style="display:inline-block;">
+            <a href="###" onclick="addLearnObject('')" > 添加 </a>
+        </div>
+    </div>
+
+
+
+    <a id="anchor-top"></a>
+
+    <div >
+        <div v-for="(alLearningObject,index) in alLearningObjectList">
+            <div style="    display: inline-block;">
+                <div v-if="alLearningObject.IS_CAN_DESCRIPTION == '1'">
+                    <div>
+                    <span>
+                        目标{{index+1}}:
+                    </span>
+                        <span>
+                        [{{alLearningObject.objectTypeStr}}]
+                    </span>
+                        <span v-bind:style="alLearningObject.IS_STA_LEVEL=='1' ? 'color:red' : '' ">
+                        [{{alLearningObject.IS_STA_LEVEL=='1'?'标准':'非标准'}}]
+                    </span>
+                        <span>
+                        {{alLearningObject.OBJECT_DESC}}
+                    </span>
+                    </div>
+                </div>
+
+                <div v-if="alLearningObject.IS_CAN_DESCRIPTION != '1'">
+                    <div>
+                    <span>
+                        目标[{{alLearningObject.OBJECT_NO}}]:
+                    </span>
+                        <span>
+                        {{alLearningObject.OBJECT_DESC}}
+                    </span>
+                    </div>
+                </div>
+
+                <div v-if="alLearningObjectVO.kcId != ''">
+                    <a href="###" v-on:click="openAlItp(alLearningObject)">题目（{{alLearningObject.ITEM_COUNT}}）</a>
+                    <a href="###" v-on:click="openAlRes(alLearningObject)">补救资源（{{alLearningObject.RES_COUNT}}）</a>
+                    <a href="###" v-on:click="openAlObjSim(alLearningObject)">相似目标（{{alLearningObject.SIMILARITY_OBJECT_COUNT}}）</a>
+                    <a href="###" v-on:click="openAlObjParent(alLearningObject)">父（{{alLearningObject.PARENT_COUNT}}）</a>
+                    <a href="###" v-on:click="openAlObjSub(alLearningObject)">子（{{alLearningObject.SUB_COUNT}}）</a>
+                </div>
+            </div>
+
+
+            <div style="    display: inline-block;float: right;">
+                <span>
+                    <a href="###" v-on:click="editObject(alLearningObject)"> 编辑</a>
+                </span>
+                <span>
+                    <a href="###" v-on:click="deleteObject(alLearningObject)"> 删除</a>
+                </span>
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+
+
+    var vm = new Vue({
+                         el:"#vue",
+                         data : {
+                             alLearningObjectVO:{
+                                 kcId:'',
+                                 bcId:'',
+                                 isCanDescription:'1',
+                                 objectNoDesc:'',
+                                 showDes:''
+                             },
+                             alLearningObject:{
+
+                             },
+                             alLearningObjectList:[]
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                         },
+                         methods : {
+                             listLearningObject:function(alLearningObjectVO){
+
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/list",
+                                            data : JSON.stringify(vm.alLearningObjectVO),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.alLearningObjectList = data.obj;
+                                                    // 将所有查询的数据放入indexList
+                                                    for(var i = 0; i < data.obj.length; i++){
+                                                       /* var v = {};
+                                                        v.OBJECT_INDEX = i;
+                                                        v.OBJECT_ID = data.obj[i].OBJECT_ID;
+                                                        indexList.push(v);*/
+                                                       // OBJECT_ID:OBJECT_INDEX
+                                                        indexList[data.obj[i].OBJECT_ID] = i;
+                                                       // OBJECT_INDEX_id:OBJECT_ID
+                                                        indexList[i+'_id'] = data.obj[i].OBJECT_ID;
+                                                    }
+                                                    indexList['size'] = data.obj.length;
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             deleteObject:function (alLearningObject) {
+                                 var obj = {};
+                                 obj.objectId = alLearningObject.OBJECT_ID;
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alLearningObject/deleteAlObj",
+                                            data : JSON.stringify(obj),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            success : function(data) {
+                                                if(data.success == true){
+                                                    vm.listLearningObject();
+                                                }else{
+                                                    $.dialog.alert(data.message);
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+                             },
+                             openAlItp:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlItp(alLearningObject.OBJECT_ID);
+                             },
+                             openAlRes:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlRes(alLearningObject.OBJECT_ID);
+                             },
+                             openAlObjSim:function (alLearningObject) {
+                                object = alLearningObject;
+                                openAlObjSim(alLearningObject.OBJECT_ID);
+                            },
+                             openAlObjParent:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlObjParent(alLearningObject.OBJECT_ID);
+                             },
+                             openAlObjSub:function (alLearningObject) {
+                                 object = alLearningObject;
+                                 openAlObjSub(alLearningObject.OBJECT_ID);
+                             },
+                             editObject:function (alLearningObject) {
+                                 addLearnObject(alLearningObject);
+                             },
+                             // 排序
+                             sortAlLearningObject :function () {
+                                 sortAlLearningObject();
+                             }
+
+
+                             
+                         }
+                     });
+
+    $(function(){
+        vm.alLearningObjectVO.kcId = kcId;
+        vm.alLearningObjectVO.bcId = bcId;
+        vm.listLearningObject();
+
+    });
+    
+    function back() {
+        
+    }
+
+</script>

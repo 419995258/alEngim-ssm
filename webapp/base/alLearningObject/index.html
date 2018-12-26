@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>首页</title>
+
+    <script src="../../common/js/base.js"></script>
+
+    <script src="../../common/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <script src="../../common/js/lhgdialog/lhgdialog_1.min.js?skin=idialog"></script>
+
+    <link rel="stylesheet" href="../../common/js/MDUI/css/mdui.min.css">
+    <!--<script src="/common/js/MDUI/js/mdui.min.js"></script>-->
+    <link rel="stylesheet" href="../../common/js/MDUI/css/doc.css">
+
+    <link href="../../common/js/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.core.min.js"></script>
+    <script src="../../common/js/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+    <!--<link rel="stylesheet" href="/common/js/AmazeUI/css/amazeui.min.css">-->
+
+    <!--排序js插件-->
+    <link href="../../common/js/jquery/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="../../common/js/jquery/jquery-ui/jquery-ui.js"></script>
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+  <div id="head">
+
+  </div>
+</header>
+
+
+<div id="leftMenu">
+
+
+</div>
+
+<a id="anchor-top"></a>
+
+<style>
+  .color-palette{
+    position: relative;
+    padding: 0 0 36px 0;
+    margin: 0;
+    list-style: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .color-palette li {
+    padding: 15px;
+  }
+  .color-palette .color-divider {
+    margin-top: 8px;
+  }
+  .color-palette .main-color {
+  }
+  .color-palette .main-color .color-name {
+    display: block;
+    margin-bottom: 60px;
+  }
+  .color-palette .color-hex {
+    float: right;
+    text-transform: uppercase;
+  }
+  .color-palette .anchor-primary-color {
+    position: absolute;
+    top: -72px;
+  }
+  .color-palette .anchor-accent-color {
+    position: absolute;
+    top: 520px;
+  }
+</style>
+
+
+<div class="mdui-container doc-container doc-no-cover" id="property">
+
+    <div class="mdui-row" >
+        <div class="mdui-col-xs-3">
+            <h2 class="doc-title mdui-text-color-theme">模型管理
+            </h2>
+            <div class="mdui-tab " mdui-tab>
+                <a href="#tab1-content" id="tab1" class="mdui-ripple">按课标</a>
+                <a href="#tab2-content" id="tab2" class="mdui-ripple">按教材</a>
+
+            </div>
+
+            <div id="tab1-content" class="mdui-p-a-2">
+                <!--树状结构-->
+                <div>
+                    <table style="width:100%">
+                        <tr>
+                            <td valign="top" style="width:200px;">
+                                <div id="treeDiv" class="ztree">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="tab2-content" class="mdui-p-a-2">
+                <!--树状结构-->
+                <div>
+                    <table style="width:100%">
+                        <tr>
+                            <td valign="top" style="width:200px;">
+                                <div id="treeDiv2" class="ztree">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="mdui-col-xs-9" >
+            <div>
+                <a href="###" onclick="openCode('-1')">目标</a>
+                <a href="###">知识图谱</a>
+            </div>
+
+            <div id="content">
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<script src="../../common/js/MDUI/js/mdui.min.js"></script>
+<script src="../../common/js/vue/vue.min.js"></script>
+
+<script>
+
+    //进度指示器
+    /*var dialogOptions = {
+        modal : true,
+        closeOnEsc : false,
+    }
+    var spinner = new mdui.Dialog('#spinner',dialogOptions);*/
+
+    console.log(projectName);
+
+    $(function(){
+        //引入head
+        $('#head').load('../head.html',function () {
+
+        })
+        //引入leftMenu
+        $('#leftMenu').load('../leftMenu.html',function () {
+            $('#alLearningObject_index').addClass("mdui-list-item-active");
+            $('#alLearningObject_index').parents(".mdui-collapse-item").addClass("mdui-collapse-item-open");
+            mdui.mutation();
+        })
+
+        initTree();
+
+    });
+
+
+    var setting = {
+        callback: {
+            onClick: zTreeOnClick
+        },
+        view: {
+            dblClickExpand: dblClickExpand
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"name",
+                title:"subjectCode",
+                kcId:""
+            }
+        }
+    };
+    var setting2 = {
+        callback: {
+            onClick: zTreeOnClick2
+        },
+        view: {
+            dblClickExpand: dblClickExpand2
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                pIdKey:"parentCode",
+                idKey:"code",
+            },
+            key:{
+                name:"name",
+                bcId:""
+            }
+        }
+    };
+
+    var zNodes = "";
+    var zNodes2 = "";
+
+    var treeObj;
+    var treeObj2;
+    function initTree(){
+        listKnowledge();
+        treeObj =$.fn.zTree.init($("#treeDiv"), setting, zNodes);
+        var node = treeObj.getNodeByParam("code", "-1");
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+
+        listBook();
+        treeObj2 =$.fn.zTree.init($("#treeDiv2"), setting2, zNodes2);
+        // var node2 = treeObj2.getNodeByParam("code", "-1");
+        //treeObj2.selectNode(node2);
+        // treeObj2.setting.callback.onClick(null, treeObj2.setting.treeId, node2);
+    }
+
+
+    function dblClickExpand(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick(event, treeId, treeNode) {
+        if(treeNode != null){
+            // 引入目标页面
+            openLearnObject(treeNode.kcId,"");
+        }
+    }
+
+    function dblClickExpand2(treeId, treeNode) {
+        return treeNode.level > 0;
+    }
+    function zTreeOnClick2(event, treeId, treeNode) {
+        if(treeNode != null){
+            // 引入目标页面
+            openLearnObject("",treeNode.bcId);
+            //openLearnObject("","1");
+        }
+    }
+
+    function listKnowledge(){
+        var obj={};
+            $.ajax({
+                       type : "post",
+                       url : projectName + "/base/baseKnowledgeCatelog/listTree",
+                       data : JSON.stringify(obj),
+                       datatype : 'json',
+                       contentType:"application/json",
+                       async: false,
+                       success : function(data) {
+                           //console.log(JSON.stringify(data))
+                           if(data.success == true){
+                               zNodes  = data.obj;
+                           }else{
+                               $.dialog.alert(data.message,function(){});
+                           }
+                       },
+                       error : function() {
+                           $.dialog.alert('请求失败！',function(){});
+                       }
+                   });
+    }
+
+    function listBook(){
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/base/baseBookCatelog/listTree",
+                   data : "{}",
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async: false,
+                   success : function(data) {
+
+                       zNodes2 = data.obj;
+
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    };
+
+
+    Vue.config.debug = true;//开启vue的debug模式
+
+
+    // 通过课标的code来点击某个节点
+    function openCode(code){
+        var node = treeObj.getNodeByParam("code", code);
+        treeObj.selectNode(node);
+        treeObj.setting.callback.onClick(null, treeObj.setting.treeId, node);
+    }
+
+
+    // 左侧课表数选中的id
+    var kcId = "";
+    // 左侧教材数选中的id
+    var bcId = "";
+    // 显示所有的目标list
+    function openLearnObject(kcId,bcId){
+        this.kcId = kcId;
+        this.bcId = bcId;
+        if(kcId == ''){
+            $('#content').load('learn_object_list_bc.html',function () {
+
+            })
+        }else{
+            $('#content').load('learn_object_list.html',function () {
+
+            })
+        }
+
+        // console.log(treeObj.getSelectedNodes()[0].level)
+        //引入head
+        /*var content = $.get('list_learn_object.html');
+        $('#content').html(content);*/
+
+    }
+
+    // 添加一个目标
+    var editAlLearningObject = {};
+    function addLearnObject(editAlLearningObject){
+        this.editAlLearningObject = editAlLearningObject;
+        $('#content').load('learn_object_add.html',function () {
+
+        })
+    }
+
+    // 排序目标
+    function sortAlLearningObject() {
+        $('#content').load('learn_object_sort.html',function () {
+
+        })
+    }
+
+    // 某个学习目标的id
+    var objectId = "";
+    var object = {};
+    // 某个学习目标的id备份，为了兼容弹窗
+    var bakobjectId = "";
+    var bakobject = {};
+    // 为了能够选中上一个下一个，整合index以及id(OBJECT_ID:OBJECT_INDEX;OBJECT_INDEX_id:OBJECT_ID)
+    var indexList = {};
+
+
+    // 通过某个目标id，显示某个目标的题目
+    function openAlItp(objectId){
+        this.objectId = objectId;
+        var d = $.dialog.tips('数据加载中...',600,'loading.gif');
+        //引入head
+        $('#content').load('alItp.html',function () {
+            d.close();
+        })
+    }
+
+    // 通过某个目标id，显示某个目标的补救资源
+    function openAlRes(objectId){
+        this.objectId = objectId;
+        var d = $.dialog.tips('数据加载中...',600,'loading.gif');
+        //引入head
+        $('#content').load('alRes.html',function () {
+            d.close();
+        })
+    }
+
+    // 通过某个目标id，显示某个目标的相似目标
+    function openAlObjSim(objectId){
+        this.objectId = objectId;
+        var d = $.dialog.tips('数据加载中...',600,'loading.gif');
+        //引入head
+        $('#content').load('alObjParent.html',function () {
+            d.close();
+        })
+    }
+
+    // 通过某个目标id，显示某个目标的父目标
+    function openAlObjParent(objectId){
+        this.objectId = objectId;
+        var d = $.dialog.tips('数据加载中...',600,'loading.gif');
+        //引入head
+        $('#content').load('alObjParent.html',function () {
+            d.close();
+        })
+    }
+
+    // 通过某个目标id，显示某个目标的子目标
+    function openAlObjSub(objectId){
+        this.objectId = objectId;
+        var d = $.dialog.tips('数据加载中...',600,'loading.gif');
+        //引入head
+        $('#content').load('alObjSub.html',function () {
+            d.close();
+        })
+    }
+
+
+    // 通过id重新查找该obj并且重新赋值
+    function listObjById(id) {
+        var ob = {};
+        ob.objectId = id;
+        ob.kcId = kcId;
+        ob.bcId = bcId;
+        $.ajax({
+                   type : "post",
+                   url : projectName + "/engin/alLearningObject/list",
+                   data : JSON.stringify(ob),
+                   datatype : 'json',
+                   contentType:"application/json",
+                   async:false,
+                   success : function(data) {
+                       if(data.success == true){
+                           object = data.obj[0];
+                           objectId = object.OBJECT_ID;
+                       }else{
+                           $.dialog.alert(data.message);
+                       }
+
+                   },
+                   error : function() {
+                       $.dialog.alert('请求失败！',function(){});
+                   }
+               });
+    }
+
+
+
+
+
+</script>
+

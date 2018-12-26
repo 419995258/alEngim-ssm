@@ -1,0 +1,266 @@
+<!--查询试卷-->
+<div id="add">
+
+    <div>
+        <div>
+            <span>试卷名称：</span>
+            <input v-model="paperVo.title" placeholder="请输入试卷名称">
+        </div>
+
+        <template v-if="paperVo.paperType == 'paperType.XUEQI'">
+            <div>
+                <span>年级：</span>
+                <select v-model="paperVo.gradeCode" >
+                    <option v-for="(properties,index) in gradeCodeList" v-bind:value="properties.propertyKey" >{{properties.propertyValue}}</option>
+                </select>
+            </div>
+            <div>
+                <span>学年：</span>
+                <select v-model="paperVo.schoolYear">
+                    <option v-for="(properties,index) in schoolYearList" v-bind:value="properties.propertyKey" >{{properties.propertyValue}}</option>
+                </select>
+                <select v-model="paperVo.termCode" >
+                    <option value="0">期中</option>
+                    <option value="1">期末</option>
+                </select>
+            </div>
+        </template>
+
+        <div>
+            <span>年份</span>
+            <select v-model="paperVo.paperYear" >
+                <option v-for="(properties,index) in paperYearList" v-bind:value="properties.propertyKey" >{{properties.propertyValue}}</option>
+            </select>
+        </div>
+        <div>
+            <span>分数：</span>
+            <input type="number" value="100" v-model="paperVo.score">分
+        </div>
+        <div>
+            <span>答题时长：</span>
+            <input type="number" value="48" v-model="paperVo.timeSpan">分钟
+        </div>
+        <div>
+            <span>地区:</span>
+            <select v-model="paperVo.province" v-on:change="changeProvince()">
+                <option value="">全国</option>
+                <option v-for="(baseArea,index) in provinceList" v-bind:value="baseArea.areaId" >{{baseArea.areaName}}</option>
+            </select>
+            <select v-model="paperVo.city" v-on:change="changeCity()">
+                <option value="">全市</option>
+                <option v-for="(baseArea,index) in cityList" v-bind:value="baseArea.areaId" >{{baseArea.areaName}}</option>
+            </select>
+            <select v-model="paperVo.county" >
+                <option value="">全县</option>
+                <option v-for="(baseArea,index) in countyList" v-bind:value="baseArea.areaId" >{{baseArea.areaName}}</option>
+            </select>
+        </div>
+        <div>
+            <span>学校：</span>
+            <input type="text" placeholder="请输入学校名字" v-model="paperVo.school">
+        </div>
+
+        <div>
+            <a href="###" v-on:click="addNew()">确定</a>
+            <a href="###" v-on:click="cancel()">取消</a>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<script>
+    var vmm = new Vue({
+                         el:"#add",
+                         data : {
+                             paper:{
+
+                             },
+                             paperVo:{
+                                 paperType:'paperType.XUEQI',
+                                 subjectCode:'subject.czsx',
+                                 schoolYear:'',
+                                 termCode:'0',
+                                 province:'',
+                                 city:'',
+                                 county:'',
+                                 title:'',
+                                 gradeCode:'',
+                                 paperYear:'',
+                                 score:'100',
+                                 timeSpan:'45',
+                                 school:'',
+                                 paperId:'',
+                                 bcId:''
+
+                             },
+                             // 年级
+                             gradeCodeList:[],
+                             // 年份
+                             paperYearList:[],
+                             // 学年
+                             schoolYearList:[],
+                             // 省
+                             provinceList:[],
+                             // 市
+                             cityList:[],
+                             // 县
+                             countyList:[],
+
+
+                         },
+                         created(){
+                             // this.defaultUserData  = JSON.parse(JSON.stringify(this.userForm));
+
+                         },
+                         // 初始化执行
+                         mounted(){
+                             //this.listUserList()
+                             this.gradeCodeList = vm.gradeCodeList;
+                             this.paperYearList = vm.paperYearList;
+                             this.schoolYearList = vm.schoolYearList;
+                             this.provinceList = vm.provinceList;
+
+                             this.paperVo.gradeCode = this.gradeCodeList[0].propertyKey;
+                             this.paperVo.paperYear = this.paperYearList[0].propertyKey;
+                             this.paperVo.schoolYear = this.schoolYearList[0].propertyKey;
+                         },
+                         //执行某些方法后数据产生了变化再执行
+                         updated:function () {
+
+                         },
+                         // 数据发生变化之后进行监听，再执行
+                         watch:{
+                             //初始化获取数据后，对数据进行监听，发现propertyGroup数据已经加载，默认选中第一个，获取属性值
+                             gradeCodeList:function (){
+                                 // vmm.paperVo.gradeCode = vmm.gradeCodeList[0].propertyKey;
+                             },
+                             paperYearList:function (){
+                                 // vmm.paperVo.paperYear = vmm.paperYearList[0].propertyKey;
+                             },
+                             schoolYearList:function (){
+                                 // vmm.paperVo.schoolYear = vmm.schoolYearList[0].propertyKey;
+                             },
+                         },
+                         methods : {
+                             addNew:function () {
+                                 if(vmm.paperVo.title == ''){
+                                     $.dialog.alert('试卷名称不能为空！',function(){});
+                                     return
+                                 }
+                                 if(vmm.paperVo.score == ''){
+                                     $.dialog.alert('分数不能为空！',function(){});
+                                     return
+                                 }
+                                 if(vmm.paperVo.school == ''){
+                                     $.dialog.alert('学校名称不能为空！',function(){});
+                                     return
+                                 }
+                                 $.ajax({
+                                            type : "post",
+                                            url : projectName + "/engin/alTestPaper/save",
+                                            data : JSON.stringify(vmm.paperVo),
+                                            datatype : 'json',
+                                            contentType:"application/json",
+                                            async: false,
+                                            success : function(data) {
+                                                //console.log(JSON.stringify(data))
+                                                if(data.success == true){
+                                                    api.close();
+                                                    vm.list();
+                                                }else{
+                                                    $.dialog.alert(data.message,function(){});
+                                                }
+                                            },
+                                            error : function() {
+                                                $.dialog.alert('请求失败！',function(){});
+                                            }
+                                        });
+
+                             },
+                             cancel:function () {
+                                 api.close();
+                             },
+                             changeProvince:function () {
+                                 if(vmm.paperVo.province != ''){
+                                     var obj = {};
+                                     obj.areaId = vmm.paperVo.province;
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/base/redisC/getBaseAreaGroupByAreaId",
+                                                data : JSON.stringify(obj),
+                                                datatype : 'json',
+                                                contentType:"application/json",
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        vmm.cityList = data.obj;
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                },
+                                                error : function() {
+                                                    $.dialog.alert('请求失败！',function(){});
+                                                }
+                                            });
+                                 }
+                             },
+                             changeCity:function () {
+                                 if(vmm.paperVo.city != ''){
+                                     var obj = {};
+                                     obj.areaId = vmm.paperVo.city;
+                                     $.ajax({
+                                                type : "post",
+                                                url : projectName + "/base/redisC/getBaseAreaGroupByAreaId",
+                                                data : JSON.stringify(obj),
+                                                datatype : 'json',
+                                                contentType:"application/json",
+                                                success : function(data) {
+                                                    if(data.success == true){
+                                                        vmm.countyList = data.obj;
+                                                    }else{
+                                                        mdui.alert(data.message);
+                                                    }
+                                                },
+                                                error : function() {
+                                                    $.dialog.alert('请求失败！',function(){});
+                                                }
+                                            });
+                                 }
+                             }
+
+                         }
+                     });
+
+
+    $(function(){
+        // vm.listAlItp();
+        vmm.paperVo.paperType = paperType;
+        vmm.paperVo.subjectCode = subjectCode;
+
+
+
+        if(paperType == 'paperType.DANYUAN'){
+            // 单元卷
+            vmm.paperVo.bcId = danyuan.bcId;
+
+        }
+
+        if(editPaper.paperId != null){
+            vmm.paperVo = editPaper;
+            vmm.changeProvince();
+            vmm.changeCity();
+        }else{
+        }
+
+
+
+    });
+</script>
