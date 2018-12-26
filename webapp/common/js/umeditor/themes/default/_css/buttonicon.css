@@ -86,6 +86,9 @@
     background-position: -380px 0;
 }
 
+.edui-btn-toolbar .edui-btn .edui-icon-file {
+    background-position: -338px 0;
+}
 .edui-btn-toolbar .edui-btn .edui-icon-emotion {
     background-position: -60px -20px;
 }

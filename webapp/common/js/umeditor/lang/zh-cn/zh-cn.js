@@ -19,7 +19,7 @@ UM.I18N['zh-cn'] = {
         'imageleft':'左浮动', 'imageright':'右浮动', 'attachment':'附件', 'imagecenter':'居中', 'wordimage':'图片转存',
         'lineheight':'行间距','edittip' :'编辑提示','customstyle':'自定义标题', 'autotypeset':'自动排版', 'webapp':'百度应用',
         'touppercase':'字母大写', 'tolowercase':'字母小写','background':'背景','template':'模板','scrawl':'涂鸦','music':'音乐','inserttable':'插入表格',
-        'drafts': '草稿箱', 'formula':'数学公式'
+        'drafts': '草稿箱', 'formula':'数学公式','file':'附件'
 
 
     },
@@ -71,7 +71,7 @@ UM.I18N['zh-cn'] = {
         'static':{
             'lang_tab_local':"本地上传",
             'lang_tab_imgSearch':"网络图片",
-            'lang_input_dragTip':"支持图片拖拽上传",
+            'lang_input_dragTip':"支持拖拽上传",
             'lang_btn_add':"添加"
         },
         'uploadError': '上传出错'

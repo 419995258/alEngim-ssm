@@ -18,6 +18,7 @@
             'core/filternode.js',
             'plugins/inserthtml.js',
             'plugins/image.js',
+            'plugins/file.js',
             'plugins/justify.js',
             'plugins/font.js',
             'plugins/link.js',
@@ -66,7 +67,7 @@
             'adapter/source.js',
             'adapter/combobox.js'
         ],
-        baseURL = '../common/js/ueditor/_src/';
+        baseURL = '../common/js/umeditor/_src/';
     for (var i=0,pi;pi = paths[i++];) {
         document.write('<script type="text/javascript" src="'+ baseURL + pi +'"></script>');
     }

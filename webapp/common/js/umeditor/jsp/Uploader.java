@@ -37,6 +37,7 @@ public class Uploader {
 
 	// 保存路径
 	private String savePath = "upload";
+//	private String savePath = "D:\\work\\其他";
 	// 文件允许格式
 	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf",".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
 	// 文件大小限制，单位KB
