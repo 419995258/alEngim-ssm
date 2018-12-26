@@ -1,0 +1,76 @@
+<!--上传-->
+<!-- 上传图片插件 -->
+<link href="../../common/js/fileInput/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+<link href="../../common/js/fileInput/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+
+
+<!--umeditor-->
+<div >
+    <div >
+        <!--multiple 多个上传 -->
+        <input id="file-6" class="file" type="file"  name="imgs"
+               data-preview-file-type="any"
+               data-upload-url="1"
+               data-preview-file-icon="">
+    </div>
+
+    <div>
+        <a href="###" onClick="save()">确定</a>
+        <a href="###" onClick="cancel()">取消</a>
+     </div>
+</div>
+
+<script>
+
+
+   /* var upload = new Vue({
+                         el: '#upload',
+                         data: {
+                             url:projectName + "/base/fileC/uploadTemp"
+                         },
+                         methods : {
+
+                         }
+                     });*/
+
+    function save() {
+
+    }
+
+    function cancel() {
+        api.close();
+    }
+    //um.destroy();
+    //um.setContent($scope.Items.content);
+
+   // 表单信息
+   var formdata = {
+        id:"ccc"
+   };
+
+    $(function(){
+        /*初始化页面,清除上传的文件*/
+        $("#file-6").attr('data-upload-url',projectName + "/base/fileC/uploadTemp");
+        $("#file-6").fileInputCleared;
+        $("#file-6").fileinput({
+                                   uploadExtraData: function(previewId, index) {   //额外参数 返回json数组
+                                       return formdata
+                                   },
+                               });
+
+        $('#file-6').on('fileuploaded', function(event, data, previewId, index) {
+            var response = data.response;
+            if (response.success) {
+                file = true;
+                console.log("file:" + file);
+                fileUrl = data.response.fileUrl;
+                console.log("fileUrl:" + fileUrl);
+            }
+        });
+        // $("#file-6").attr('data-upload-url',projectName + '/base/fileC/uploadTemp');
+        //{{mainUrl}} + /newsC/uploadTemp
+    });
+
+</script>
+
+<script src="../../common/js/fileInput/fileinput.js" type="text/javascript"/>

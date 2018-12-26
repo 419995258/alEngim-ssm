@@ -99,9 +99,9 @@ public class FileOperationUtil {
 			// ContentType)+ "/";
 
 
-			String savePath2="G:\\AllWorkspace\\IDEA\\mine\\news\\target\\classes\\static\\file\\img";
+//			String savePath2="G:\\AllWorkspace\\IDEA\\mine\\news\\target\\classes\\static\\file\\img";
 
-			File savefile = new File(new File(savePath2), diskFileName
+			File savefile = new File(new File(savePath), diskFileName
 					+ externalName);
 			if (!savefile.getParentFile().exists()) {
 				savefile.getParentFile().mkdirs();

@@ -1,4 +1,4 @@
-package com.baidu.ueditor.um;
+package org.zyyd.base.util;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * UEditor文件上传辅助类
  *
  */
-public class Uploader {
+public class BaiduUploader {
 	// 输出文件地址
 	private String url = "";
 	// 上传文件名
@@ -45,7 +45,7 @@ public class Uploader {
 	
 	private HashMap<String, String> errorInfo = new HashMap<String, String>();
 
-	public Uploader(HttpServletRequest request) {
+	public BaiduUploader(HttpServletRequest request) {
 		this.request = request;
 		HashMap<String, String> tmp = this.errorInfo;
 		tmp.put("SUCCESS", "SUCCESS"); //默认成功
@@ -90,8 +90,7 @@ public class Uploader {
 					this.url = savePath + "/" + this.fileName;
 					BufferedInputStream in = new BufferedInputStream(fis.openStream());
 					// 保存到ueditor路径下
-					// File file = new File(this.getPhysicalPath(this.url));
-                    // 保存到项目路径下
+                    // 保存到项目路径下2
                     File file = new File(this.getPhysicalPath(this.url));
 					FileOutputStream out = new FileOutputStream( file );
 					BufferedOutputStream output = new BufferedOutputStream(out);
@@ -222,9 +221,11 @@ public class Uploader {
 		String servletPath = this.request.getServletPath();
 		String realPath = this.request.getSession().getServletContext()
 				.getRealPath(servletPath);
-        String realPath2 = this.request.getSession().getServletContext().getRealPath();
+		System.out.println(realPath);
+        String realPath2 = this.request.getSession().getServletContext().getRealPath("/");
         System.out.println(realPath2);
-		return new File(realPath).getParent() +"/" +path;
+        String fileUrl = new File(realPath2) +"/" +path;
+		return fileUrl;
 	}
 
 	public void setSavePath(String savePath) {

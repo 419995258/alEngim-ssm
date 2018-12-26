@@ -42,7 +42,7 @@
                         <div class="doc-example-code">
                             <!--编辑-->
                             <div>
-                                <textarea type="text" v-model="alPaperElement.elementDesc"></textarea>
+                                <textarea type="text" v-model="alPaperElement.elementDesc"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'elementDesc')">高级模式</a>）
                             </div>
                             <div>
                                 <a href="###" v-on:click="saveElement(alPaperElement,index)">完成编辑</a>
@@ -64,14 +64,14 @@
 
                             <div class="doc-example-demo">
                                 <!--内容-->
-                                <div>
+                                <div >
                                     {{index+1}}<span v-html="alPaperElement.content"></span>[主观题]（{{alPaperElement.score}}分）
                                 </div>
                                 <div>
                                     <a href="###" v-on:click="addObjectId(alPaperElement,index)">覆盖目标({{alPaperElement.objectId == null || alPaperElement.objectId == ''?0:1}})</a>
                                 </div>
-                                <div>
-                                    {{alPaperElement.correctResponse}}
+                                <div >
+                                    <span v-html="alPaperElement.correctResponse"></span>
                                 </div>
                             </div>
                             <div class="doc-example-code">
@@ -84,16 +84,17 @@
                                 </div>
                                 <div>
                                     <div>*题干</div>
-                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea></div>
+                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'content')">高级模式</a>）（<a href="###" v-on:click="openUpload(alPaperElement)">附件</a>）</div>
+
                                 </div>
                                 <div>
                                     <div>*答案</div>
                                     <div>
-                                        <textarea v-model="alPaperElement.correctResponse"></textarea>
+                                        <textarea v-model="alPaperElement.correctResponse"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'correctResponse')">高级模式</a>）
                                     </div>
                                     <div>*解析</div>
                                     <div>
-                                        <textarea v-model="alPaperElement.howTo"></textarea>
+                                        <textarea v-model="alPaperElement.howTo"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'howTo')">高级模式</a>）
                                     </div>
                                     <div>
                                         覆盖目标:
@@ -118,7 +119,7 @@
 
                             <div class="doc-example-demo">
                                 <!--内容-->
-                                <div>
+                                <div >
                                     {{index+1}}<span v-html="alPaperElement.content"></span>[单选题]（{{alPaperElement.score}}分）
                                 </div>
                                 <div>
@@ -126,14 +127,14 @@
                                 </div>
                                 <div >
                                     <div v-if="alPaperElement.layout == '1*'">
-                                        <span v-for="(answer,cindex) in alPaperElement.answer" v-bind:style="alPaperElement.choiceId == answer.choiceId ? 'color:green' : '' ">
-                                                {{ABC[cindex]}}{{answer.content}}
+                                        <span v-for="(answer,cindex) in alPaperElement.answer" v-bind:style="alPaperElement.choiceId == answer.choiceId ? 'color:green' : '' " >
+                                                {{ABC[cindex]}}<span v-html="answer.content"></span>
                                         </span>
                                     </div>
                                     <div v-if="alPaperElement.layout != '1*'">
                                         <div v-for="(answer,cindex) in alPaperElement.answer">
-                                            <span v-bind:style="alPaperElement.choiceId == answer.choiceId ? 'color:green' : '' ">
-                                                {{ABC[cindex]}}{{answer.content}}
+                                            <span v-bind:style="alPaperElement.choiceId == answer.choiceId ? 'color:green' : '' " >
+                                                {{ABC[cindex]}}<span v-html="answer.content"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -150,7 +151,7 @@
                                 </div>
                                 <div>
                                     <div>*题干</div>
-                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea></div>
+                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'content')">高级模式</a>）</div>
                                 </div>
                                 <div>
                                     <div>*选项</div>
@@ -158,10 +159,11 @@
                                         <div v-for="(answer,cindex) in alPaperElement.answer" class="choice">
                                             <input type="radio" v-bind:value="answer.choiceId" v-bind:checked="answer.isRight == '1'" v-model="alPaperElement.choiceId">
                                             {{ABC[cindex]}}
-                                            <input type="text" v-model="answer.content"><a href="###" v-on:click="deleteChoice(cindex,alPaperElement.answer,'DANXUAN',answer.choiceId)">删除</a>
                                             <span>
+                                                <input type="text" v-model="answer.content"><a href="###" v-on:click="deleteChoice(cindex,alPaperElement.answer,'DANXUAN',answer.choiceId)">删除</a>
                                                 <a href="###" v-on:click="zIndexUp(alPaperElement.answer,cindex,alPaperElement.answer.length)">上移</a>
                                                 <a href="###" v-on:click="zIndexDown(alPaperElement.answer,cindex,alPaperElement.answer.length)">下移</a>
+                                                （<a href="###" v-on:click="openUmeditor(answer,'content')">高级模式</a>）
                                             </span>
                                         </div>
                                     </div>
@@ -178,7 +180,7 @@
                                     </div>
                                     <div>*解析</div>
                                     <div>
-                                        <textarea v-model="alPaperElement.howTo"></textarea>
+                                        <textarea v-model="alPaperElement.howTo"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'howTo')">高级模式</a>）
                                     </div>
                                     <div>
                                         覆盖目标:
@@ -204,7 +206,7 @@
 
                             <div class="doc-example-demo">
                                 <!--内容-->
-                                <div>
+                                <div >
                                     {{index+1}}<span v-html="alPaperElement.content"></span>[多选题]（{{alPaperElement.score}}分）
                                 </div>
                                 <div>
@@ -212,14 +214,14 @@
                                 </div>
                                 <div >
                                     <div v-if="alPaperElement.layout == '1*'">
-                                        <span v-for="(answer,cindex) in alPaperElement.answer" v-bind:style="alPaperElement.choiceIdList.indexOf(answer.choiceId)>-1 ? 'color:green' : '' ">
-                                                {{ABC[cindex]}}{{answer.content}}
+                                        <span v-for="(answer,cindex) in alPaperElement.answer" v-bind:style="alPaperElement.choiceIdList.indexOf(answer.choiceId)>-1 ? 'color:green' : '' " >
+                                                {{ABC[cindex]}}<span v-html="answer.content"></span>
                                         </span>
                                     </div>
                                     <div v-if="alPaperElement.layout != '1*'">
                                         <div v-for="(answer,cindex) in alPaperElement.answer">
-                                            <span v-bind:style="alPaperElement.choiceIdList.indexOf(answer.choiceId)>-1 ? 'color:green' : '' ">
-                                                {{ABC[cindex]}}{{answer.content}}
+                                            <span v-bind:style="alPaperElement.choiceIdList.indexOf(answer.choiceId)>-1 ? 'color:green' : '' " >
+                                                {{ABC[cindex]}}<span v-html="answer.content"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -235,7 +237,7 @@
                                 </div>
                                 <div>
                                     <div>*题干</div>
-                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea></div>
+                                    <div><textarea type="text" v-model="alPaperElement.content"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'content')">高级模式</a>）</div>
                                 </div>
                                 <div>
                                     <div>*选项</div>
@@ -243,10 +245,11 @@
                                         <div v-for="(answer,cindex) in alPaperElement.answer">
                                             <input type="checkbox" v-bind:value="answer.choiceId" v-bind:checked="answer.isRight == '1'" v-model="alPaperElement.choiceIdList">
                                             {{ABC[cindex]}}
-                                            <input type="text" v-model="answer.content"><a href="###" v-on:click="deleteChoice(cindex,alPaperElement.answer,'DUOXUAN',answer.choiceId)">删除</a>
                                             <span>
+                                                <input type="text" v-model="answer.content"><a href="###" v-on:click="deleteChoice(cindex,alPaperElement.answer,'DUOXUAN',answer.choiceId)">删除</a>
                                                 <a href="###" v-on:click="zIndexUp(alPaperElement.answer,cindex,alPaperElement.answer.length)">上移</a>
                                                 <a href="###" v-on:click="zIndexDown(alPaperElement.answer,cindex,alPaperElement.answer.length)">下移</a>
+                                                （<a href="###" v-on:click="openUmeditor(answer,'content')">高级模式</a>）
                                             </span>
                                         </div>
                                     </div>
@@ -263,7 +266,7 @@
                                     </div>
                                     <div>*解析</div>
                                     <div>
-                                        <textarea v-model="alPaperElement.howTo"></textarea>
+                                        <textarea v-model="alPaperElement.howTo"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'howTo')">高级模式</a>）
                                     </div>
                                     <div>
                                         覆盖目标:
@@ -298,7 +301,7 @@
                                 <div >
                                     <div v-for="(answer,cindex) in alPaperElement.answer">
                                         <span >
-                                            空{{cindex+1}}:{{answer.correctResponse}}
+                                            空{{cindex+1}}:<span v-html="answer.correctResponse"></span>
                                         </span>
                                     </div>
                                 </div>
@@ -313,7 +316,7 @@
                                 </div>
                                 <div>
                                     <div>*题干</div>
-                                    <div><textarea type="text" v-model="alPaperElement.content" v-on:change="changeTianKongContent(alPaperElement)"></textarea></div>
+                                    <div><textarea type="text" v-model="alPaperElement.content" v-on:change="changeTianKongContent(alPaperElement)"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'content')">高级模式</a>）</div>
                                 </div>
                                 <div>
                                     <div>*答案</div>
@@ -322,6 +325,7 @@
                                             权重：<input type="text" v-model="answer.weight">
                                             空格长度：<input type="text" v-model="answer.blankLength">
                                             答案：<input type="text" v-model="answer.correctResponse">
+                                            （<a href="###" v-on:click="openUmeditor(answer,'correctResponse')">高级模式</a>）
                                             <!--<a href="###" v-on:click="deleteChoice(cindex,alPaperElement.answer,'TIANKONG',answer.blankId)">删除</a>-->
                                         </div>
                                     </div>
@@ -330,7 +334,7 @@
                                     </div>
                                     <div>*解析</div>
                                     <div>
-                                        <textarea v-model="alPaperElement.howTo"></textarea>
+                                        <textarea v-model="alPaperElement.howTo"></textarea>（<a href="###" v-on:click="openUmeditor(alPaperElement,'howTo')">高级模式</a>）
                                     </div>
                                     <div>
                                         覆盖目标:
@@ -718,29 +722,138 @@
                                         });
 
 
+                             },
+
+                             // 高级编辑模式
+                             openUmeditor:function (obj,type) {
+                                 if(type == 'elementDesc'){
+                                     // 段落描述
+                                     umeditorText = obj.elementDesc;
+                                 }else if(type == 'correctResponse'){
+                                     // 应用正确答案
+                                     // 填空正确答案
+                                     umeditorText = obj.correctResponse;
+                                 }else if(type == 'howTo'){
+                                     // 解析
+                                     umeditorText = obj.howTo;
+                                 }else if(type == 'content'){
+                                     // 题干
+                                     // 选择答案
+                                     umeditorText = obj.content;
+                                 }
+
+                                 api = $.dialog({id:'umeditor',
+                                                    title:'高级编辑模式',
+                                                    lock: true,
+                                                    background: '#FFF', /* 背景色 默认的遮罩背景色为:#DCE2F1浅蓝护眼色 */
+                                                    opacity: 0.5,       /* 透明度 */
+                                                    // content: 'url:alObjParent_add',
+                                                    max: false,
+                                                    min: false,
+                                                    drag: false,
+                                                    resize: false,
+                                                    zIndex:50,
+                                                    width:750,
+                                                    height: 400,
+                                                    close:function(){
+                                                        // 重新赋值
+                                                        if(type == 'elementDesc'){
+                                                            // 段落描述
+                                                            obj.elementDesc = umeditorText;
+                                                        }else if(type == 'correctResponse'){
+                                                            // 应用正确答案
+                                                            // 填空正确答案
+                                                            obj.correctResponse = umeditorText;
+                                                        }else if(type == 'howTo'){
+                                                            // 解析
+                                                            obj.howTo = umeditorText;
+                                                        }else if(type == 'content'){
+                                                            // 题干
+                                                            // 选择答案
+                                                            obj.content = umeditorText;
+                                                        }
+                                                        mathAll();
+
+                                                    }
+                                                });
+                                 /* jQuery ajax */
+                                 $.ajax({
+                                            url:'umeditor.html',
+                                            success:function(data){
+                                                api.content(data);
+                                            },
+                                            cache:false
+                                        });
+
+
+                             },
+                             openUpload:function (obj) {
+                                 console.log("1");
+                                 api = $.dialog({id:'upload',
+                                                    title:'附件',
+                                                    lock: true,
+                                                    background: '#FFF', /* 背景色 默认的遮罩背景色为:#DCE2F1浅蓝护眼色 */
+                                                    opacity: 0.5,       /* 透明度 */
+                                                    // content: 'url:alObjParent_add',
+                                                    max: false,
+                                                    min: false,
+                                                    drag: false,
+                                                    resize: false,
+                                                    zIndex:50,
+                                                    width:750,
+                                                    height: 400,
+                                                    close:function(){
+
+
+                                                    }
+                                                });
+                                 /* jQuery ajax */
+                                 $.ajax({
+                                            url:'upload.html',
+                                            success:function(data){
+                                                api.content(data);
+                                            },
+                                            cache:false
+                                        });
                              }
 
                          }
                      });
 
+    // 弹窗以及绑定数据用
     var api = "";
 
     var bindIndex = '';
     var bindObjectId = '';
     var bindObjectStr = '';
     var bindKcStr = '';
+    var umeditorText = '';
+
+    // 数学公式用
+    var MQ = MathQuill.getInterface(2);
+    function mathAll(){
+        setTimeout(function() {
+            console.log("1");
+            var mathC = $('.mathquill-embedded-latex');
+            console.log(mathC);
+            for(var i=0;i<mathC.length;i++){
+                MQ.StaticMath(mathC[i]);
+            }
+        },1)
+
+    }
 
     $(function(){
         // vm.listAlItp();
         vm.paperVo = paperItme;
         vm.alPaperElementVO.paperId = vm.paperVo.paperId;
         vm.list();
-
+        mathAll();
     });
 
 
 
-    
+    // 返回
     function back() {
         if(paperType != 'paperType.DANYUAN'){
             changeList();

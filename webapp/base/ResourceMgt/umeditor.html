@@ -1,0 +1,47 @@
+<!--umeditor-->
+<div >
+    <script type="text/plain" id="myEditor" style="width:100%;height:100%;">
+    </script>
+    <div>
+        <a href="###" onClick="save()">确定</a>
+        <a href="###" onClick="cancel()">取消</a>
+     </div>
+</div>
+
+<script>
+
+
+    // ////////////////////////////////////////////////////////实例化编辑器
+    var um ;
+
+    function save() {
+        um.ready(function() {
+            /*
+             * //设置编辑器的内容 ckum1.setContent('hello'); //获取html内容，返回: <p>hello</p>
+             * var html = ue.getContent();
+             */
+            // 获取纯文本内容，返回: hello
+            umeditorText = um.getContent();
+            /*var MQ = MathQuill.getInterface(2);
+            MQ.StaticMath($('#text')[0]);*/
+
+        });
+        cancel();
+    }
+
+    function cancel() {
+        um.destroy();
+        api.close();
+    }
+    //um.destroy();
+    //um.setContent($scope.Items.content);
+
+
+    $(function(){
+        um = UM.getEditor('myEditor');
+        console.log("umeditorText:" + umeditorText);
+        um.setContent(umeditorText);
+
+    });
+
+</script>

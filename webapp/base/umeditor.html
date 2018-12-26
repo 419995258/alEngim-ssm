@@ -7,6 +7,8 @@
 
 <!--<link href="../common/js/sortable/app.css" rel="stylesheet" type="text/css"/>
 <script src="../common/js/sortable/Sortable.js"></script>-->
+<script src="../common/js/base.js"></script>
+
 <script src="../common/js/jquery/jquery-2.2.0.min.js"></script>
 <link href="../common/js/jquery/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script src="../common/js/jquery/jquery-ui/jquery-ui.js"></script>
@@ -15,7 +17,7 @@
 <link href="../common/js/umeditor/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
 <!-- 引入 etpl -->
 <script type="text/javascript" charset="utf-8" src="../common/js/umeditor/umeditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="../common/js/umeditor/editor_api.js"></script>
+<script type="text/javascript" charset="utf-8" src="../common/js/umeditor/editor_api1.js"></script>
 <script type="text/javascript" src="../common/js/umeditor/lang/zh-cn/zh-cn.js"></script>
 <link href="../common/js/umeditor/third-party/mathquill/mathquill.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="../common/js/umeditor/third-party/mathquill/mathquill.min.js"></script>
@@ -27,6 +29,11 @@
 <div id="text">
 
 </div>
+
+<span class="math ccc">^1/_2</span>
+<span class="math ccc">^1/_2</span>
+<span class="math ccc">^1/_2</span>
+<span class="math ccc">^1/_2</span>
 
 </body>
 <!--umeditor-->
@@ -67,7 +74,7 @@ $(function(){
     // um = UM.getEditor('myEditor');
 
 });
-
+var MQ = MathQuill.getInterface(2);
 function save() {
     um.ready(function() {
         /*
@@ -78,13 +85,18 @@ function save() {
         txt1 = um.getContent();
         console.log(txt1);
         $("#text").html(txt1);
-        var MQ = MathQuill.getInterface(2);
+
         MQ.StaticMath($('#text')[0]);
     });
 }
 //um.destroy();
 //um.setContent($scope.Items.content);
-
+function math(){
+    var mathC = $('.math');
+    for(var i=0;i<mathC.length;i++){
+        MQ.StaticMath(mathC[i]);
+    }
+}
 
 </script>
 </html>

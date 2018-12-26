@@ -400,13 +400,6 @@
           <version>0.9.1</version>
       </dependency>
 
-      <!--百度 ueditor长传插件-->
-      <!-- https://mvnrepository.com/artifact/com.baidu.ueditor/ueditor-mini -->
-      <dependency>
-          <groupId>com.baidu.ueditor</groupId>
-          <artifactId>ueditor-mini</artifactId>
-          <version>1.0</version>
-      </dependency>
 
 
 
